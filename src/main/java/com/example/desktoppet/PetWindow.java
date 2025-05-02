@@ -10,8 +10,13 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.IOException;
 import java.util.Random;
 
+/**
+ * Transparent window with Desktop Pet
+ */
 public class PetWindow extends Application {
     private final Random random = new Random();
     private double xSpeed = 1.5;
@@ -25,8 +30,15 @@ public class PetWindow extends Application {
     };
     private int colorIndex = 0;
 
+    private Window window = new Window();
+//    private Logic logic = new Logic();
+//    private NetworkManager networkManager = new NetworkManager(logic, window);
+
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage){
+//        networkManager.startServer(5000);
+        // window.chatArea = networkManager.chatAreaServer;
+
         this.primaryStage = primaryStage;
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
@@ -54,6 +66,7 @@ public class PetWindow extends Application {
         pet.setOnMouseClicked(e -> {
             colorIndex = (colorIndex + 1) % colors.length;
             updateButtonStyle();
+            window.openWindow();
         });
 
         // Click-through handling
@@ -75,6 +88,10 @@ public class PetWindow extends Application {
                 "-fx-font-size: 16;");
     }
 
+    /**
+     * Animation for the Pet movement
+     * @param screenWidth
+     */
     private void setupAnimation(double screenWidth) {
         animation = new AnimationTimer() {
             private long lastChange = 0;
@@ -112,7 +129,4 @@ public class PetWindow extends Application {
         animation.start();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }

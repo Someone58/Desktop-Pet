@@ -1,4 +1,17 @@
 package com.example.desktoppet;
 
-public class Logic {
+import javafx.application.Platform;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+
+import java.io.*;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Logic{
+
+
+
+
 }
