@@ -3,9 +3,12 @@ package com.example.desktoppet;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import static com.sun.javafx.css.StyleClassSet.getStyleClass;
 
 public class Window {
     Stage stage = new Stage();
@@ -17,24 +20,37 @@ public class Window {
 //    SharedTextAreaManager textAreaManagerServer = new SharedTextAreaManager();
 
     private TextArea connectionStatus = new TextArea();
+    private Label test = new Label();
+
     Button chatButton = new Button("Chat");
     Chat chat = new Chat(networkManager, chatManager);
 
     Button networkButton = new Button("Network");
     NetworkConnector networkConnector = new NetworkConnector(networkManager, connectionStatus, connectionManager);
 
+    Button timerButton = new Button("Timer");
+    Timer timer = new Timer();
+
 
 public Window() {
     connectionStatus.setEditable(false);
     connectionStatus.setPrefRowCount(1);
     connectionStatus.setPrefHeight(25);
-    connectionStatus.setStyle("-fx-text-fill: darkred;");
+    connectionStatus.getStyleClass().add("disconnected-status");
     statusManager.registerTextArea(connectionStatus);
     connectionStatus.setText("Disconnected");
 
+    connectionStatus.textProperty().addListener((observable, oldValue, newValue) -> {
+        connectionStatus.getStyleClass().removeAll("connected-status", "disconnected-status");
+        if (newValue.equals("Connected")) {
+            connectionStatus.getStyleClass().add("connected-status");
+            test.getStyleClass().add("connected-status");
+        } else if (newValue.equals("Disconnected")) {
+            connectionStatus.getStyleClass().add("disconnected-status");
+        }
+    });
+
 }
-
-
 
     public void openWindow() {
 
@@ -42,7 +58,8 @@ public Window() {
         rootVBox.getChildren().addAll(
                 connectionStatus,
                 chatButton,
-                networkButton
+                networkButton,
+                timerButton
         );
 
         Group root = new Group(rootVBox);
@@ -64,6 +81,10 @@ public Window() {
 
         networkButton.setOnAction(e -> {
             networkConnector.changeScene(stage, scene);
+        });
+
+        timerButton.setOnAction(e -> {
+            timer.changeScene(stage, scene);
         });
     }
 

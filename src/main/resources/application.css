@@ -1,0 +1,7 @@
+.connected-status {
+    -fx-text-fill: darkgreen;
+}
+
+.disconnected-status {
+    -fx-text-fill: darkred;
+}
