@@ -33,6 +33,8 @@ public class Window {
 
 
 public Window() {
+    stage.setAlwaysOnTop(true);
+
     connectionStatus.setEditable(false);
     connectionStatus.setPrefRowCount(1);
     connectionStatus.setPrefHeight(25);

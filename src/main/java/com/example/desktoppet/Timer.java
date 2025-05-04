@@ -1,7 +1,12 @@
+// com/example/desktoppet/Timer.java
 package com.example.desktoppet;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,15 +28,22 @@ public class Timer {
     private boolean isWork = true;
     private int sessionsCompleted = 0;
 
-    private Label timerLabel = new Label();
-    private Label statusLabel = new Label("Work Time");
-    private Button startPauseButton = new Button("Start");
-    private Button resetButton = new Button("Reset");
-    private Button nextPhaseButton = new Button();
+    Label timerLabel = new Label();
+    Label statusLabel = new Label("Work Time");
+    Button startPauseButton = new Button("Start");
+    Button resetButton = new Button("Reset");
+    Button nextPhaseButton = new Button();
     private TextField workField = new TextField();
     private TextField breakField = new TextField();
     private TextField sessionsField = new TextField();
     private HBox buttonBox;
+    Button miniTimerButton = new Button("Mini Timer");
+
+    private Runnable onUpdate = null;
+
+    private final StringProperty timerText = new SimpleStringProperty("25:00");
+    private final StringProperty statusText = new SimpleStringProperty("Work Time");
+    private final BooleanProperty waitingForNextPhaseProperty = new SimpleBooleanProperty(false);
 
     private boolean waitingForNextPhase = false;
 
@@ -39,6 +51,11 @@ public class Timer {
     private int totalStudyTime = 0;
     private int totalBreakTime = 0;
     private int phaseStartTime = 0; // time in seconds when a phase starts
+
+    public Timer() {
+        timeline = new Timeline(); // Initialize empty timeline
+        timeline.setCycleCount(Timeline.INDEFINITE);
+    }
 
     public void changeScene(Stage stage, Scene windowScene) {
         VBox root = new VBox(5);
@@ -60,7 +77,6 @@ public class Timer {
         stage.setResizable(false);
 
         backButton.setOnAction(e -> {
-//            if (timeline != null) timeline.stop();
             stage.setScene(windowScene);
         });
 
@@ -92,7 +108,7 @@ public class Timer {
         timerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold;");
         statusLabel.setStyle("-fx-font-size: 20px;");
 
-        HBox buttonBox = new HBox(10);
+        buttonBox = new HBox(10);
         buttonBox.setAlignment(Pos.CENTER);
 
         startPauseButton.setStyle("-fx-font-size: 16px;");
@@ -103,13 +119,15 @@ public class Timer {
 
         startPauseButton.setOnAction(e -> toggleTimer());
         resetButton.setOnAction(e -> resetTimer(buttonBox));
+        miniTimerButton.setOnAction(e -> new MiniTimerWindow(this, stage));
 
         root.getChildren().clear();
-        root.getChildren().addAll(backButton, statusLabel, timerLabel, buttonBox, inputBox);
+        root.getChildren().addAll(backButton, miniTimerButton, statusLabel, timerLabel, buttonBox, inputBox);
         updateTimerDisplay();
+        if (onUpdate != null) onUpdate.run();
     }
 
-    private void toggleTimer() {
+    void toggleTimer() {
         if (timeline == null || timeline.getStatus() == Timeline.Status.STOPPED) {
             startTimer();
         } else {
@@ -121,9 +139,12 @@ public class Timer {
                 startPauseButton.setText("Pause");
             }
         }
+        if (onUpdate != null) onUpdate.run();
     }
 
     private void startTimer() {
+        if (timeline != null) timeline.stop();
+
         try {
             workDuration = Integer.parseInt(workField.getText()) * 60;
             breakDuration = Integer.parseInt(breakField.getText()) * 60;
@@ -136,18 +157,22 @@ public class Timer {
         isWork = true;
         sessionsCompleted = 0;
         waitingForNextPhase = false;
+        waitingForNextPhaseProperty.set(false);
 
         totalStudyTime = 0;
         totalBreakTime = 0;
         phaseStartTime = workDuration;
 
-        if (timeline != null) timeline.stop();
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateTimer()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+
         startPauseButton.setText("Pause");
         statusLabel.setText("Work Time");
         timerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: black;");
+
+        buttonBox.getChildren().setAll(startPauseButton, resetButton);
+        if (onUpdate != null) onUpdate.run();
     }
 
     private void updateTimer() {
@@ -156,45 +181,45 @@ public class Timer {
 
         if (remainingTime == 0 && !waitingForNextPhase) {
             waitingForNextPhase = true;
+            waitingForNextPhaseProperty.set(true);
             showNextPhaseButton();
         } else if (waitingForNextPhase) {
-            // Timer is negative, keep counting down and show in red
             timerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: red;");
         }
+        if (onUpdate != null) onUpdate.run();
     }
 
     private void showNextPhaseButton() {
-        HBox buttonBox = (HBox) startPauseButton.getParent();
-        buttonBox.getChildren().clear();
+        HBox box = (HBox) startPauseButton.getParent();
+        box.getChildren().clear();
 
-        // Calculate overtime for this phase
-        int overtime = -remainingTime; // negative remainingTime is overtime in seconds
-
+        int overtime = -remainingTime;
         if (isWork) {
             totalStudyTime += phaseStartTime + overtime;
         } else {
             totalBreakTime += phaseStartTime + overtime;
         }
 
-        // If this was last session, show "Done"
         if (isWork && sessionsCompleted + 1 >= sessions) {
             nextPhaseButton.setText("Done");
-            nextPhaseButton.setOnAction(e -> showStats(buttonBox));
+            nextPhaseButton.setOnAction(e -> showStats(box));
         } else {
             if (isWork) {
                 nextPhaseButton.setText("Start Break");
-                nextPhaseButton.setOnAction(e -> proceedToNextPhase(buttonBox));
+                nextPhaseButton.setOnAction(e -> proceedToNextPhase(box));
             } else {
                 nextPhaseButton.setText("Continue Studying");
-                nextPhaseButton.setOnAction(e -> proceedToNextPhase(buttonBox));
+                nextPhaseButton.setOnAction(e -> proceedToNextPhase(box));
             }
         }
 
-        buttonBox.getChildren().add(nextPhaseButton);
+        box.getChildren().add(nextPhaseButton);
+        if (onUpdate != null) onUpdate.run();
     }
 
-    private void proceedToNextPhase(HBox buttonBox) {
+    private void proceedToNextPhase(HBox box) {
         waitingForNextPhase = false;
+        waitingForNextPhaseProperty.set(false);
         timerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: black;");
 
         if (isWork) {
@@ -211,13 +236,14 @@ public class Timer {
         }
         updateTimerDisplay();
 
-        buttonBox.getChildren().clear();
-        buttonBox.getChildren().addAll(startPauseButton, resetButton);
+        box.getChildren().setAll(startPauseButton, resetButton);
+        if (onUpdate != null) onUpdate.run();
     }
 
-    private void showStats(HBox buttonBox) {
+    private void showStats(HBox box) {
         timeline.stop();
         waitingForNextPhase = false;
+        waitingForNextPhaseProperty.set(false);
         timerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: green;");
 
         int overtime = -remainingTime;
@@ -233,12 +259,12 @@ public class Timer {
         statusLabel.setText("All sessions completed!");
         timerLabel.setText("Study: " + studyTimeStr + "\nBreak: " + breakTimeStr);
 
-        buttonBox.getChildren().clear();
+        box.getChildren().clear();
         nextPhaseButton.setText("Close");
-        buttonBox.getChildren().add(nextPhaseButton);
-        nextPhaseButton.setOnAction(e -> resetTimer(buttonBox));
+        nextPhaseButton.setOnAction(e -> resetTimer(box));
+        box.getChildren().add(nextPhaseButton);
+        if (onUpdate != null) onUpdate.run();
     }
-
 
     private String formatSeconds(int totalSeconds) {
         int minutes = totalSeconds / 60;
@@ -252,9 +278,10 @@ public class Timer {
         int seconds = absTime % 60;
         String timeString = String.format("%s%02d:%02d", (remainingTime < 0 ? "-" : ""), minutes, seconds);
         timerLabel.setText(timeString);
+        if (onUpdate != null) onUpdate.run();
     }
 
-    private void resetTimer(HBox buttonBox) {
+    private void resetTimer(HBox box) {
         if (timeline != null) {
             timeline.stop();
         }
@@ -262,14 +289,40 @@ public class Timer {
         isWork = true;
         sessionsCompleted = 0;
         waitingForNextPhase = false;
+        waitingForNextPhaseProperty.set(false);
         remainingTime = workDuration;
         updateTimerDisplay();
         statusLabel.setText("Work Time");
 
-        buttonBox.getChildren().clear();
-        buttonBox.getChildren().addAll(startPauseButton, resetButton);
+        // ← clear the old “Done/Close” text so mini‐window knows to go back to START/RESET
+        nextPhaseButton.setText("");
 
+        box.getChildren().setAll(startPauseButton, resetButton);
         timerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: black;");
+        if (onUpdate != null) onUpdate.run();
     }
 
+    public void setOnUpdate(Runnable r) { this.onUpdate = r; }
+    public javafx.beans.property.StringProperty timerTextProperty() { return timerLabel.textProperty(); }
+    public javafx.beans.property.StringProperty statusTextProperty() { return statusLabel.textProperty(); }
+    public javafx.beans.property.StringProperty startPauseTextProperty() { return startPauseButton.textProperty(); }
+    public javafx.beans.property.StringProperty nextPhaseTextProperty() { return nextPhaseButton.textProperty(); }
+
+    public enum TimerButtonState {
+        START_PAUSE_AND_RESET,
+        NEXT_PHASE_ONLY,
+        CLOSE_ONLY
+    }
+
+    public TimerButtonState getButtonState() {
+        String txt = nextPhaseButton.getText();
+        // if the button is “Done” or “Close” at all, treat it as CLOSE_ONLY:
+        if ("Done".equals(txt) || "Close".equals(txt)) {
+            return TimerButtonState.CLOSE_ONLY;
+        } else if (waitingForNextPhase) {
+            return TimerButtonState.NEXT_PHASE_ONLY;
+        } else {
+            return TimerButtonState.START_PAUSE_AND_RESET;
+        }
+    }
 }
