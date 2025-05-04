@@ -20,19 +20,26 @@ public class NetworkManager {
     private boolean connected = false;
     private static final int CONNECTION_TIMEOUT = 5000;
 
-    private TextArea messageArea;
     private TextArea chatArea = new TextArea();
+
+    private SharedTextAreaManager chatManager;
+    private SharedTextAreaManager connectionManager;
+    private SharedTextAreaManager statusManager;
+
 
     public boolean isConnected() {
         return connected;
     }
 
-    public NetworkManager(Logic logic, Window window, TextArea messageArea, TextArea chatArea ) {
+    public NetworkManager(Logic logic, Window window, SharedTextAreaManager chatManager, SharedTextAreaManager connectionManager, SharedTextAreaManager statusManager) {
         this.gameLogic = logic;
         this.window = window;
-        this.messageArea = messageArea;
-        this.chatArea = chatArea;
+        this.chatManager = chatManager;
+        this.connectionManager = connectionManager;
+        this.statusManager = statusManager;
+
     }
+
 
 
     public void startServer(int port) throws IOException {
@@ -42,20 +49,20 @@ public class NetworkManager {
                 // Bind with a backlog of 1
                 serverSocket.bind(new InetSocketAddress(port), 1);
                 Platform.runLater(() -> {
-                    appendToMessageArea("Server started on port " + port + "\n");
+                    appendConnectionMessage("Server started on port " + port);
                 });
                 socket = serverSocket.accept();
                 setupStreams();
                 connected = true;
                 Platform.runLater(() -> {
                     notifyConnectionSuccess();
-                    appendToMessageArea("Client connected!\n");
+                    appendConnectionMessage("Client connected!\n");
                 });
                 listenForMessages();
             } catch (IOException e) {
                 Platform.runLater(() -> {
                     notifyConnectionError();
-                    appendToMessageArea("Server error: " + e.getMessage() + "\n");
+                    appendConnectionMessage("Server error: " + e.getMessage() + "\n");
                 });
             }
         }).start();
@@ -70,25 +77,34 @@ public class NetworkManager {
                 connected = true;
                 Platform.runLater(() -> {
                     notifyConnectionSuccess();
-                    appendToMessageArea("Connected to server!\n");
+                    appendConnectionMessage("Connected to server!\n");
                 });
                 listenForMessages();
             } catch (IOException e) {
                 Platform.runLater(() -> {
                     notifyConnectionError();
-                    appendToMessageArea("Connection failed: " + e.getMessage() + "\n");
+                    appendConnectionMessage("Connection failed: " + e.getMessage() + "\n");
                 });
             }
         }).start();
     }
 
     private void notifyConnectionSuccess() {
-//        window.updateTurnStatus();
+        connected = true;
+        if (statusManager != null) {
+            Platform.runLater(() -> {
+                statusManager.sharedContentProperty().set("Connected");
+            });
+        }
     }
 
     private void notifyConnectionError() {
         connected = false;
-//        window.updateTurnStatus();
+        if (statusManager != null) {
+            Platform.runLater(() -> {
+                statusManager.sharedContentProperty().set("Disconnected");
+            });
+        }
     }
 
     private void setupStreams() throws IOException {
@@ -103,13 +119,13 @@ public class NetworkManager {
                 while ((message = in.readLine()) != null) {
                     final String receivedMessage = message;
                     Platform.runLater(() -> {
-                        appendToChatArea("Received: " + receivedMessage + "\n");
+                        appendMessage("Received: " + receivedMessage);
                     });
                 }
             } catch (IOException e) {
                 Platform.runLater(() -> {
                     notifyConnectionError();
-                    appendToChatArea("Connection lost: " + e.getMessage() + "\n");
+                    appendMessage("Connection lost: " + e.getMessage());
                 });
             }
         }).start();
@@ -119,7 +135,7 @@ public class NetworkManager {
         if (out != null && connected) {
             out.println(message);
             Platform.runLater(() -> {
-                appendToChatArea("Sent: " + message + "\n");
+                appendMessage("Sent: " + message);
             });
         }
     }
@@ -128,11 +144,16 @@ public class NetworkManager {
         return isServer;
     }
 
-    public void appendToChatArea(String message) {
-        chatArea.appendText(message + "\n");
+    private void appendMessage(String message) {
+        if (chatManager != null) {
+            chatManager.appendText(message);
+        }
     }
 
-    public void appendToMessageArea(String message) {
-        messageArea.appendText(message + "\n");
+    private void appendConnectionMessage(String message) {
+        if (connectionManager != null) {
+            connectionManager.appendText(message);
+        }
     }
+
 }

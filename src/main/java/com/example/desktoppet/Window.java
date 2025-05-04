@@ -1,39 +1,42 @@
 package com.example.desktoppet;
 
-import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class Window {
     Stage stage = new Stage();
 
-    private TextArea chatArea = new TextArea();
-    private TextArea messageArea = new TextArea();
+    SharedTextAreaManager chatManager = new SharedTextAreaManager();
+    SharedTextAreaManager connectionManager = new SharedTextAreaManager();
+    SharedTextAreaManager statusManager = new SharedTextAreaManager();
+    NetworkManager networkManager = new NetworkManager(new Logic(), this, chatManager, connectionManager, statusManager);
+//    SharedTextAreaManager textAreaManagerServer = new SharedTextAreaManager();
 
-    private Logic logic = new Logic();
-    NetworkManager networkManager = new NetworkManager(logic, this, messageArea, chatArea);
-
-    private Label connectionStatus = new Label("Disconnected");
+    private TextArea connectionStatus = new TextArea();
     Button chatButton = new Button("Chat");
-    Chat chat = new Chat(networkManager, chatArea);
+    Chat chat = new Chat(networkManager, chatManager);
 
     Button networkButton = new Button("Network");
-    NetworkConnector networkConnector = new NetworkConnector(networkManager, connectionStatus, messageArea);
+    NetworkConnector networkConnector = new NetworkConnector(networkManager, connectionStatus, connectionManager);
+
+
+public Window() {
+    connectionStatus.setEditable(false);
+    connectionStatus.setPrefRowCount(1);
+    connectionStatus.setPrefHeight(25);
+    connectionStatus.setStyle("-fx-text-fill: darkred;");
+    statusManager.registerTextArea(connectionStatus);
+    connectionStatus.setText("Disconnected");
+
+}
 
 
 
     public void openWindow() {
-
 
         VBox rootVBox = new VBox(5);
         rootVBox.getChildren().addAll(
@@ -63,21 +66,5 @@ public class Window {
             networkConnector.changeScene(stage, scene);
         });
     }
-
-
-//    public void updateConnectionStatus() {
-//        Platform.runLater(() -> {
-//            if (connectionStatus != null) {
-//                if (networkManager.isConnected()) {
-//                    connectionStatus.setText("Connected");
-//                    connectionStatus.setTextFill(Color.DARKGREEN);
-//                } else {
-//                    connectionStatus.setText("Disconnected");
-//                    connectionStatus.setTextFill(Color.DARKRED);
-//                }
-//            }
-//        });
-//    }
-
 
 }

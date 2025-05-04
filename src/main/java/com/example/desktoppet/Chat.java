@@ -3,36 +3,32 @@ package com.example.desktoppet;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class Chat {
     Stage stage = new Stage();
-    private TextArea chatArea;
+    private TextArea chatArea = new TextArea();
     private TextArea messageArea;
-//    private Logic logic = Window.logic;
-//    NetworkManager networkManager = new NetworkManager(logic, this);
 
-//    private Label connectionStatus = new Label("Disconnected");
-//    private TextField portField = new TextField("5555");
-//    private TextField hostField = new TextField("localhost");
-//    private Button hostButton = new Button("Host Game");
-//    private Button joinButton = new Button("Join Game");
     private TextField messageField = new TextField();
     private Button sendButton = new Button("Send");
 
     private NetworkManager networkManager;
+    private SharedTextAreaManager textAreaManager;
 
-    public Chat(NetworkManager networkManager, TextArea chatArea) {
+
+    public Chat(NetworkManager networkManager, SharedTextAreaManager textAreaManager
+    ) {
         this.networkManager = networkManager;
-        this.chatArea = chatArea;
+        this.textAreaManager = textAreaManager;
+
+//        this.chatArea = chatArea;
+        textAreaManager.registerTextArea(chatArea);
+
     }
 
     public void changeScene(Stage stage, Scene windowScene) {
@@ -50,15 +46,8 @@ public class Chat {
         messageField.setPrefWidth(150);
         messageBox.getChildren().addAll(messageField, sendButton);
 
-        // Set up connection controls
-//        HBox connectionBox = new HBox(5);
-//        connectionBox.getChildren().addAll(new Label("Host:"), hostField, new Label("Port:"), portField);
-
         VBox rootVBox = new VBox(5);
         rootVBox.getChildren().addAll(
-//                connectionBox,
-//                hostButton,
-//                joinButton,
                 backButton,
                 chatArea,
                 messageBox
@@ -94,17 +83,4 @@ public class Chat {
         }
     }
 
-//    public void appendToChatArea(String message) {
-//        chatArea.appendText(message + "\n");
-//    }
-//
-//    public void updateTurnStatus() {
-//        if (networkManager.isConnected()) {
-//            connectionStatus.setText("Connected");
-//            connectionStatus.setTextFill(Color.DARKGREEN);
-//        } else {
-//            connectionStatus.setText("Disconnected");
-//            connectionStatus.setTextFill(Color.DARKRED);
-//        }
-//    }
 }
