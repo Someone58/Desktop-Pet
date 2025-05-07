@@ -63,7 +63,7 @@ public class NetworkConnector {
             scene.getStylesheets().add(css);
         }
 
-        stage.setTitle("Chat");
+        stage.setTitle("Network Connector");
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false);
@@ -91,6 +91,7 @@ public class NetworkConnector {
 
         backButton.setOnAction(e -> {
             stage.setScene(windowScene);
+            stage.setTitle("Apps");
         });
     }
 

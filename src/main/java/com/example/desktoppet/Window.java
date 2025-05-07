@@ -31,6 +31,9 @@ public class Window {
     Button timerButton = new Button("Timer");
     Timer timer = new Timer();
 
+    Button pinWindow = new Button("Pin Window");
+    boolean windowOnTop = true;
+
 
 public Window() {
     stage.setAlwaysOnTop(true);
@@ -61,7 +64,8 @@ public Window() {
                 connectionStatus,
                 chatButton,
                 networkButton,
-                timerButton
+                timerButton,
+                pinWindow
         );
 
         Group root = new Group(rootVBox);
@@ -87,6 +91,18 @@ public Window() {
 
         timerButton.setOnAction(e -> {
             timer.changeScene(stage, scene);
+        });
+
+        pinWindow.setOnAction(e -> {
+            if (windowOnTop == false) {
+                stage.setAlwaysOnTop(true);
+                windowOnTop = true;
+            }
+            else{
+                stage.setAlwaysOnTop(false);
+                windowOnTop = false;
+            }
+
         });
     }
 

@@ -78,6 +78,7 @@ public class Timer {
 
         backButton.setOnAction(e -> {
             stage.setScene(windowScene);
+            stage.setTitle("Apps");
         });
 
         VBox inputBox = new VBox(10);
