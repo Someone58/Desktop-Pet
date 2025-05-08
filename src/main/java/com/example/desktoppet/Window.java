@@ -7,14 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
-import static com.sun.javafx.css.StyleClassSet.getStyleClass;
 
 public class Window extends Application {
     Stage primaryStage = new Stage();
@@ -43,6 +37,8 @@ public class Window extends Application {
 
     Button petButton = new Button("Select Pet");
     PetSelect petSelect;
+
+    Button settingsButton = new Button("Settings");
 
 
     public Window() {
@@ -88,6 +84,7 @@ public class Window extends Application {
                 networkButton,
                 timerButton,
                 petButton,
+                settingsButton,
                 pinWindow
         );
 
@@ -118,6 +115,10 @@ public class Window extends Application {
 
         petButton.setOnAction(e -> {
             petSelect.changeScene(stage, scene);
+        });
+
+        settingsButton.setOnAction(e -> {
+            petSelect.settings.changeScene(stage, scene);
         });
 
         pinWindow.setOnAction(e -> {

@@ -1,23 +1,19 @@
 package com.example.desktoppet;
 
-import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
-import javax.swing.text.Element;
 
 public class PetSelect {
     Stage primaryStage;
     Rectangle2D screenBounds;
+    Settings settings = new Settings();
+    double height = 100;
+    double size = 100;
 
     Button sharkSelect = new Button("Shark");
     Image sharkIdle = new Image(getClass().getResource("/Pets/sharkIdle.png").toExternalForm());
@@ -25,10 +21,29 @@ public class PetSelect {
     Button hedgehogSelect = new Button("Hedgehog");
     Image hedgehogIdle = new Image(getClass().getResource("/Pets/hedgehogIdle.png").toExternalForm());
 
-    PetAnimation pet = new PetAnimation(screenBounds, 1.5);
+    PetAnimation pet = new PetAnimation(screenBounds);
 
     public PetSelect(Stage primatyStage, Rectangle2D screenBounds) {
         this.primaryStage = primatyStage;
+
+        settings.speedSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            pet.setxSpeed(newValue.doubleValue());
+        });
+
+        settings.activitySlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            pet.setActivity(newValue.doubleValue());
+        });
+
+        settings.sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            this.size = newValue.doubleValue();
+            pet.setSizeHeight(newValue.doubleValue(), height);
+        });
+
+        settings.heightSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            double reversedValue = 100 - newValue.doubleValue();
+            this.height = reversedValue;
+            pet.setSizeHeight(size, reversedValue);
+        });
     }
 
     public void changeScene(Stage stage, Scene windowScene) {
