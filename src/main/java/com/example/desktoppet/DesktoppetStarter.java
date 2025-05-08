@@ -6,7 +6,7 @@ import javafx.application.Application;
  */
 public class DesktoppetStarter {
     public static void main(String[] args) {
-        Application.launch(PetWindow.class, args);
+        Application.launch(Window.class, args);
         System.setProperty("javafx.version", "21");
     }
 }

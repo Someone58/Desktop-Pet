@@ -1,80 +1,58 @@
 package com.example.desktoppet;
 
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.scene.image.ImageView;
 import javafx.stage.StageStyle;
 
-import java.io.IOException;
 import java.util.Random;
 
-/**
- * Transparent window with Desktop Pet
- */
-public class PetWindow extends Application {
+public class PetAnimation {
     private final Random random = new Random();
     private double xSpeed = 1.5;
     private AnimationTimer animation;
-    private Stage primaryStage;
-    private Button pet;
-    private final String[] colors = {
-            "-fx-background-color: #FFC0CB; -fx-border-color: #FF69B4;",
-            "-fx-background-color: #ADD8E6; -fx-border-color: #0000FF;",
-            "-fx-background-color: #90EE90; -fx-border-color: #006400;"
-    };
-    private int colorIndex = 0;
+    Button pet = new Button();
+    Rectangle2D screeNBounds;
+    Pane root = new Pane(pet);
+    ImageView petImage = new ImageView();
 
-    private Window window = new Window();
-//    private Logic logic = new Logic();
-//    private NetworkManager networkManager = new NetworkManager(logic, window);
+    public PetAnimation(Rectangle2D screenBounds, double xSpeed) {
+        this.xSpeed = xSpeed;
+        this.screeNBounds = screenBounds;
+        petImage.setFitHeight(100);
+        petImage.setFitWidth(100);
+        pet.setBackground(null);
+    }
 
-    @Override
-    public void start(Stage primaryStage){
-//        networkManager.startServer(5000);
-        // window.chatArea = networkManager.chatAreaServer;
-
-        this.primaryStage = primaryStage;
+    public void setupStage(Stage primaryStage, Image idle) {
+        System.out.println("button triggered");
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
-        // Create visible pet button
-        pet = new Button("^_^");
-        updateButtonStyle();
         pet.setPrefSize(60, 40);
-
-        // Position at bottom with padding
-        double bottomY = screenBounds.getHeight() - pet.getPrefHeight() - 10;
+        double bottomY = screenBounds.getHeight() - pet.getPrefHeight() - 40;
         pet.setLayoutY(bottomY);
 
-        // Configure window
-        primaryStage.initStyle(StageStyle.TRANSPARENT);
-        primaryStage.setAlwaysOnTop(true);
+        petImage.setImage(idle);
+        pet.setGraphic(petImage);
 
-        // Click-through pane
-        Pane root = new Pane(pet);
         root.setStyle("-fx-background-color: transparent;");
-
-        // Setup random movement
         setupAnimation(screenBounds.getWidth());
 
-        // Click handler
-        pet.setOnMouseClicked(e -> {
-            colorIndex = (colorIndex + 1) % colors.length;
-            updateButtonStyle();
-            window.openWindow();
-        });
-
-        // Click-through handling
         root.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             if (!pet.getBoundsInParent().contains(e.getX(), e.getY())) {
                 e.consume();
             }
         });
+
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
+        primaryStage.setAlwaysOnTop(true);
 
         Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
         scene.setFill(null);
@@ -82,16 +60,10 @@ public class PetWindow extends Application {
         primaryStage.show();
     }
 
-    private void updateButtonStyle() {
-        pet.setStyle(colors[colorIndex] +
-                "-fx-border-width: 2; " +
-                "-fx-font-size: 16;");
+    public void setupPet(Image petIdle) {
+        petImage.setImage(petIdle);
     }
 
-    /**
-     * Animation for the Pet movement
-     * @param screenWidth
-     */
     private void setupAnimation(double screenWidth) {
         animation = new AnimationTimer() {
             private long lastChange = 0;
@@ -100,10 +72,21 @@ public class PetWindow extends Application {
             public void handle(long now) {
                 // Move horizontally
                 double newX = pet.getLayoutX() + xSpeed;
+                if (xSpeed < 0){
+                    petImage.setScaleX(1.0);
+                } else if (xSpeed > 0){
+                    petImage.setScaleX(-1.0);
+                }
 
                 // Boundary check
                 if (newX > screenWidth - pet.getWidth() || newX < 0) {
                     xSpeed *= -1;
+                    if (newX > screenWidth - pet.getWidth()){
+                        petImage.setScaleX(1.0);
+                    } else{
+                        petImage.setScaleX(-1.0);
+                    }
+
                     newX = Math.max(0, Math.min(newX, screenWidth - pet.getWidth()));
                 }
 
@@ -112,15 +95,18 @@ public class PetWindow extends Application {
                 // Random direction changes
                 if (now - lastChange > 1_000_000_000) { // Every 1 second
                     if (random.nextDouble() < 0.3) { // 30% chance to change
-                        //int timecounter = 0;
-                        //if (timecounter > 5) {
                         if (random.nextDouble() < 0.5){
                             xSpeed = (random.nextBoolean() ? 0.5 : -0.5) * (1 + random.nextDouble() * 2);
+                            if (xSpeed < 0){
+                                petImage.setScaleX(1.0);
+                            } else if (xSpeed > 0){
+                                petImage.setScaleX(-1.0);
+                            }
                         }
                         else{
                             xSpeed = 0;
                         }
-                       // }
+                        // }
                     }
                     lastChange = now;
                 }
