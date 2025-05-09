@@ -72,6 +72,7 @@ public class Window extends Application {
 
         petSelect.pet.pet.setOnAction(e -> {
             openWindow();
+            stage.setIconified(false);
         });
     }
 
