@@ -16,10 +16,12 @@ public class PetSelect {
     double size = 100;
 
     Button sharkSelect = new Button("Shark");
-    Image sharkIdle = new Image(getClass().getResource("/Pets/sharkIdle.png").toExternalForm());
+    Image sharkIdle = new Image(getClass().getResource("/Pets/Shark_Animation.gif").toExternalForm());
+    String sharkName = "Shark";
 
     Button hedgehogSelect = new Button("Hedgehog");
     Image hedgehogIdle = new Image(getClass().getResource("/Pets/hedgehogIdle.png").toExternalForm());
+    String hedgehogName = "Hedgehog";
 
     PetAnimation pet = new PetAnimation(screenBounds);
 
@@ -77,16 +79,17 @@ public class PetSelect {
         });
 
         sharkSelect.setOnAction(e -> {
-            pet.setupPet(sharkIdle);
+//            pet.imageAnimation.remove();
+            pet.setupPet(sharkIdle, sharkName);
         });
 
         hedgehogSelect.setOnAction(e -> {
-            pet.setupPet(hedgehogIdle);
+            pet.setupPet(hedgehogIdle, hedgehogName);
         });
     }
 
     public void startPet() {
-        pet.setupStage(primaryStage, sharkIdle);
+        pet.setupStage(primaryStage, sharkIdle, sharkName);
         System.out.println("clicked on button");
     }
 

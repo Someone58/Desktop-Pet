@@ -25,6 +25,9 @@ public class PetAnimation {
     ImageView petImage = new ImageView();
     double bottomY;
 
+    String petName = "Shark";
+    ImageAnimation imageAnimation= new ImageAnimation(petImage, petName, 4);
+
     Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
     double screenWidth = screenBounds.getWidth();
 
@@ -34,15 +37,20 @@ public class PetAnimation {
         pet.setBackground(null);
     }
 
-    public void setupStage(Stage primaryStage, Image idle) {
+    public void setupStage(Stage primaryStage, Image idle, String petName) {
+        this.petName = petName;
         System.out.println("button triggered");
+        pet.setGraphic(petImage);
+//        imageAnimation = new ImageAnimation(petImage, petName, 4);
+        imageAnimation.play();
+        imageAnimation.setFps(5);
 
         pet.setPrefSize(60, 40);
         bottomY = screenBounds.getHeight() - pet.getPrefHeight() - 40;
         pet.setLayoutY(bottomY);
 
         petImage.setImage(idle);
-        pet.setGraphic(petImage);
+//        pet.setGraphic(petImage);
 
         root.setStyle("-fx-background-color: transparent;");
         setupAnimation();
@@ -62,8 +70,12 @@ public class PetAnimation {
         primaryStage.show();
     }
 
-    public void setupPet(Image petIdle) {
+    public void setupPet(Image petIdle, String petName) {
         petImage.setImage(petIdle);
+        imageAnimation.remove();
+        imageAnimation = new ImageAnimation(petImage, petName, 4);
+        imageAnimation.play();
+        imageAnimation.setFps(5);
     }
 
     private void setupAnimation() {
@@ -83,6 +95,7 @@ public class PetAnimation {
                 // Boundary check
                 if (newX > screenWidth - pet.getWidth() || newX < 0) {
                     xSpeed *= -1;
+                    imageAnimation.setFps(Math.abs(xSpeed*2));
                     if (newX > screenWidth - pet.getWidth()){
                         petImage.setScaleX(1.0);
                     } else{
@@ -98,8 +111,10 @@ public class PetAnimation {
                 if (now - lastChange > 1_000_000_000) { // Every 1 second
                     if (random.nextDouble() < 0.3) { // 30% chance to change
                         if (random.nextDouble() < activity){
+                            imageAnimation.playAnimation();
                             xSpeed = (random.nextBoolean() ? 0.5 : -0.5) * (1 + random.nextDouble() * 2);
                             xSpeed *= speedMultiplier;
+                            imageAnimation.setFps(Math.abs(xSpeed*2));
                             if (xSpeed < 0){
                                 petImage.setScaleX(1.0);
                             } else if (xSpeed > 0){
@@ -108,6 +123,7 @@ public class PetAnimation {
                         }
                         else{
                             xSpeed = 0;
+                            imageAnimation.playIdle();
                         }
                         // }
                     }
