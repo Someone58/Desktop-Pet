@@ -79,7 +79,6 @@ public class PetSelect {
         });
 
         sharkSelect.setOnAction(e -> {
-//            pet.imageAnimation.remove();
             pet.setupPet(sharkIdle, sharkName);
         });
 

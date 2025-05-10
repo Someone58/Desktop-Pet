@@ -41,7 +41,6 @@ public class PetAnimation {
         this.petName = petName;
         System.out.println("button triggered");
         pet.setGraphic(petImage);
-//        imageAnimation = new ImageAnimation(petImage, petName, 4);
         imageAnimation.play();
         imageAnimation.setFps(5);
 
@@ -50,7 +49,6 @@ public class PetAnimation {
         pet.setLayoutY(bottomY);
 
         petImage.setImage(idle);
-//        pet.setGraphic(petImage);
 
         root.setStyle("-fx-background-color: transparent;");
         setupAnimation();
@@ -95,7 +93,7 @@ public class PetAnimation {
                 // Boundary check
                 if (newX > screenWidth - pet.getWidth() || newX < 0) {
                     xSpeed *= -1;
-                    imageAnimation.setFps(Math.abs(xSpeed*2));
+                    imageAnimation.setFps(Math.abs(xSpeed*2.5));
                     if (newX > screenWidth - pet.getWidth()){
                         petImage.setScaleX(1.0);
                     } else{
@@ -114,7 +112,7 @@ public class PetAnimation {
                             imageAnimation.playAnimation();
                             xSpeed = (random.nextBoolean() ? 0.5 : -0.5) * (1 + random.nextDouble() * 2);
                             xSpeed *= speedMultiplier;
-                            imageAnimation.setFps(Math.abs(xSpeed*2));
+                            imageAnimation.setFps(Math.abs(xSpeed*2.5));
                             if (xSpeed < 0){
                                 petImage.setScaleX(1.0);
                             } else if (xSpeed > 0){
@@ -123,6 +121,7 @@ public class PetAnimation {
                         }
                         else{
                             xSpeed = 0;
+                            imageAnimation.setFps(4);
                             imageAnimation.playIdle();
                         }
                         // }
