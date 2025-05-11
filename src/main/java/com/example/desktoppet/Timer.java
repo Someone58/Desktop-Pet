@@ -84,9 +84,9 @@ public class Timer {
         VBox inputBox = new VBox(10);
         inputBox.setAlignment(Pos.CENTER);
 
-        workField.setPromptText("Work (min)");
-        breakField.setPromptText("Break (min)");
-        sessionsField.setPromptText("Sessions");
+        workField.setPromptText("25 (min)");
+        breakField.setPromptText("5 (min)");
+        sessionsField.setPromptText("4 Sessions");
 
         workField.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
         breakField.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));

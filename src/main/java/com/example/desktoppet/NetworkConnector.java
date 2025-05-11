@@ -11,6 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class NetworkConnector {
 
@@ -25,6 +27,8 @@ public class NetworkConnector {
     private SharedTextAreaManager textAreaManager;
     private TextArea localTextArea;
 
+    private Label ipAdress = new Label("IP address: ");
+
 
     public NetworkConnector(NetworkManager networkManager, TextArea connectionStatus, SharedTextAreaManager textAreaManager) {
         this.networkManager = networkManager;
@@ -32,6 +36,7 @@ public class NetworkConnector {
         this.textAreaManager = textAreaManager;
         this.localTextArea = new TextArea();
         this.textAreaManager.registerTextArea(localTextArea);
+        getIP();
     }
 
     public void changeScene(Stage stage, Scene windowScene) {
@@ -52,7 +57,8 @@ public class NetworkConnector {
                 connectionBox,
                 hostButton,
                 joinButton,
-                localTextArea
+                localTextArea,
+                ipAdress
         );
 
         Group root = new Group(rootVBox);
@@ -93,6 +99,17 @@ public class NetworkConnector {
             stage.setScene(windowScene);
             stage.setTitle("Apps");
         });
+    }
+
+    private void getIP(){
+        try {
+            InetAddress address = InetAddress.getLocalHost();
+//            System.out.println("IP address: " + address.getHostAddress());
+            ipAdress.setText("IP address: " + address.getHostAddress());
+        } catch (UnknownHostException ex) {
+//            System.out.println("Could not find IP address for this host");
+            ipAdress.setText("Could not find IP address for this host");
+        }
     }
 
     public void appendToChatArea(String message) {
