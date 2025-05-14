@@ -1,47 +1,42 @@
 package com.example.desktoppet;
 
 import javafx.application.Application;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Window extends Application {
-    Stage primaryStage = new Stage();
-    Stage stage = new Stage();
-    Rectangle2D screenBounds;
+    private PetController petController = new PetController();
 
-    SharedTextAreaManager chatManager = new SharedTextAreaManager();
-    SharedTextAreaManager connectionManager = new SharedTextAreaManager();
-    SharedTextAreaManager statusManager = new SharedTextAreaManager();
-    NetworkManager networkManager = new NetworkManager(new Logic(), this, chatManager, connectionManager, statusManager);
+    Stage stage;
 
     private TextArea connectionStatus = new TextArea();
-    private Label test = new Label();
+    SharedTextAreaManager statusManager = petController.getStatusManager();
 
     Button chatButton = new Button("Chat");
-    Chat chat = new Chat(networkManager, chatManager);
+    Chat chat = new Chat(petController);
 
     Button networkButton = new Button("Network");
-    NetworkConnector networkConnector = new NetworkConnector(networkManager, connectionStatus, connectionManager);
+    NetworkConnector networkConnector = new NetworkConnector(petController);
 
     Button timerButton = new Button("Timer");
-    Timer timer = new Timer();
+    Timer timer = new Timer(petController);
+
+    Button petButton = new Button("Select Pet");
+    PetSelect petSelect = new PetSelect(petController);
+
+    Button settingsButton = new Button("Settings");
 
     Button pinWindow = new Button("Pin Window");
     boolean windowOnTop = true;
 
-    Button petButton = new Button("Select Pet");
-    PetSelect petSelect;
-
-    Button settingsButton = new Button("Settings");
-
 
     public Window() {
+        stage = petController.getStage();
+
         stage.setAlwaysOnTop(true);
 
         connectionStatus.setEditable(false);
@@ -55,7 +50,7 @@ public class Window extends Application {
             connectionStatus.getStyleClass().removeAll("connected-status", "disconnected-status");
             if (newValue.equals("Connected")) {
                 connectionStatus.getStyleClass().add("connected-status");
-                test.getStyleClass().add("connected-status");
+//                test.getStyleClass().add("connected-status");
             } else if (newValue.equals("Disconnected")) {
                 connectionStatus.getStyleClass().add("disconnected-status");
             }
@@ -65,8 +60,6 @@ public class Window extends Application {
 
     @Override
     public void start(Stage primaryStage){
-        this.primaryStage = primaryStage;
-        petSelect = new PetSelect(primaryStage, screenBounds);
         petSelect.startPet();
         System.out.println("program started");
 
@@ -91,6 +84,7 @@ public class Window extends Application {
 
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 400);
+        petController.setWindowScene(scene);
 
         String css = this.getClass().getResource("/application.css").toExternalForm();
         if (css != null) {
@@ -103,23 +97,23 @@ public class Window extends Application {
         stage.setResizable(false);
 
         chatButton.setOnAction(e -> {
-            chat.changeScene(stage, scene);
+            chat.changeScene();
         });
 
         networkButton.setOnAction(e -> {
-            networkConnector.changeScene(stage, scene);
+            networkConnector.changeScene();
         });
 
         timerButton.setOnAction(e -> {
-            timer.changeScene(stage, scene);
+            timer.changeScene();
         });
 
         petButton.setOnAction(e -> {
-            petSelect.changeScene(stage, scene);
+            petSelect.changeScene();
         });
 
         settingsButton.setOnAction(e -> {
-            petSelect.settings.changeScene(stage, scene);
+            petSelect.settings.changeScene();
         });
 
         pinWindow.setOnAction(e -> {

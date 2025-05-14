@@ -9,28 +9,24 @@ import javafx.util.Duration;
 import java.util.Arrays;
 
 public class ImageAnimation {
+    private PetController petController;
     private Timeline timeline;
     private final Image[] frames;
-    private final ImageView imageView;
+    private ImageView imageView;
     private int index = 0;
     private double fps;
     private String file;
 
-    public ImageAnimation(ImageView imageView, String file, double fps) {
+    public ImageAnimation(PetController petController, String file, double fps) {
+        this.petController = petController;
+        imageView = petController.getPetImage();
+
         this.file = file;
         if (fps <= 0) throw new IllegalArgumentException("FPS must be > 0");
-        this.imageView = imageView;
         this.fps = fps;
 
         frames = new Image[5];
         playAnimation();
-//        for (int i = 0; i < 5; i++) {
-//            String path = STR."/Pets/\{file}_Animation\{i+1}.png";
-//            var url = getClass().getResource(path);
-//            if (url == null) throw new IllegalArgumentException("Resource not found: " + path);
-//            frames[i] = new Image(url.toExternalForm());
-//        }
-
         setupTimeline();
     }
 
@@ -57,8 +53,7 @@ public class ImageAnimation {
     }
 
     public void play() { timeline.play(); }
-    public void pause() { timeline.pause(); }
-    public void stop() { timeline.stop(); }
+
     public void remove() {
         Arrays.fill(frames, null);
         if (timeline != null) {
@@ -70,7 +65,7 @@ public class ImageAnimation {
     void playAnimation() {
         Arrays.fill(frames, null);
         for (int i = 0; i < 5; i++) {
-            String path = STR."/Pets/\{file}_Animation\{i+1}.png";
+            String path = "/Pets/" + file + "_Animation" + (i + 1) + ".png";
             var url = getClass().getResource(path);
             if (url == null) throw new IllegalArgumentException("Resource not found: " + path);
             frames[i] = new Image(url.toExternalForm());
@@ -79,7 +74,7 @@ public class ImageAnimation {
     void playIdle(){
         Arrays.fill(frames, null);
         for (int i = 0; i < 5; i++) {
-            String path = STR."/Pets/\{file}_Idle\{i+1}.png";
+            String path = "/Pets/" + file + "_Idle" + (i + 1) + ".png";
             var url = getClass().getResource(path);
             if (url == null) throw new IllegalArgumentException("Resource not found: " + path);
             frames[i] = new Image(url.toExternalForm());

@@ -11,36 +11,29 @@ import java.net.Socket;
 import javafx.scene.control.TextArea;
 
 public class NetworkManager {
+    private PetController petController;
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
     private boolean isServer;
-    private Logic gameLogic;
-    private Window window;
     private boolean connected = false;
     private static final int CONNECTION_TIMEOUT = 5000;
-
-    private TextArea chatArea = new TextArea();
 
     private SharedTextAreaManager chatManager;
     private SharedTextAreaManager connectionManager;
     private SharedTextAreaManager statusManager;
 
-
     public boolean isConnected() {
         return connected;
     }
 
-    public NetworkManager(Logic logic, Window window, SharedTextAreaManager chatManager, SharedTextAreaManager connectionManager, SharedTextAreaManager statusManager) {
-        this.gameLogic = logic;
-        this.window = window;
-        this.chatManager = chatManager;
-        this.connectionManager = connectionManager;
-        this.statusManager = statusManager;
+    public NetworkManager(PetController petController) {
+        this.petController = petController;
 
+        chatManager = petController.getChatManager();
+        connectionManager = petController.getConnectionManager();
+        statusManager = petController.getStatusManager();
     }
-
-
 
     public void startServer(int port) throws IOException {
         isServer = true;

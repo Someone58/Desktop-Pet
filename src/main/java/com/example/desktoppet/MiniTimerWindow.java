@@ -11,7 +11,8 @@ import javafx.stage.Stage;
 public class MiniTimerWindow {
     private static Stage miniStage = null; // Only one instance allowed
 
-    public MiniTimerWindow(Timer timer, Stage owner) {
+    public MiniTimerWindow(Timer timer, PetController petController) {
+
         if (miniStage != null && miniStage.isShowing()) {
             miniStage.toFront();
             return;

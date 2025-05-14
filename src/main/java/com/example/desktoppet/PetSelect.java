@@ -9,24 +9,29 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class PetSelect {
-    Stage primaryStage;
-    Rectangle2D screenBounds;
-    Settings settings = new Settings();
+    PetController petController;
+    Settings settings;
     double height = 100;
     double size = 100;
+    Stage stage;
 
     Button sharkSelect = new Button("Shark");
-    Image sharkIdle = new Image(getClass().getResource("/Pets/Shark_Animation.gif").toExternalForm());
+    Image sharkIdle;
     String sharkName = "Shark";
 
     Button hedgehogSelect = new Button("Hedgehog");
-    Image hedgehogIdle = new Image(getClass().getResource("/Pets/hedgehogIdle.png").toExternalForm());
+    Image hedgehogIdle;
     String hedgehogName = "Hedgehog";
 
-    PetAnimation pet = new PetAnimation(screenBounds);
+    PetAnimation pet;
 
-    public PetSelect(Stage primatyStage, Rectangle2D screenBounds) {
-        this.primaryStage = primatyStage;
+    public PetSelect(PetController petController) {
+        this.petController = petController;
+
+        pet = new PetAnimation(petController);
+        sharkIdle = petController.getSharkIdle();
+        hedgehogIdle = petController.getHedgehogIdle();
+        settings = petController.getSettings();
 
         settings.speedSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             pet.setxSpeed(newValue.doubleValue());
@@ -48,7 +53,8 @@ public class PetSelect {
         });
     }
 
-    public void changeScene(Stage stage, Scene windowScene) {
+    public void changeScene() {
+        stage = petController.getStage();
 
         Button backButton = new Button("Back");
 
@@ -74,7 +80,7 @@ public class PetSelect {
         stage.setResizable(false);
 
         backButton.setOnAction(e -> {
-            stage.setScene(windowScene);
+            stage.setScene(petController.getWindowScene());
             stage.setTitle("Apps");
         });
 
@@ -88,7 +94,8 @@ public class PetSelect {
     }
 
     public void startPet() {
-        pet.setupStage(primaryStage, sharkIdle, sharkName);
+        pet = new PetAnimation(petController);
+        pet.setupStage();
         System.out.println("clicked on button");
     }
 

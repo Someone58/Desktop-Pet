@@ -15,6 +15,7 @@ import javafx.stage.StageStyle;
 import java.util.Random;
 
 public class PetAnimation {
+    PetController petController;
     private final Random random = new Random();
     private double xSpeed = 1.5;
     private double speedMultiplier = 1;
@@ -22,24 +23,31 @@ public class PetAnimation {
     private AnimationTimer animation;
     Button pet = new Button();
     Pane root = new Pane(pet);
-    ImageView petImage = new ImageView();
+    ImageView petImage;
     double bottomY;
 
     String petName = "Shark";
-    ImageAnimation imageAnimation= new ImageAnimation(petImage, petName, 4);
+    ImageAnimation imageAnimation;
 
     Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
     double screenWidth = screenBounds.getWidth();
 
-    public PetAnimation(Rectangle2D screenBounds) {
+
+    public PetAnimation(PetController petController) {
+        this.petController = petController;
+
+        imageAnimation = new ImageAnimation(petController, petName, 4);
+    }
+
+    public void setupStage() {
+        petImage = petController.getPetImage();
         petImage.setFitHeight(100);
         petImage.setFitWidth(100);
         pet.setBackground(null);
-    }
 
-    public void setupStage(Stage primaryStage, Image idle, String petName) {
-        this.petName = petName;
-        System.out.println("button triggered");
+        Stage primaryStage = petController.getPrimaryStage();
+        Image idle = petController.getSharkIdle();
+
         pet.setGraphic(petImage);
         imageAnimation.play();
         imageAnimation.setFps(5);
@@ -71,7 +79,7 @@ public class PetAnimation {
     public void setupPet(Image petIdle, String petName) {
         petImage.setImage(petIdle);
         imageAnimation.remove();
-        imageAnimation = new ImageAnimation(petImage, petName, 4);
+        imageAnimation = new ImageAnimation(petController, petName, 4);
         imageAnimation.play();
         imageAnimation.setFps(5);
     }

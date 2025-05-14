@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 
 
 public class Settings {
+    PetController petController;
+    Stage stage;
+    Scene windowScene;
     Label speedLabel = new Label("Speed (Changes the maximal speed): ");
     Slider speedSlider = new Slider(0, 5, 1);
     Label activityLabel = new Label("Activity (Changes the chance for the pet to move): ");
@@ -20,15 +23,19 @@ public class Settings {
     Label heightLabel = new Label("Hight (Changes the hight of the pet): ");
     Slider heightSlider = new Slider(0, 100, 0);
 
-    public void changeScene(Stage stage, Scene windowScene) {
+    public Settings(PetController petController) {
+        this.petController = petController;
+    }
 
-//        speedSlider.setBlockIncrement(10);
+    public void changeScene() {
+        stage = petController.getStage();
+        windowScene = petController.getWindowScene();
+
         speedSlider.setShowTickLabels(true);
         activitySlider.setShowTickLabels(true);
         sizeSlider.setShowTickLabels(true);
         sizeSlider.setMajorTickUnit(100);
         heightSlider.setShowTickLabels(true);
-//        speedSlider.setShowTickMarks(true);
 
         Button backButton = new Button("Back");
 
@@ -54,7 +61,7 @@ public class Settings {
             scene.getStylesheets().add(css);
         }
 
-        stage.setTitle("Select Pet");
+        stage.setTitle("Settings");
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false);

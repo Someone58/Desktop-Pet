@@ -10,7 +10,6 @@ public class SharedTextAreaManager {
     private StringProperty sharedContent = new SimpleStringProperty("");
 
     public void registerTextArea(TextArea textArea) {
-        // Bidirectional binding
         textArea.textProperty().bindBidirectional(sharedContent);
     }
 

@@ -15,6 +15,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class NetworkConnector {
+    PetController petController;
 
     private TextField portField = new TextField("5555");
     private TextField hostField = new TextField("localhost");
@@ -25,21 +26,24 @@ public class NetworkConnector {
     private NetworkManager networkManager;
 
     private SharedTextAreaManager textAreaManager;
-    private TextArea localTextArea;
+    private TextArea localTextArea = new TextArea();;
 
     private Label ipAdress = new Label("IP address: ");
 
 
-    public NetworkConnector(NetworkManager networkManager, TextArea connectionStatus, SharedTextAreaManager textAreaManager) {
-        this.networkManager = networkManager;
-        this.connectionStatus = connectionStatus;
-        this.textAreaManager = textAreaManager;
-        this.localTextArea = new TextArea();
-        this.textAreaManager.registerTextArea(localTextArea);
-        getIP();
+    public NetworkConnector(PetController petController) {
+        this.petController = petController;
+        networkManager = petController.getNetworkManager();
+        connectionStatus = petController.getConnectionStatus();
+        textAreaManager = petController.getConnectionManager();
+        textAreaManager.registerTextArea(localTextArea);
     }
 
-    public void changeScene(Stage stage, Scene windowScene) {
+    public void changeScene() {
+        getIP();
+
+        Stage stage = petController.getStage();
+        Scene windowScene = petController.getWindowScene();
 
         Button backButton = new Button("Back");
 
@@ -104,10 +108,8 @@ public class NetworkConnector {
     private void getIP(){
         try {
             InetAddress address = InetAddress.getLocalHost();
-//            System.out.println("IP address: " + address.getHostAddress());
             ipAdress.setText("IP address: " + address.getHostAddress());
         } catch (UnknownHostException ex) {
-//            System.out.println("Could not find IP address for this host");
             ipAdress.setText("Could not find IP address for this host");
         }
     }

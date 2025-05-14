@@ -20,6 +20,7 @@ import javafx.util.Duration;
 import javafx.util.converter.IntegerStringConverter;
 
 public class Timer {
+    PetController petController;
     private Timeline timeline;
     private int workDuration = 25 * 60;
     private int breakDuration = 5 * 60;
@@ -52,12 +53,16 @@ public class Timer {
     private int totalBreakTime = 0;
     private int phaseStartTime = 0; // time in seconds when a phase starts
 
-    public Timer() {
+    public Timer(PetController petController) {
+        this.petController = petController;
         timeline = new Timeline(); // Initialize empty timeline
         timeline.setCycleCount(Timeline.INDEFINITE);
     }
 
-    public void changeScene(Stage stage, Scene windowScene) {
+    public void changeScene() {
+        Stage stage = petController.getStage();
+        Scene windowScene = petController.getWindowScene();
+
         VBox root = new VBox(5);
 
         buttonBox = new HBox(10);
@@ -120,7 +125,7 @@ public class Timer {
 
         startPauseButton.setOnAction(e -> toggleTimer());
         resetButton.setOnAction(e -> resetTimer(buttonBox));
-        miniTimerButton.setOnAction(e -> new MiniTimerWindow(this, stage));
+        miniTimerButton.setOnAction(e -> new MiniTimerWindow(this, petController));
 
         root.getChildren().clear();
         root.getChildren().addAll(backButton, miniTimerButton, statusLabel, timerLabel, buttonBox, inputBox);
@@ -150,9 +155,7 @@ public class Timer {
             workDuration = Integer.parseInt(workField.getText()) * 60;
             breakDuration = Integer.parseInt(breakField.getText()) * 60;
             sessions = Integer.parseInt(sessionsField.getText());
-        } catch (NumberFormatException e) {
-            // Use default values
-        }
+        } catch (NumberFormatException e) {}
 
         remainingTime = workDuration;
         isWork = true;
@@ -295,7 +298,7 @@ public class Timer {
         updateTimerDisplay();
         statusLabel.setText("Work Time");
 
-        // ← clear the old “Done/Close” text so mini‐window knows to go back to START/RESET
+        //clear the old “Done/Close” text so mini‐window knows to go back to START/RESET
         nextPhaseButton.setText("");
 
         box.getChildren().setAll(startPauseButton, resetButton);

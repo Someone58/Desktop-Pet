@@ -11,9 +11,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Chat {
-    Stage stage = new Stage();
+    PetController petController;
     private TextArea chatArea = new TextArea();
-    private TextArea messageArea;
 
     private TextField messageField = new TextField();
     private Button sendButton = new Button("Send");
@@ -27,18 +26,17 @@ public class Chat {
     boolean scrolledUp = false;
     double lastPosition = 0;
 
-    Button testButton = new Button("Test");
+    public Chat(PetController petController) {
+        this.petController = petController;
 
-    public Chat(NetworkManager networkManager, SharedTextAreaManager textAreaManager
-    ) {
-        this.networkManager = networkManager;
-        this.textAreaManager = textAreaManager;
-
+        networkManager = petController.getNetworkManager();
+        textAreaManager = petController.getChatManager();
         textAreaManager.registerTextArea(chatArea);
-
     }
 
-    public void changeScene(Stage stage, Scene windowScene) {
+    public void changeScene() {
+        Stage stage = petController.getStage();
+        Scene windowScene = petController.getWindowScene();
 
         Button backButton = new Button("Back");
 
@@ -58,8 +56,7 @@ public class Chat {
         rootVBox.getChildren().addAll(
                 backButton,
                 chatArea,
-                messageBox,
-                testButton
+                messageBox
         );
 
         Group root = new Group(rootVBox);
@@ -105,7 +102,6 @@ public class Chat {
             }
         });
 
-
         chatArea.textProperty().addListener((obs, oldText, newText) -> {
 
             if (scrolledUp == false) {
@@ -116,19 +112,17 @@ public class Chat {
             }
             else{
                 chatArea.setScrollTop(lastPosition);
-//                System.out.println("last Position: " + lastPosition);
-                testButton.fire();
+                scrollToTop();
             }
         });
+    }
 
-        testButton.setOnAction(e -> {
-            PauseTransition delay = new PauseTransition(Duration.seconds(0.005));
-            delay.setOnFinished(ev -> {
-                Platform.runLater(() -> chatArea.setScrollTop(lastPosition));
-            });
-            delay.play();
+    private void scrollToTop(){
+        PauseTransition delay = new PauseTransition(Duration.seconds(0.005));
+        delay.setOnFinished(ev -> {
+            Platform.runLater(() -> chatArea.setScrollTop(lastPosition));
         });
-
+        delay.play();
     }
 
     private void sendMessage() {
@@ -142,22 +136,3 @@ public class Chat {
 
 }
 
-
-//petwindow: animation code, uses variables from pet
-//pet: variables, sprites, instance of petwindow -> input variables, makes instance of window
-//window creates instance of petselect
-
-//petselect needs to be able to stop pet
-
-//window creates instance of petselect and pet
-//pet creates instance of petanimation
-
-//petselect needs to make instances of pet
-//pet has variables for each pet that makes instances
-//petanimation needs variables for speed and sprites
-//petselect can make instances of petanimation and give variables and sprites
-//window makes instance of petselect
-//starter starts pet which then creates an instance of petanimation
-//starter starts window but window doesn't show stage? window makes instance of petanimation which starts a pet
-
-//PetAnimation needs to create an instance of window
