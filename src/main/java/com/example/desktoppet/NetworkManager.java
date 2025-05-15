@@ -12,6 +12,7 @@ import javafx.scene.control.TextArea;
 
 public class NetworkManager {
     private PetController petController;
+    private Notification notification;
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
@@ -30,6 +31,8 @@ public class NetworkManager {
     public NetworkManager(PetController petController) {
         this.petController = petController;
 
+        notification = petController.getNotification();
+        System.out.println("notification " + notification);
         chatManager = petController.getChatManager();
         connectionManager = petController.getConnectionManager();
         statusManager = petController.getStatusManager();
@@ -112,6 +115,9 @@ public class NetworkManager {
                 while ((message = in.readLine()) != null) {
                     final String receivedMessage = message;
                     Platform.runLater(() -> {
+                        if (petController.isChatopened() == false){{
+                            notification.setChatIcon();
+                        }}
                         appendMessage("Received: " + receivedMessage);
                     });
                 }

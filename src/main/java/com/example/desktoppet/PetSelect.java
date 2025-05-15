@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 public class PetSelect {
     PetController petController;
+    Notification notification;
     Settings settings;
     double height = 100;
     double size = 100;
@@ -28,6 +29,7 @@ public class PetSelect {
     public PetSelect(PetController petController) {
         this.petController = petController;
 
+        notification = petController.getNotification();
         pet = new PetAnimation(petController);
         sharkIdle = petController.getSharkIdle();
         hedgehogIdle = petController.getHedgehogIdle();
@@ -43,7 +45,8 @@ public class PetSelect {
 
         settings.sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             this.size = newValue.doubleValue();
-            pet.setSizeHeight(newValue.doubleValue(), height);
+            petController.setPetSize(newValue.doubleValue());
+            pet.setSizeHeight(size, height);
         });
 
         settings.heightSlider.valueProperty().addListener((observable, oldValue, newValue) -> {

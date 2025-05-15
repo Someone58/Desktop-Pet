@@ -12,6 +12,7 @@ import javafx.util.Duration;
 
 public class Chat {
     PetController petController;
+    Notification notification;
     private TextArea chatArea = new TextArea();
 
     private TextField messageField = new TextField();
@@ -29,12 +30,16 @@ public class Chat {
     public Chat(PetController petController) {
         this.petController = petController;
 
+        notification = petController.getNotification();
         networkManager = petController.getNetworkManager();
         textAreaManager = petController.getChatManager();
         textAreaManager.registerTextArea(chatArea);
     }
 
     public void changeScene() {
+        petController.setChatopened(true);
+        notification.setNoIcon();
+
         Stage stage = petController.getStage();
         Scene windowScene = petController.getWindowScene();
 
@@ -72,12 +77,20 @@ public class Chat {
         stage.show();
         stage.setResizable(false);
 
+
+
         sendButton.setOnAction(e -> sendMessage());
         messageField.setOnAction(e -> sendMessage());
 
         backButton.setOnAction(e -> {
+            petController.setChatopened(false);
             stage.setScene(windowScene);
             stage.setTitle("Apps");
+        });
+
+        stage.setOnCloseRequest(event -> {
+            System.out.println("Stage is closing");
+            petController.setChatopened(false);
         });
 
         chatArea.scrollTopProperty().addListener((obs, oldVal, newVal) -> {

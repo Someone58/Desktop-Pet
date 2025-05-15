@@ -1,6 +1,8 @@
 package com.example.desktoppet;
 
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,6 +18,7 @@ import java.util.Random;
 
 public class PetAnimation {
     PetController petController;
+    Notification notification;
     private final Random random = new Random();
     private double xSpeed = 1.5;
     private double speedMultiplier = 1;
@@ -37,12 +40,14 @@ public class PetAnimation {
         this.petController = petController;
 
         imageAnimation = new ImageAnimation(petController, petName, 4);
+        notification = petController.getNotification();
     }
 
     public void setupStage() {
         petImage = petController.getPetImage();
-        petImage.setFitHeight(100);
-        petImage.setFitWidth(100);
+        petImage.setFitHeight(petController.getPetSize());
+        petImage.setFitWidth(petController.getPetSize());
+
         pet.setBackground(null);
 
         Stage primaryStage = petController.getPrimaryStage();
@@ -52,7 +57,7 @@ public class PetAnimation {
         imageAnimation.play();
         imageAnimation.setFps(5);
 
-        pet.setPrefSize(60, 40);
+        pet.setPrefHeight(40);
         bottomY = screenBounds.getHeight() - pet.getPrefHeight() - 40;
         pet.setLayoutY(bottomY);
 
@@ -70,10 +75,15 @@ public class PetAnimation {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setAlwaysOnTop(true);
 
+        ImageView notificationIcon = notification.getNotification();
+        root.getChildren().add(notificationIcon);
+
         Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
         scene.setFill(null);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        pet.setPadding(Insets.EMPTY);
     }
 
     public void setupPet(Image petIdle, String petName) {
@@ -92,19 +102,33 @@ public class PetAnimation {
             public void handle(long now) {
                 // Move horizontally
                 double newX = pet.getLayoutX() + xSpeed;
-                if (xSpeed < 0){
+                boolean facingRight = xSpeed > 0;
+
+                notification.setSize(petController.getPetSize() / 6.0);
+                double notificationWidth = notification.getSize();
+
+                double middlePos = pet.getLayoutX() + petController.getPetSize() / 2 - notificationWidth / 2;
+                if (xSpeed < 0 || xSpeed == 0 && facingRight) {
+                    notification.setPos(
+                            middlePos - petController.getPetSize() / 2.3,
+                            pet.getLayoutY() + petController.getPetSize() / 5
+                    );
                     petImage.setScaleX(1.0);
-                } else if (xSpeed > 0){
+                } else if (xSpeed > 0 || xSpeed == 0 && !facingRight) {
+                    notification.setPos(
+                            middlePos + petController.getPetSize() / 2.3,
+                            pet.getLayoutY() + petController.getPetSize() / 5
+                    );
                     petImage.setScaleX(-1.0);
                 }
 
                 // Boundary check
                 if (newX > screenWidth - pet.getWidth() || newX < 0) {
                     xSpeed *= -1;
-                    imageAnimation.setFps(Math.abs(xSpeed*2.5));
-                    if (newX > screenWidth - pet.getWidth()){
+                    imageAnimation.setFps(Math.abs(xSpeed * 2.5));
+                    if (newX > screenWidth - pet.getWidth()) {
                         petImage.setScaleX(1.0);
-                    } else{
+                    } else {
                         petImage.setScaleX(-1.0);
                     }
 
@@ -116,18 +140,17 @@ public class PetAnimation {
                 // Random direction changes
                 if (now - lastChange > 1_000_000_000) { // Every 1 second
                     if (random.nextDouble() < 0.3) { // 30% chance to change
-                        if (random.nextDouble() < activity){
+                        if (random.nextDouble() < activity) {
                             imageAnimation.playAnimation();
                             xSpeed = (random.nextBoolean() ? 0.5 : -0.5) * (1 + random.nextDouble() * 2);
                             xSpeed *= speedMultiplier;
-                            imageAnimation.setFps(Math.abs(xSpeed*2.5));
-                            if (xSpeed < 0){
+                            imageAnimation.setFps(Math.abs(xSpeed * 2.5));
+                            if (xSpeed < 0) {
                                 petImage.setScaleX(1.0);
-                            } else if (xSpeed > 0){
+                            } else if (xSpeed > 0) {
                                 petImage.setScaleX(-1.0);
                             }
-                        }
-                        else{
+                        } else {
                             xSpeed = 0;
                             imageAnimation.setFps(4);
                             imageAnimation.playIdle();
@@ -143,7 +166,9 @@ public class PetAnimation {
 
     public void setxSpeed(double speedMultiplier) {
         this.speedMultiplier = speedMultiplier;
-    };
+    }
+
+    ;
 
     public void setActivity(double activity) {
         this.activity = activity;
@@ -165,7 +190,6 @@ public class PetAnimation {
         double clampedY = Math.max(minY, Math.min(desiredY, maxY));
         pet.setLayoutY(clampedY);
     }
-
 
 
 }

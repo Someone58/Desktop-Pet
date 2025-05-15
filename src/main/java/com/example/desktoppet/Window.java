@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 public class Window extends Application {
     private PetController petController = new PetController();
+    private Notification notification = petController.getNotification();
 
     Stage stage;
 
@@ -66,6 +67,7 @@ public class Window extends Application {
         petSelect.pet.pet.setOnAction(e -> {
             openWindow();
             stage.setIconified(false);
+//            notification.setNoIcon();
         });
     }
 

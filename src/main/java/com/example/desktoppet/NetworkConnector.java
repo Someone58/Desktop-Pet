@@ -17,6 +17,7 @@ import java.net.UnknownHostException;
 public class NetworkConnector {
     PetController petController;
 
+    private CopieableLabel copieableLabel = new CopieableLabel("IP address: ");
     private TextField portField = new TextField("5555");
     private TextField hostField = new TextField("localhost");
     private Button hostButton = new Button("Host Game");
@@ -26,7 +27,7 @@ public class NetworkConnector {
     private NetworkManager networkManager;
 
     private SharedTextAreaManager textAreaManager;
-    private TextArea localTextArea = new TextArea();;
+    private TextArea localTextArea = new TextArea();
 
     private Label ipAdress = new Label("IP address: ");
 
@@ -62,7 +63,8 @@ public class NetworkConnector {
                 hostButton,
                 joinButton,
                 localTextArea,
-                ipAdress
+                ipAdress,
+                copieableLabel
         );
 
         Group root = new Group(rootVBox);
@@ -108,9 +110,12 @@ public class NetworkConnector {
     private void getIP(){
         try {
             InetAddress address = InetAddress.getLocalHost();
-            ipAdress.setText("IP address: " + address.getHostAddress());
+//            ipAdress.setText("IP address: " + address.getHostAddress());
+
+            copieableLabel.setText(address.getHostAddress());
         } catch (UnknownHostException ex) {
-            ipAdress.setText("Could not find IP address for this host");
+//            ipAdress.setText("Could not find IP address for this host");
+            copieableLabel.setText("Could not find IP address for this host");
         }
     }
 
