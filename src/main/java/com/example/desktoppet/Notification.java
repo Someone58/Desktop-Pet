@@ -5,7 +5,8 @@ import javafx.scene.image.ImageView;
 
 public class Notification {
     PetController petController;
-    Image chatIcon = new Image(getClass().getResource("/NotificationIcons/MessageNotification.png").toExternalForm());;
+    Image chatIcon = new Image(getClass().getResource("/NotificationIcons/MessageNotification.png").toExternalForm());
+    Image timerIcon = new Image(getClass().getResource("/NotificationIcons/TimerNotification.png").toExternalForm());
     ImageView notificationIcon = new ImageView();
     double size = 20;
 
@@ -37,6 +38,10 @@ public class Notification {
 
     public void setChatIcon(){
         notificationIcon.setImage(chatIcon);
+    }
+
+    public void setTimerIcon(){
+        notificationIcon.setImage(timerIcon);
     }
 
     public void setNoIcon(){

@@ -12,8 +12,11 @@ import javafx.stage.Stage;
 public class PetController {
     //Window
     String css = this.getClass().getResource("/application.css").toExternalForm();
+    String darkmode = this.getClass().getResource("/darkmode.css").toExternalForm();
     Notification notification = new Notification(this);
 
+    boolean timeropened = false;
+    boolean minitimeropened = false;
     boolean chatopened = false;
     double petSize = 100;
     double xSpeed = 1.5;
@@ -218,5 +221,29 @@ public class PetController {
 
     public void setxSpeed(double xSpeed) {
         this.xSpeed = xSpeed;
+    }
+
+    public String getDarkmode() {
+        return darkmode;
+    }
+
+    public void setDarkmode(String darkmode) {
+        this.darkmode = darkmode;
+    }
+
+    public boolean isTimeropened() {
+        return timeropened;
+    }
+
+    public void setTimeropened(boolean timeropened) {
+        this.timeropened = timeropened;
+    }
+
+    public boolean isMinitimeropened() {
+        return minitimeropened;
+    }
+
+    public void setMinitimeropened(boolean minitimeropened) {
+        this.minitimeropened = minitimeropened;
     }
 }

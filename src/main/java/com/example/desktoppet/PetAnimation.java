@@ -86,12 +86,15 @@ public class PetAnimation {
         pet.setPadding(Insets.EMPTY);
     }
 
-    public void setupPet(Image petIdle, String petName) {
-        petImage.setImage(petIdle);
+    public void setupPet(String petName) {
+//        petImage.setImage(petIdle);
         imageAnimation.remove();
         imageAnimation = new ImageAnimation(petController, petName, 4);
         imageAnimation.play();
-        imageAnimation.setFps(5);
+        if (xSpeed == 0){
+            imageAnimation.playIdle();
+        }
+        imageAnimation.setFps(4);
     }
 
     private void setupAnimation() {
