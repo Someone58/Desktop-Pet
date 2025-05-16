@@ -24,6 +24,9 @@ public class PetSelect {
     Image hedgehogIdle;
     String hedgehogName = "Hedgehog";
 
+    Button dogSelect = new Button("Dog");
+    String dogName = "Dog";
+
     PetAnimation pet;
 
     public PetSelect(PetController petController) {
@@ -61,7 +64,7 @@ public class PetSelect {
 
         Button backButton = new Button("Back");
 
-        VBox petsVBox = new VBox(sharkSelect, hedgehogSelect);
+        VBox petsVBox = new VBox(sharkSelect, hedgehogSelect, dogSelect);
 
         VBox rootVBox = new VBox(5);
         rootVBox.getChildren().addAll(
@@ -88,11 +91,15 @@ public class PetSelect {
         });
 
         sharkSelect.setOnAction(e -> {
-            pet.setupPet(sharkIdle, sharkName);
+            pet.setupPet(sharkName);
         });
 
         hedgehogSelect.setOnAction(e -> {
-            pet.setupPet(hedgehogIdle, hedgehogName);
+            pet.setupPet(hedgehogName);
+        });
+
+        dogSelect.setOnAction(e -> {
+            pet.setupPet(dogName);
         });
     }
 
