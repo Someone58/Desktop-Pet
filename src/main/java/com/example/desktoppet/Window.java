@@ -22,7 +22,6 @@ public class Window extends Application {
         // Start the pet animation
         PetSelect petSelect = ((WindowGUI)windowUI).getPetSelect();
         petSelect.startPet();
-        System.out.println("program started");
 
         // Set up event handler for pet button
         petSelect.pet.pet.setOnAction(e -> {

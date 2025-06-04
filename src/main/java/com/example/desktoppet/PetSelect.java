@@ -102,7 +102,6 @@ public class PetSelect {
     public void startPet() {
         pet = new PetAnimation(petController);
         pet.setupStage();
-        System.out.println("clicked on button");
     }
 
     /**

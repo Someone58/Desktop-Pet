@@ -122,7 +122,6 @@ public class TimerGUI implements TimerInterface {
         });
 
         stage.setOnCloseRequest(event -> {
-            System.out.println("Stage is closing");
             petController.setTimeropened(false);
             timerLogic.saveInputFields(
                 workField.getText(),

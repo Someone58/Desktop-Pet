@@ -32,7 +32,6 @@ public class NetworkManager {
         this.petController = petController;
 
         notification = petController.getNotification();
-        System.out.println("notification " + notification);
         chatManager = petController.getChatManager();
         connectionManager = petController.getConnectionManager();
         statusManager = petController.getStatusManager();

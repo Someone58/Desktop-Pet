@@ -23,7 +23,9 @@ public class SettingsGUI implements SettingsInterface {
     private final Slider heightSlider = new Slider(0, 100, 0);
 
     private final Button darkmode = new Button("Dark Mode");
+    private final Button pinWindow = new Button("Pin Window");
     private boolean isDarkMode = false;
+    private boolean windowOnTop = true;
     
     public SettingsGUI(Settings settingsLogic, PetController petController) {
         this.settingsLogic = settingsLogic;
@@ -54,8 +56,12 @@ public class SettingsGUI implements SettingsInterface {
         heightSlider.valueProperty().addListener((observable, oldValue, newValue) -> 
                 settingsLogic.onHeightChanged(newValue.doubleValue()));
 
-        // Setup darkmode button action
+        // Setup button actions
         darkmode.setOnAction(e -> toggleDarkMode());
+        pinWindow.setOnAction(e -> toggleAlwaysOnTop());
+
+        // Initialize pin window button text
+        updatePinWindowText();
     }
     
     @Override
@@ -76,7 +82,8 @@ public class SettingsGUI implements SettingsInterface {
                 sizeSlider,
                 heightLabel,
                 heightSlider,
-                darkmode
+                darkmode,
+                pinWindow
         );
 
         Group root = new Group(rootVBox);
@@ -141,6 +148,23 @@ public class SettingsGUI implements SettingsInterface {
 
         // Make sure all existing scenes are updated immediately
         updateCurrentScenes();
+    }
+
+    /**
+     * Toggles the always-on-top state of the window
+     */
+    private void toggleAlwaysOnTop() {
+        windowOnTop = !windowOnTop;
+        Stage stage = petController.getStage();
+        stage.setAlwaysOnTop(windowOnTop);
+        updatePinWindowText();
+    }
+
+    /**
+     * Updates the text of the pin window button based on current state
+     */
+    private void updatePinWindowText() {
+        pinWindow.setText(windowOnTop ? "Unpin Window" : "Pin Window");
     }
 
     /**

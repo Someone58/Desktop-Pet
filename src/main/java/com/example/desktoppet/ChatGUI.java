@@ -51,7 +51,7 @@ public class ChatGUI implements ChatInterface {
         chatArea.scrollTopProperty().addListener((obs, oldVal, newVal) -> {
             if ((double) newVal % 1 == 0 && (double) newVal != 0 && (double) newVal > scrollBottom) {
                 scrollBottom = (double) newVal;
-                System.out.println("At bottom:  " + scrollBottom);
+//                System.out.println("At bottom:  " + scrollBottom);
             }
 
             newPosition = (double) newVal;
@@ -72,7 +72,6 @@ public class ChatGUI implements ChatInterface {
         chatArea.textProperty().addListener((obs, oldText, newText) -> {
             if (!scrolledUp) {
                 Platform.runLater(() -> {
-                    System.out.println(chatArea.getCaretPosition());
                     chatArea.positionCaret(newText.length());
                 });
             }
@@ -108,9 +107,6 @@ public class ChatGUI implements ChatInterface {
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 400);
 
-        // Register scene with StyleManager
-        StyleManager.getInstance().registerScene(scene);
-
         String css = petController.getCss();
         if (css != null) {
             scene.getStylesheets().add(css);
@@ -132,7 +128,6 @@ public class ChatGUI implements ChatInterface {
         });
 
         stage.setOnCloseRequest(event -> {
-            System.out.println("Stage is closing");
             petController.setChatopened(false);
         });
     }

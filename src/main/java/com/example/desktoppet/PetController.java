@@ -56,7 +56,6 @@ public class PetController {
     //Notification
 
     public Notification getNotification() {
-//        System.out.println(notification);
         return notification;
     }
 

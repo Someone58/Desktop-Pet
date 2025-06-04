@@ -22,7 +22,6 @@ public class WindowGUI implements WindowUI {
     private Button timerButton;
     private Button petButton;
     private Button settingsButton;
-    private Button pinWindow;
     
     // Component handlers
     private Chat chat;
@@ -42,7 +41,6 @@ public class WindowGUI implements WindowUI {
         timerButton = new Button("Timer");
         petButton = new Button("Select Pet");
         settingsButton = new Button("Settings");
-        pinWindow = new Button("Pin Window");
         
         // Initialize handlers with their respective UI implementations
         chat = new Chat(petController); // This now uses ChatGUI internally
@@ -86,8 +84,7 @@ public class WindowGUI implements WindowUI {
                 networkButton,
                 timerButton,
                 petButton,
-                settingsButton,
-                pinWindow
+                settingsButton
         );
         
         // Set up scene
@@ -117,11 +114,6 @@ public class WindowGUI implements WindowUI {
         timerButton.setOnAction(e -> timer.changeScene());
         petButton.setOnAction(e -> petSelect.changeScene());
         settingsButton.setOnAction(e -> petSelect.settings.changeScene());
-        pinWindow.setOnAction(e -> toggleAlwaysOnTop());
-    }
-    
-    private void toggleAlwaysOnTop() {
-        setAlwaysOnTop(!windowOnTop);
     }
     
     @Override
