@@ -34,13 +34,10 @@ public class PetController {
     private TextArea connectionStatus = new TextArea();
 
     Button chatButton = new Button("Chat");
-//    Chat chat;
 
     Button networkButton = new Button("Network");
-//    NetworkConnector networkConnector = new NetworkConnector(networkManager, connectionStatus, connectionManager);
 
     Button timerButton = new Button("Timer");
-//    Timer timer = new Timer();
 
     Button pinWindow = new Button("Pin Window");
     boolean windowOnTop = true;
@@ -51,7 +48,6 @@ public class PetController {
     Button settingsButton = new Button("Settings");
 
     //PetSelect
-//    Settings settings;
     Settings settings = new Settings(this);
     Image sharkIdle = new Image(getClass().getResource("/Pets/Shark_Animation.gif").toExternalForm());
     Image hedgehogIdle = new Image(getClass().getResource("/Pets/hedgehogIdle.png").toExternalForm());
@@ -61,9 +57,6 @@ public class PetController {
 
     //Notification
 
-//    int petXPos;
-//    int petYpos;
-
     public Notification getNotification() {
 //        System.out.println(notification);
         return notification;
@@ -72,22 +65,6 @@ public class PetController {
     public void setNotification(Notification notification) {
         this.notification = notification;
     }
-
-//    public int getPetXPos() {
-//        return petXPos;
-//    }
-//
-//    public void setPetXPos(int petXPos) {
-//        this.petXPos = petXPos;
-//    }
-//
-//    public int getPetYpos() {
-//        return petYpos;
-//    }
-//
-//    public void setPetYpos(int petYpos) {
-//        this.petYpos = petYpos;
-//    }
 
     public String getCss() {
         return css;

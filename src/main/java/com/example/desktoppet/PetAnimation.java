@@ -26,7 +26,11 @@ public class PetAnimation {
     private AnimationTimer animation;
     Button pet = new Button();
     Pane root = new Pane(pet);
-    ImageView petImage;
+
+    String imagePath = "/Pets/Shark_Idle1.png";
+    Image image = new Image(getClass().getResource(imagePath).toExternalForm());
+    ImageView petImage = new ImageView(image);
+
     double bottomY;
 
     String petName = "Shark";
@@ -87,7 +91,6 @@ public class PetAnimation {
     }
 
     public void setupPet(String petName) {
-//        petImage.setImage(petIdle);
         imageAnimation.remove();
         imageAnimation = new ImageAnimation(petController, petName, 4);
         imageAnimation.play();
@@ -158,7 +161,6 @@ public class PetAnimation {
                             imageAnimation.setFps(4);
                             imageAnimation.playIdle();
                         }
-                        // }
                     }
                     lastChange = now;
                 }

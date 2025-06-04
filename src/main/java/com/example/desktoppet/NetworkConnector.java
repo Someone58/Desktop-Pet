@@ -1,127 +1,100 @@
 package com.example.desktoppet;
 
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
+/**
+ * Handles network connection logic and functionality, delegating UI operations to NetworkConnectorInterface
+ */
 public class NetworkConnector {
-    PetController petController;
+    private final PetController petController;
+    private final NetworkManager networkManager;
+    private final NetworkConnectorInterface networkUI;
 
-    private CopieableLabel copieableLabel = new CopieableLabel("IP address: ");
-    private TextField portField = new TextField("5555");
-    private TextField hostField = new TextField("localhost");
-    private Button hostButton = new Button("Host Game");
-    private Button joinButton = new Button("Join Game");
-
-    private TextArea connectionStatus;
-    private NetworkManager networkManager;
-
-    private SharedTextAreaManager textAreaManager;
-    private TextArea localTextArea = new TextArea();
-
-    private Label ipAdress = new Label("IP address: ");
-
-
+    /**
+     * Constructor that uses the default NetworkConnectorGUI implementation
+     * @param petController the pet controller instance
+     */
     public NetworkConnector(PetController petController) {
         this.petController = petController;
-        networkManager = petController.getNetworkManager();
-        connectionStatus = petController.getConnectionStatus();
-        textAreaManager = petController.getConnectionManager();
-        textAreaManager.registerTextArea(localTextArea);
+        this.networkManager = petController.getNetworkManager();
+
+        // Create and initialize the default UI implementation
+        this.networkUI = new NetworkConnectorGUI(this, petController);
     }
 
+    /**
+     * Constructor that accepts a custom UI implementation
+     * @param petController the pet controller instance
+     * @param networkUI custom UI implementation
+     */
+    public NetworkConnector(PetController petController, NetworkConnectorInterface networkUI) {
+        this.petController = petController;
+        this.networkManager = petController.getNetworkManager();
+        this.networkUI = networkUI;
+    }
+
+    /**
+     * Changes to the network connector scene using the UI implementation
+     */
     public void changeScene() {
-        getIP();
-
-        Stage stage = petController.getStage();
-        Scene windowScene = petController.getWindowScene();
-
-        Button backButton = new Button("Back");
-
-        localTextArea.setEditable(false);
-        localTextArea.setWrapText(true);
-        localTextArea.setPrefRowCount(10);
-        localTextArea.setPrefColumnCount(30);
-
-        HBox connectionBox = new HBox(5);
-        connectionBox.getChildren().addAll(new Label("Host:"), hostField, new Label("Port:"), portField);
-
-        VBox rootVBox = new VBox(5);
-        rootVBox.getChildren().addAll(
-                backButton,
-                connectionBox,
-                hostButton,
-                joinButton,
-                localTextArea,
-                ipAdress,
-                copieableLabel
-        );
-
-        Group root = new Group(rootVBox);
-        Scene scene = new Scene(root, 300, 400);
-
-        String css = this.getClass().getResource("/application.css").toExternalForm();
-        if (css != null) {
-            scene.getStylesheets().add(css);
-        }
-
-        stage.setTitle("Network Connector");
-        stage.setScene(scene);
-        stage.show();
-        stage.setResizable(false);
-
-        hostButton.setOnAction(e -> {
-            try {
-                networkManager.startServer(Integer.parseInt(portField.getText()));
-            } catch (IOException ex) {
-                connectionStatus.setText("Hosting Failed");
-                appendToChatArea("Error: " + ex.getMessage());
-            }
-        });
-
-        joinButton.setOnAction(e -> {
-            try {
-                networkManager.connectToServer(
-                        hostField.getText(),
-                        Integer.parseInt(portField.getText())
-                );
-            } catch (IOException ex) {
-                connectionStatus.setText("Connection Failed");
-                appendToChatArea("Error: " + ex.getMessage());
-            }
-        });
-
-        backButton.setOnAction(e -> {
-            stage.setScene(windowScene);
-            stage.setTitle("Apps");
-        });
+        networkUI.changeScene();
     }
 
-    private void getIP(){
+    /**
+     * Attempts to start a server
+     * @param port the port to host on
+     * @return true if server started, false otherwise
+     */
+    public boolean startServer(int port) {
         try {
-            InetAddress address = InetAddress.getLocalHost();
-//            ipAdress.setText("IP address: " + address.getHostAddress());
-
-            copieableLabel.setText(address.getHostAddress());
-        } catch (UnknownHostException ex) {
-//            ipAdress.setText("Could not find IP address for this host");
-            copieableLabel.setText("Could not find IP address for this host");
+            networkManager.startServer(port);
+            return true;
+        } catch (IOException ex) {
+            petController.getConnectionStatus().setText("Hosting Failed");
+            appendToChatArea("Error: " + ex.getMessage());
+            return false;
         }
     }
 
-    public void appendToChatArea(String message) {
-        localTextArea.appendText(message + "\n");
+    /**
+     * Attempts to connect to a server
+     * @param host the host to connect to
+     * @param port the port to connect to
+     * @return true if connection succeeded, false otherwise
+     */
+    public boolean connectToServer(String host, int port) {
+        try {
+            networkManager.connectToServer(host, port);
+            return true;
+        } catch (IOException ex) {
+            petController.getConnectionStatus().setText("Connection Failed");
+            appendToChatArea("Error: " + ex.getMessage());
+            return false;
+        }
     }
 
+    /**
+     * Appends a message to the chat area
+     * @param message the message to append
+     */
+    public void appendToChatArea(String message) {
+        networkUI.appendToChatArea(message);
+    }
+
+    /**
+     * Get the UI implementation
+     * @return the network connector UI interface
+     */
+    public NetworkConnectorInterface getNetworkUI() {
+        return networkUI;
+    }
+
+    /**
+     * Get the pet controller
+     * @return the pet controller
+     */
+    public PetController getPetController() {
+        return petController;
+    }
 }
 

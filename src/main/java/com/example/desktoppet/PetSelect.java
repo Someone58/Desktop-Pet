@@ -1,34 +1,32 @@
 package com.example.desktoppet;
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
+/**
+ * Handles pet selection logic and functionality, delegating UI operations to PetSelectInterface
+ */
 public class PetSelect {
-    PetController petController;
-    Notification notification;
-    Settings settings;
-    double height = 100;
-    double size = 100;
-    Stage stage;
+    private final PetController petController;
+    private final Notification notification;
+    final Settings settings;
+    private double height = 100;
+    private double size = 100;
 
-    Button sharkSelect = new Button("Shark");
-    Image sharkIdle;
-    String sharkName = "Shark";
+    private final Image sharkIdle;
+    private final String sharkName = "Shark";
 
-    Button hedgehogSelect = new Button("Hedgehog");
-    Image hedgehogIdle;
-    String hedgehogName = "Hedgehog";
+    private final Image hedgehogIdle;
+    private final String hedgehogName = "Hedgehog";
 
-    Button dogSelect = new Button("Dog");
-    String dogName = "Dog";
+    private final String dogName = "Dog";
 
     PetAnimation pet;
+    private final PetSelectInterface petSelectUI;
 
+    /**
+     * Constructor that uses the default PetSelectGUI implementation
+     * @param petController the pet controller instance
+     */
     public PetSelect(PetController petController) {
         this.petController = petController;
 
@@ -38,75 +36,136 @@ public class PetSelect {
         hedgehogIdle = petController.getHedgehogIdle();
         settings = petController.getSettings();
 
-        settings.speedSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            pet.setxSpeed(newValue.doubleValue());
-        });
+        // Store this instance in the stage's userData for access from Settings
+        petController.getStage().setUserData(this);
 
-        settings.activitySlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            pet.setActivity(newValue.doubleValue());
-        });
+        // Initialize with current settings values
+        this.size = settings.getSize();
+        this.height = settings.getHeight();
 
-        settings.sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            this.size = newValue.doubleValue();
-            petController.setPetSize(newValue.doubleValue());
-            pet.setSizeHeight(size, height);
-        });
+        // Apply initial settings to pet
+        pet.setxSpeed(settings.getSpeed());
+        pet.setActivity(settings.getActivity());
+        pet.setSizeHeight(size, height);
 
-        settings.heightSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            double reversedValue = 100 - newValue.doubleValue();
-            this.height = reversedValue;
-            pet.setSizeHeight(size, reversedValue);
-        });
+        // Create and initialize the default UI implementation
+        this.petSelectUI = new PetSelectGUI(this, petController);
     }
 
+    /**
+     * Constructor that accepts a custom UI implementation
+     * @param petController the pet controller instance
+     * @param petSelectUI custom UI implementation
+     */
+    public PetSelect(PetController petController, PetSelectInterface petSelectUI) {
+        this.petController = petController;
+
+        notification = petController.getNotification();
+        pet = new PetAnimation(petController);
+        sharkIdle = petController.getSharkIdle();
+        hedgehogIdle = petController.getHedgehogIdle();
+        settings = petController.getSettings();
+
+        // Store this instance in the stage's userData for access from Settings
+        petController.getStage().setUserData(this);
+
+        // Initialize with current settings values
+        this.size = settings.getSize();
+        this.height = settings.getHeight();
+
+        // Apply initial settings to pet
+        pet.setxSpeed(settings.getSpeed());
+        pet.setActivity(settings.getActivity());
+        pet.setSizeHeight(size, height);
+
+        this.petSelectUI = petSelectUI;
+    }
+
+    /**
+     * Changes to the pet selection scene using the UI implementation
+     */
     public void changeScene() {
-        stage = petController.getStage();
-
-        Button backButton = new Button("Back");
-
-        VBox petsVBox = new VBox(sharkSelect, hedgehogSelect, dogSelect);
-
-        VBox rootVBox = new VBox(5);
-        rootVBox.getChildren().addAll(
-                backButton,
-                petsVBox
-        );
-
-        Group root = new Group(rootVBox);
-        Scene scene = new Scene(root, 300, 400);
-
-        String css = this.getClass().getResource("/application.css").toExternalForm();
-        if (css != null) {
-            scene.getStylesheets().add(css);
-        }
-
-        stage.setTitle("Select Pet");
-        stage.setScene(scene);
-        stage.show();
-        stage.setResizable(false);
-
-        backButton.setOnAction(e -> {
-            stage.setScene(petController.getWindowScene());
-            stage.setTitle("Apps");
-        });
-
-        sharkSelect.setOnAction(e -> {
-            pet.setupPet(sharkName);
-        });
-
-        hedgehogSelect.setOnAction(e -> {
-            pet.setupPet(hedgehogName);
-        });
-
-        dogSelect.setOnAction(e -> {
-            pet.setupPet(dogName);
-        });
+        petSelectUI.changeScene();
     }
 
+    /**
+     * Sets up the selected pet
+     * @param petName the name of the pet to set up
+     */
+    public void setupPet(String petName) {
+        pet.setupPet(petName);
+    }
+
+    /**
+     * Starts the pet animation
+     */
     public void startPet() {
         pet = new PetAnimation(petController);
         pet.setupStage();
         System.out.println("clicked on button");
     }
 
+    /**
+     * Get the pet animation instance
+     * @return the current PetAnimation instance
+     */
+    public PetAnimation getPetAnimation() {
+        return pet;
+    }
+
+    /**
+     * Get the UI implementation
+     * @return the pet select UI interface
+     */
+    public PetSelectInterface getPetSelectUI() {
+        return petSelectUI;
+    }
+
+    /**
+     * Get the pet controller
+     * @return the pet controller
+     */
+    public PetController getPetController() {
+        return petController;
+    }
+
+    /**
+     * Get the height setting
+     * @return the height value
+     */
+    public double getHeight() {
+        return height;
+    }
+
+    /**
+     * Get the size setting
+     * @return the size value
+     */
+    public double getSize() {
+        return size;
+    }
+
+    /**
+     * Get the shark name
+     * @return the shark name
+     */
+    public String getSharkName() {
+        return sharkName;
+    }
+
+    /**
+     * Get the hedgehog name
+     * @return the hedgehog name
+     */
+    public String getHedgehogName() {
+        return hedgehogName;
+    }
+
+    /**
+     * Get the dog name
+     * @return the dog name
+     */
+    public String getDogName() {
+        return dogName;
+    }
 }

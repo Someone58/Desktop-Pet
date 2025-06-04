@@ -2,11 +2,13 @@ package com.example.desktoppet;
 import javafx.application.Application;
 
 /**
- * Main class
+ * Main class that launches the desktop pet application
  */
 public class DesktoppetStarter {
     public static void main(String[] args) {
-        Application.launch(Window.class, args);
+        // Set Java version property before launching
         System.setProperty("javafx.version", "21");
+        // Launch the application using the refactored Window class
+        Application.launch(Window.class, args);
     }
 }
