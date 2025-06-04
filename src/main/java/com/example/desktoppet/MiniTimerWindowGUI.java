@@ -38,9 +38,24 @@ public class MiniTimerWindowGUI implements MiniTimerWindowInterface {
         miniStage.setTitle("Mini Timer");
         miniStage.setAlwaysOnTop(true);
         miniStage.setResizable(false);
+
         
         VBox miniRoot = new VBox(10);
         miniRoot.setAlignment(Pos.CENTER);
+
+        Scene miniScene = new Scene(miniRoot, 320, 220);
+
+        // Apply the current stylesheet using proper resource loading
+        String css = petController.getCss();
+        if (css != null) {
+            String cssUrl = getClass().getResource(css).toExternalForm();
+            if (cssUrl != null) {
+                miniScene.getStylesheets().add(cssUrl);
+            }
+        }
+
+        // Register the scene with StyleManager to handle future stylesheet changes
+        StyleManager.getInstance().registerScene(miniScene);
         
         // Initialize UI components
         setupComponents(timer);
@@ -50,7 +65,6 @@ public class MiniTimerWindowGUI implements MiniTimerWindowInterface {
         miniButtonBox.setAlignment(Pos.CENTER);
         miniRoot.getChildren().addAll(miniStatusLabel, miniSessionLabel, miniTimerLabel, miniButtonBox);
         
-        Scene miniScene = new Scene(miniRoot, 320, 220);
         miniStage.setScene(miniScene);
         
         // Set up update functions

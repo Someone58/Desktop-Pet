@@ -11,8 +11,6 @@ import javafx.stage.Stage;
 
 public class PetController {
     //Window
-    String css = this.getClass().getResource("/application.css").toExternalForm();
-    String darkmode = this.getClass().getResource("/darkmode.css").toExternalForm();
     Notification notification = new Notification(this);
 
     boolean timeropened = false;
@@ -67,11 +65,12 @@ public class PetController {
     }
 
     public String getCss() {
-        return css;
+        return StyleManager.getInstance().getCurrentStylesheet();
     }
 
     public void setCss(String css) {
-        this.css = css;
+        // Update the stylesheet in StyleManager
+        StyleManager.getInstance().setStylesheet(css);
     }
 
     public Stage getPrimaryStage() {
@@ -201,11 +200,12 @@ public class PetController {
     }
 
     public String getDarkmode() {
-        return darkmode;
+        return "/darkmode.css";
     }
 
     public void setDarkmode(String darkmode) {
-        this.darkmode = darkmode;
+        // Using StyleManager to change to dark mode
+        StyleManager.getInstance().setStylesheet("/darkmode.css");
     }
 
     public boolean isTimeropened() {

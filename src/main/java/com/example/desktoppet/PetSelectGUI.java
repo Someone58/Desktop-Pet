@@ -46,7 +46,7 @@ public class PetSelectGUI implements PetSelectInterface {
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 400);
 
-        String css = this.getClass().getResource("/application.css").toExternalForm();
+        String css = petController.getCss();
         if (css != null) {
             scene.getStylesheets().add(css);
         }

@@ -5,3 +5,7 @@
 .disconnected-status {
     -fx-text-fill: darkred;
 }
+
+.label {
+    -fx-text-fill: blue;
+}

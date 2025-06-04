@@ -21,6 +21,9 @@ public class SettingsGUI implements SettingsInterface {
     private final Slider sizeSlider = new Slider(30, 300, 100);
     private final Label heightLabel = new Label("Height (Changes the height of the pet): ");
     private final Slider heightSlider = new Slider(0, 100, 0);
+
+    private final Button darkmode = new Button("Dark Mode");
+    private boolean isDarkMode = false;
     
     public SettingsGUI(Settings settingsLogic, PetController petController) {
         this.settingsLogic = settingsLogic;
@@ -50,6 +53,9 @@ public class SettingsGUI implements SettingsInterface {
         
         heightSlider.valueProperty().addListener((observable, oldValue, newValue) -> 
                 settingsLogic.onHeightChanged(newValue.doubleValue()));
+
+        // Setup darkmode button action
+        darkmode.setOnAction(e -> toggleDarkMode());
     }
     
     @Override
@@ -69,16 +75,15 @@ public class SettingsGUI implements SettingsInterface {
                 sizeLabel,
                 sizeSlider,
                 heightLabel,
-                heightSlider
+                heightSlider,
+                darkmode
         );
 
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 400);
 
-        String css = this.getClass().getResource("/application.css").toExternalForm();
-        if (css != null) {
-            scene.getStylesheets().add(css);
-        }
+        // Register the scene with StyleManager to handle stylesheets
+        StyleManager.getInstance().registerScene(scene);
 
         stage.setTitle("Settings");
         stage.setScene(scene);
@@ -117,5 +122,69 @@ public class SettingsGUI implements SettingsInterface {
     @Override
     public double getHeightValue() {
         return heightSlider.getValue();
+    }
+
+    /**
+     * Toggles between dark mode and light mode
+     */
+    private void toggleDarkMode() {
+        isDarkMode = !isDarkMode;
+
+        if (isDarkMode) {
+            // Use PetController's setCss method to update all views
+            petController.setCss("/darkmode.css");
+            darkmode.setText("Light Mode");
+        } else {
+            petController.setCss("/application.css");
+            darkmode.setText("Dark Mode");
+        }
+
+        // Make sure all existing scenes are updated immediately
+        updateCurrentScenes();
+    }
+
+    /**
+     * Updates the stylesheet of all existing scenes
+     */
+    private void updateCurrentScenes() {
+        // Update the current scene
+        Scene currentScene = petController.getStage().getScene();
+        String newStylesheet = petController.getCss();
+
+        if (currentScene != null) {
+            // Clear existing stylesheets and add the new one
+            currentScene.getStylesheets().clear();
+            currentScene.getStylesheets().add(getClass().getResource(newStylesheet).toExternalForm());
+        }
+
+        // Update the window scene
+        Scene windowScene = petController.getWindowScene();
+        if (windowScene != null) {
+            windowScene.getStylesheets().clear();
+            windowScene.getStylesheets().add(getClass().getResource(newStylesheet).toExternalForm());
+        }
+
+        // Update the mini timer window if it's open
+        MiniTimerWindowInterface miniTimer = MiniTimerWindow.getMiniTimerUI();
+        if (miniTimer != null && miniTimer.isShowing()) {
+            try {
+                // Use reflection to access the miniStage's scene since it's private
+                java.lang.reflect.Field miniStageField = MiniTimerWindowGUI.class.getDeclaredField("miniStage");
+                miniStageField.setAccessible(true);
+                Stage miniStage = (Stage) miniStageField.get(null); // static field
+
+                if (miniStage != null && miniStage.getScene() != null) {
+                    Scene miniScene = miniStage.getScene();
+                    miniScene.getStylesheets().clear();
+                    String cssUrl = getClass().getResource(newStylesheet).toExternalForm();
+                    if (cssUrl != null) {
+                        miniScene.getStylesheets().add(cssUrl);
+                    }
+                }
+            } catch (Exception e) {
+                // In case of reflection error, fallback to StyleManager
+                // The next repaint should apply the style via StyleManager
+            }
+        }
     }
 }

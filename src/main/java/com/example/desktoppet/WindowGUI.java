@@ -96,7 +96,7 @@ public class WindowGUI implements WindowUI {
         petController.setWindowScene(scene);
         
         // Apply CSS styling
-        String css = this.getClass().getResource("/application.css").toExternalForm();
+        String css = petController.getCss();
         if (css != null) {
             scene.getStylesheets().add(css);
         }
