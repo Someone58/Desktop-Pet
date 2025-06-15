@@ -3,9 +3,15 @@ package com.example.desktoppet;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 /**
  * Handles UI construction and components for the main window
@@ -36,11 +42,51 @@ public class WindowGUI implements WindowUI {
         
         // Initialize UI components
         connectionStatus = new TextArea();
-        chatButton = new Button("Chat");
-        networkButton = new Button("Network");
-        timerButton = new Button("Timer");
-        petButton = new Button("Select Pet");
-        settingsButton = new Button("Settings");
+
+        petButton = new Button("");
+        Image petButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pet.png")));
+        ImageView petButtonImgView = new ImageView(petButtonImg);
+        petButtonImgView.setFitWidth(30);
+        petButtonImgView.setFitHeight(30);
+        petButtonImgView.setPreserveRatio(true);
+        petButton.setGraphic(petButtonImgView);
+        petButton.setId("petButton");
+
+        networkButton = new Button("");
+        Image networkButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/network.png")));
+        ImageView networkButtonImgView = new ImageView(networkButtonImg);
+        networkButtonImgView.setFitWidth(30);
+        networkButtonImgView.setFitHeight(30);
+        networkButtonImgView.setPreserveRatio(true);
+        networkButton.setGraphic(networkButtonImgView);
+        networkButton.setId("networkButton");
+
+        chatButton = new Button("");
+        Image chatButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/chat.png")));
+        ImageView chatButtonImgView = new ImageView(chatButtonImg);
+        chatButtonImgView.setFitWidth(30);
+        chatButtonImgView.setFitHeight(30);
+        chatButtonImgView.setPreserveRatio(true);
+        chatButton.setGraphic(chatButtonImgView);
+        chatButton.setId("chatButton");
+
+        timerButton = new Button("");
+        Image timerButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/timer.png")));
+        ImageView timerButtonImgView = new ImageView(timerButtonImg);
+        timerButtonImgView.setFitWidth(30);
+        timerButtonImgView.setFitHeight(30);
+        timerButtonImgView.setPreserveRatio(true);
+        timerButton.setGraphic(timerButtonImgView);
+        timerButton.setId("timerButton");
+
+        settingsButton = new Button("");
+        Image settingsButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/settings.png")));
+        ImageView settingsButtonImgView = new ImageView(settingsButtonImg);
+        settingsButtonImgView.setFitWidth(30);
+        settingsButtonImgView.setFitHeight(30);
+        settingsButtonImgView.setPreserveRatio(true);
+        settingsButton.setGraphic(settingsButtonImgView);
+        settingsButton.setId("settingsButton");
         
         // Initialize handlers with their respective UI implementations
         chat = new Chat(petController); // This now uses ChatGUI internally
@@ -76,20 +122,72 @@ public class WindowGUI implements WindowUI {
 
     @Override
     public void openWindow() {
+
+        Label homeTitle = new Label("Home");
+        homeTitle.setId("homeTitle");
+
+        Label currentPet = new Label("");
+        Image sharkImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/shark.png")));
+        ImageView sharkImgView = new ImageView(sharkImg);
+        sharkImgView.setFitWidth(80);
+        sharkImgView.setFitHeight(80);
+        sharkImgView.setPreserveRatio(true); // Damit das Bild nicht verzerrt wird
+        currentPet.setGraphic(sharkImgView);
+        currentPet.setId("currentPet");
+
+
+        Label petName = new Label("Mister Shark");
+
+        Label currentStatus = new Label("");
+        Image statusImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/disconnected.png")));
+        ImageView statusImgView = new ImageView(statusImg);
+        statusImgView.setFitWidth(15);
+        statusImgView.setFitHeight(15);
+        statusImgView.setPreserveRatio(true);
+        currentStatus.setGraphic(statusImgView);
+        currentStatus.setId("chatButton");
+
+        HBox connectionHBox = new HBox(5);
+        connectionHBox.getChildren().addAll(
+                currentStatus,
+                connectionStatus
+        );
+
+        VBox describitionVBox = new VBox(5);
+        describitionVBox.getChildren().addAll(
+                petName,
+                currentStatus
+        );
+
+        HBox currentPetHBox = new HBox(5);
+        currentPetHBox.getChildren().addAll(
+                currentPet,
+                describitionVBox
+        );
+
+        HBox appsHBox = new HBox(5);
+        appsHBox.getChildren().addAll(
+                petButton,
+                networkButton,
+                chatButton,
+                timerButton,
+                settingsButton
+        );
+
+
         // Build UI layout
         VBox rootVBox = new VBox(5);
         rootVBox.getChildren().addAll(
-                connectionStatus,
-                chatButton,
-                networkButton,
-                timerButton,
-                petButton,
-                settingsButton
+                homeTitle,
+                currentPetHBox,
+                appsHBox
         );
+
+        rootVBox.setId("rootVBox");
         
         // Set up scene
         Group root = new Group(rootVBox);
-        scene = new Scene(root, 300, 400);
+        scene = new Scene(root, 300, 200);
         petController.setWindowScene(scene);
         
         // Apply CSS styling

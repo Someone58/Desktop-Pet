@@ -8,9 +8,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 /**
  * GUI implementation for the Timer.
@@ -24,8 +28,8 @@ public class TimerGUI implements TimerInterface {
     private final Label statusLabel = new Label("Work Time");
     private final Label sessionLabel = new Label();
     private final Label timerLabel = new Label();
-    private final Button startPauseButton = new Button("Start");
-    private final Button resetButton = new Button("Reset");
+    private final Button startPauseButton = new Button("");
+    private final Button resetButton = new Button("");
     private final Button nextPhaseButton = new Button();
     private final Button miniTimerButton = new Button("Mini Timer");
     private final TextField workField = new TextField();
@@ -36,7 +40,7 @@ public class TimerGUI implements TimerInterface {
     // String properties for binding
     private final StringProperty timerTextProperty = new SimpleStringProperty();
     private final StringProperty statusTextProperty = new SimpleStringProperty("Work Time");
-    private final StringProperty startPauseTextProperty = new SimpleStringProperty("Start");
+    private final StringProperty startPauseTextProperty = new SimpleStringProperty("");
     private final StringProperty nextPhaseTextProperty = new SimpleStringProperty();
     
     public TimerGUI(Timer timerLogic, PetController petController) {
@@ -63,6 +67,18 @@ public class TimerGUI implements TimerInterface {
         startPauseButton.setStyle("-fx-font-size: 16px;");
         resetButton.setStyle("-fx-font-size: 16px;");
         nextPhaseButton.setStyle("-fx-font-size: 16px;");
+
+        Image startPauseButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/play.png")));
+        ImageView startPauseButtonImgView = new ImageView(startPauseButtonImg);
+        startPauseButton.setGraphic(startPauseButtonImgView);
+
+        Image resetButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/replay.png")));
+        ImageView resetButtonImgView = new ImageView(resetButtonImg);
+        resetButton.setGraphic(resetButtonImgView);
+
+        timerLabel.setId("timerLabel");
+        statusLabel.setId("statusLabel");
+        sessionLabel.setId("sessionLabel");
         
         // Set up text fields
         workField.setPromptText("25 (min)");
@@ -94,11 +110,19 @@ public class TimerGUI implements TimerInterface {
         petController.setTimeropened(true);
         petController.getNotification().setNoIcon();
 
-        VBox root = new VBox(10);
-        root.setAlignment(Pos.CENTER);
+        VBox rootVBox = new VBox(10);
+        rootVBox.setAlignment(Pos.CENTER);
 
-        Button backButton = new Button("Back");
-        Scene scene = new Scene(root, 300, 400);
+        Label timerTitle = new Label("Timer");
+        timerTitle.setId("timerTitle");
+
+        Button backButton = new Button("");
+        Image backButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/arrow.png")));
+        ImageView backButtonImgView = new ImageView(backButtonImg);
+        backButton.setGraphic(backButtonImgView);
+
+
+        Scene scene = new Scene(rootVBox, 300, 400);
 
         String css = petController.getCss();
         if (css != null) {
@@ -130,6 +154,9 @@ public class TimerGUI implements TimerInterface {
             );
         });
 
+        HBox navigationHBox = new HBox(10);
+        navigationHBox.getChildren().addAll(backButton, miniTimerButton);
+
         VBox inputBox = new VBox(10);
         inputBox.setAlignment(Pos.CENTER);
 
@@ -142,17 +169,32 @@ public class TimerGUI implements TimerInterface {
         HBox breakHBox = new HBox(5, new Label("Break:"), breakField);
         HBox sessionsHBox = new HBox(5, new Label("Sessions:"), sessionsField);
 
-        inputBox.getChildren().addAll(workHBox, breakHBox, sessionsHBox);
+        inputBox.getChildren().addAll(
+                workHBox,
+                breakHBox,
+                sessionsHBox);
 
         buttonBox.getChildren().clear();
         if (timerLogic.isWaitingForNextPhase()) {
             showNextPhaseButton();
         } else {
-            buttonBox.getChildren().addAll(startPauseButton, resetButton);
+            buttonBox.getChildren().addAll(
+                    startPauseButton,
+                    resetButton);
         }
 
-        root.getChildren().clear();
-        root.getChildren().addAll(backButton, miniTimerButton, statusLabel, sessionLabel, timerLabel, buttonBox, inputBox);
+        rootVBox.getChildren().clear();
+        rootVBox.getChildren().addAll(
+                timerTitle,
+                navigationHBox,
+                statusLabel,
+                sessionLabel,
+                timerLabel,
+                buttonBox,
+                inputBox
+        );
+
+        rootVBox.setId("rootVBox");
 
         updateTimerDisplay();
         updateSessionLabel();

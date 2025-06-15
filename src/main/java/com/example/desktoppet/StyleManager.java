@@ -3,6 +3,7 @@ package com.example.desktoppet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 
 /**
  * A singleton class that manages the application's stylesheets
@@ -10,6 +11,8 @@ import javafx.scene.Scene;
  */
 public class StyleManager {
     private static StyleManager instance;
+
+    public Font customFont4 = Font.loadFont(getClass().getResourceAsStream("/font/Silkscreen/Silkscreen-Regular.ttf"), 25);
 
     // Default stylesheet path
     private String currentStylesheet = "/application.css";

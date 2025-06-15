@@ -1,3 +1,23 @@
+.root {
+    interfaceBackground: "#B8CCCB";
+    interfaceShadow: "#6E6962";
+    titleBackground: "#6E9FAA";
+    labelBackground: "#152F38";
+    labelHighlight: "#83BCCB";
+    labelShadow: "#6A929C";
+    buttonText: "#152F38";
+    buttonHighlight: "#83BCCB";
+    buttonShadow: "#5F8A95";
+    inputText: "#152F38";
+    inputBackground: "#E5E5E5";
+    inputHighlight: "#AFABA5";
+    inputShadow: "#6E6962";
+}
+
+.scene {
+    -fx-background-color: black;
+}
+
 .connected-status {
     -fx-text-fill: darkgreen;
 }
@@ -7,5 +27,88 @@
 }
 
 .label {
-    -fx-text-fill: blue;
+    -fx-text-fill: interfaceBackground;
+    -fx-background-color: labelBackground;
+    /* Border-Farben: oben rechts unten links */
+    -fx-border-color:  labelHighlight labelShadow labelShadow  labelHighlight;
+    -fx-border-width: 4px 4px 4px 4px;
+    -fx-border-style: solid;
+    -fx-font-family: "Silkscreen";
+}
+
+#timerLabel {
+    -fx-background-color: interfaceBackground;
+    -fx-border-width: 0px;
+    -fx-text-fill: buttonText;
+}
+
+#statusLabel {
+    -fx-background-color: interfaceBackground;
+    -fx-border-width: 0px;
+    -fx-text-fill: buttonText;
+}
+
+#sessionLabel {
+    -fx-background-color: interfaceBackground;
+    -fx-border-width: 0px;
+    -fx-text-fill: buttonText;
+}
+
+.button {
+    -fx-text-fill: buttonText;
+    -fx-background-color: interfaceBackground;
+    /* Border-Farben: oben rechts unten links */
+    -fx-border-color:  buttonHighlight buttonShadow buttonShadow  buttonHighlight;
+    -fx-border-width: 4px 4px 4px 4px;
+    -fx-border-style: solid;
+    -fx-font-family: "Silkscreen";
+}
+
+.text-area {
+    -fx-text-fill: buttonText;
+    -fx-background-color: inputBackground;
+    -fx-border-color: inputHighlight inputShadow inputShadow inputHighlight;
+    -fx-border-width: 4px 4px 4px 4px;
+    -fx-border-style: solid;
+    -fx-font-family: "Silkscreen";
+}
+
+.text-field {
+    -fx-text-fill: inputText;
+    -fx-background-color: inputBackground;
+    -fx-border-color: inputHighlight inputShadow inputShadow inputHighlight;
+    -fx-border-width: 4px 4px 4px 4px;
+    -fx-border-style: solid;
+    -fx-font-family: "Silkscreen";
+}
+
+#chatRoot {
+    -fx-padding: 10px;
+    -fx-padding-left: 10px;
+    -fx-background-color: interfaceBackground;
+}
+
+#currentPet {
+    -fx-max-width: 5px;
+    -fx-max-height: 5px;
+    -fx-font-size: 5px;
+}
+
+#rootVBox {
+    -fx-background-color: interfaceBackground;
+    -fx-border-color:  interfaceBackground interfaceShadow interfaceShadow  interfaceBackground;
+    -fx-border-width: 4px 4px 4px 4px;
+}
+
+#homeTitle, #petSelectionTitle, #networkTitle, #chatTitle, #timerTitle, #miniTimerTitle, #settingsTitle {
+    -fx-text-fill: buttonText;
+    -fx-background-color: titleBackground;
+    /* Border-Farben: oben rechts unten links */
+    -fx-border-color:  titleBackground interfaceShadow interfaceShadow  titleBackground;
+    -fx-border-width: 4px 4px 4px 0px;
+    -fx-border-style: solid;
+    -fx-font-family: "Silkscreen";
+    -fx-font-size: 16px;
+    -fx-min-width: 293px;
+    -fx-translate-x: 2px;
 }

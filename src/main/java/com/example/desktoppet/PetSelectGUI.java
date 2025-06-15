@@ -3,9 +3,14 @@ package com.example.desktoppet;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 /**
  * Handles UI construction and components for the pet selection window
@@ -14,9 +19,9 @@ public class PetSelectGUI implements PetSelectInterface {
     private final PetSelect petSelectLogic;
     private final PetController petController;
 
-    private Button sharkSelect = new Button("Shark");
-    private Button hedgehogSelect = new Button("Hedgehog");
-    private Button dogSelect = new Button("Dog");
+    private Button sharkSelect = new Button("");
+    private Button hedgehogSelect = new Button("");
+    private Button dogSelect = new Button("");
     private Stage stage;
 
     public PetSelectGUI(PetSelect petSelectLogic, PetController petController) {
@@ -33,18 +38,55 @@ public class PetSelectGUI implements PetSelectInterface {
 
     @Override
     public void changeScene() {
-        Button backButton = new Button("Back");
+        Label petSelectionTitle = new Label("Pets");
+        petSelectionTitle.setId("petSelectionTitle");
 
-        VBox petsVBox = new VBox(sharkSelect, hedgehogSelect, dogSelect);
+        Button backButton = new Button("");
+        Image backButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/arrow.png")));
+        ImageView backButtonImgView = new ImageView(backButtonImg);
+        backButton.setGraphic(backButtonImgView);
+
+        Image sharkButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/shark.png")));
+        ImageView sharkButtonImgView = new ImageView(sharkButtonImg);
+        sharkButtonImgView.setFitWidth(50);
+        sharkButtonImgView.setFitHeight(50);
+        sharkButtonImgView.setPreserveRatio(true);
+        sharkSelect.setGraphic(sharkButtonImgView);
+        sharkSelect.setId("shark");
+
+        Image hedgehogButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/hedgehog.png")));
+        ImageView hedgehogButtonImgView = new ImageView(hedgehogButtonImg);
+        hedgehogButtonImgView.setFitWidth(50);
+        hedgehogButtonImgView.setFitHeight(50);
+        hedgehogButtonImgView.setPreserveRatio(true);
+        hedgehogSelect.setGraphic(hedgehogButtonImgView);
+        hedgehogSelect.setId("hedgehog");
+
+        Image dogButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dog.png")));
+        ImageView dogButtonImgView = new ImageView(dogButtonImg);
+        dogButtonImgView.setFitWidth(50);
+        dogButtonImgView.setFitHeight(50);
+        dogButtonImgView.setPreserveRatio(true);
+        dogSelect.setGraphic(dogButtonImgView);
+        dogSelect.setId("dog");
+
+
+        HBox petsHBox = new HBox(
+                sharkSelect,
+                hedgehogSelect,
+                dogSelect);
 
         VBox rootVBox = new VBox(5);
         rootVBox.getChildren().addAll(
+                petSelectionTitle,
                 backButton,
-                petsVBox
+                petsHBox
         );
 
+        rootVBox.setId("rootVBox");
+
         Group root = new Group(rootVBox);
-        Scene scene = new Scene(root, 300, 400);
+        Scene scene = new Scene(root, 300, 200);
 
         String css = petController.getCss();
         if (css != null) {

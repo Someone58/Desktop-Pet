@@ -4,9 +4,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.Objects;
+
 
 /**
  * GUI implementation for the Mini Timer Window.
@@ -39,11 +44,13 @@ public class MiniTimerWindowGUI implements MiniTimerWindowInterface {
         miniStage.setAlwaysOnTop(true);
         miniStage.setResizable(false);
 
-        
-        VBox miniRoot = new VBox(10);
-        miniRoot.setAlignment(Pos.CENTER);
+        Label miniTimerTitle = new Label("Timer");
+        miniTimerTitle.setId("miniTimerTitle");
 
-        Scene miniScene = new Scene(miniRoot, 320, 220);
+        VBox rootVBox = new VBox(10);
+        rootVBox.setAlignment(Pos.CENTER);
+
+        Scene miniScene = new Scene(rootVBox, 320, 220);
 
         // Apply the current stylesheet using proper resource loading
         String css = petController.getCss();
@@ -63,7 +70,9 @@ public class MiniTimerWindowGUI implements MiniTimerWindowInterface {
         // Initialize layout
         miniButtonBox = new HBox(10);
         miniButtonBox.setAlignment(Pos.CENTER);
-        miniRoot.getChildren().addAll(miniStatusLabel, miniSessionLabel, miniTimerLabel, miniButtonBox);
+        rootVBox.getChildren().addAll(miniTimerTitle, miniStatusLabel, miniSessionLabel, miniTimerLabel, miniButtonBox);
+
+        rootVBox.setId("rootVBox");
         
         miniStage.setScene(miniScene);
         
@@ -97,28 +106,40 @@ public class MiniTimerWindowGUI implements MiniTimerWindowInterface {
         miniStatusLabel = new Label();
         miniStatusLabel.textProperty().bind(timer.statusTextProperty());
         miniStatusLabel.setStyle("-fx-font-size: 20px;");
-        
+        miniStatusLabel.setId("statusLabel");
+
         miniSessionLabel = new Label();
         miniSessionLabel.textProperty().bind(timer.getTimerUI().getSessionLabel().textProperty());
         miniSessionLabel.setStyle("-fx-font-size: 16px;");
-        
+        miniSessionLabel.setId("sessionLabel");
+
         miniTimerLabel = new Label();
         miniTimerLabel.textProperty().bind(timer.timerTextProperty());
         miniTimerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold;");
-        
+        miniTimerLabel.setId("timerLabel");
+
         miniStartPause = new Button();
         miniStartPause.textProperty().bind(timer.startPauseTextProperty());
         miniStartPause.setOnAction(e -> timer.getTimerUI().getStartPauseButton().fire());
         miniStartPause.setStyle("-fx-font-size: 16px;");
+
+        Image miniStartPauseImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/play.png")));
+        ImageView miniStartPauseImgView = new ImageView(miniStartPauseImg);
+        miniStartPause.setGraphic(miniStartPauseImgView);
         
-        miniReset = new Button("Reset");
+        miniReset = new Button("");
         miniReset.setOnAction(e -> timer.getTimerUI().getResetButton().fire());
         miniReset.setStyle("-fx-font-size: 16px;");
-        
+
+        Image miniResetImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/replay.png")));
+        ImageView miniResetImgView = new ImageView(miniResetImg);
+        miniReset.setGraphic(miniResetImgView);
+
         miniNextPhase = new Button();
         miniNextPhase.textProperty().bind(timer.nextPhaseTextProperty());
         miniNextPhase.setOnAction(e -> timer.getTimerUI().getNextPhaseButton().fire());
         miniNextPhase.setStyle("-fx-font-size: 16px;");
+
     }
     
     @Override

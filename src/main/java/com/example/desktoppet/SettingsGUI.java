@@ -5,8 +5,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class SettingsGUI implements SettingsInterface {
     private final Settings settingsLogic;
@@ -14,12 +19,16 @@ public class SettingsGUI implements SettingsInterface {
     
     // UI Components
     private final Label speedLabel = new Label("Speed (Changes the maximal speed): ");
+    private final Label speedTextLabel = new Label("(Changes the maximal speed)");
     private final Slider speedSlider = new Slider(0, 5, 1);
-    private final Label activityLabel = new Label("Activity (Changes the chance for the pet to move): ");
+    private final Label activityLabel = new Label("Activity");
+    private final Label activityTextLabel = new Label("(Changes the chance for the pet to move)");
     private final Slider activitySlider = new Slider(0.1, 1, 0.5);
-    private final Label sizeLabel = new Label("Size (Changes the size of the pet): ");
+    private final Label sizeLabel = new Label("Size");
+    private final Label sizeTextLabel = new Label("(Changes the size of the pet)");
     private final Slider sizeSlider = new Slider(30, 300, 100);
-    private final Label heightLabel = new Label("Height (Changes the height of the pet): ");
+    private final Label heightLabel = new Label("Height");
+    private final Label heightTextLabel = new Label("(Changes the height of the pet)");
     private final Slider heightSlider = new Slider(0, 100, 0);
 
     private final Button darkmode = new Button("Dark Mode");
@@ -69,22 +78,61 @@ public class SettingsGUI implements SettingsInterface {
         Stage stage = petController.getStage();
         Scene windowScene = petController.getWindowScene();
 
-        Button backButton = new Button("Back");
+        Label settingsTitle = new Label("Settings");
+        settingsTitle.setId("settingsTitle");
+
+        Button backButton = new Button("");
+        Image backButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/arrow.png")));
+        ImageView backButtonImgView = new ImageView(backButtonImg);
+        backButton.setGraphic(backButtonImgView);
+
+        speedTextLabel.setId("speedTextLabel");
+        activityTextLabel.setId("activityTextLabel");
+        sizeTextLabel.setId("sizeTextLabel");
+        heightTextLabel.setId("heightTextLabel");
+
+        HBox speedHBox = new HBox(5);
+        speedHBox.getChildren().addAll(
+                speedLabel,
+                speedTextLabel
+        );
+
+        HBox activityHBox = new HBox(5);
+        activityHBox.getChildren().addAll(
+                activityLabel,
+                activityTextLabel
+        );
+
+        HBox sizeHBox = new HBox(5);
+        sizeHBox.getChildren().addAll(
+                sizeLabel,
+                sizeTextLabel
+        );
+
+        HBox heightHBox = new HBox(5);
+        heightHBox.getChildren().addAll(
+                heightLabel,
+                heightTextLabel
+        );
+
 
         VBox rootVBox = new VBox(5);
         rootVBox.getChildren().addAll(
+                settingsTitle,
                 backButton,
-                speedLabel,
+                speedHBox,
                 speedSlider,
-                activityLabel,
+                activityHBox,
                 activitySlider,
-                sizeLabel,
+                sizeHBox,
                 sizeSlider,
-                heightLabel,
+                heightHBox,
                 heightSlider,
                 darkmode,
                 pinWindow
         );
+
+        rootVBox.setId("rootVBox");
 
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 400);
@@ -139,10 +187,10 @@ public class SettingsGUI implements SettingsInterface {
 
         if (isDarkMode) {
             // Use PetController's setCss method to update all views
-            petController.setCss("/darkmode.css");
+            petController.setCss("/styling/darkmode.css");
             darkmode.setText("Light Mode");
         } else {
-            petController.setCss("/application.css");
+            petController.setCss("/styling/styles.css");
             darkmode.setText("Dark Mode");
         }
 

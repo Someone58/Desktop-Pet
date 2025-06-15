@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -13,6 +15,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Objects;
 
 /**
  * Handles UI construction and components for the network connector window
@@ -53,26 +56,46 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
         Stage stage = petController.getStage();
         Scene windowScene = petController.getWindowScene();
 
-        Button backButton = new Button("Back");
+        Label networkTitle = new Label("Network");
+        networkTitle.setId("networkTitle");
+
+        Button backButton = new Button("");
+        Image backButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/arrow.png")));
+        ImageView backButtonImgView = new ImageView(backButtonImg);
+        backButton.setGraphic(backButtonImgView);
 
         localTextArea.setEditable(false);
         localTextArea.setWrapText(true);
         localTextArea.setPrefRowCount(10);
         localTextArea.setPrefColumnCount(30);
 
-        HBox connectionBox = new HBox(5);
-        connectionBox.getChildren().addAll(new Label("Host:"), hostField, new Label("Port:"), portField);
+        HBox hostHBox = new HBox(5);
+        hostHBox.getChildren().addAll(new Label("Host:"), hostField);
 
-        VBox rootVBox = new VBox(5);
-        rootVBox.getChildren().addAll(
-                backButton,
-                connectionBox,
-                hostButton,
-                joinButton,
-                localTextArea,
+        HBox portHBox = new HBox(5);
+        portHBox.getChildren().addAll(new Label("Port:"), portField);
+
+        HBox connectionButtonHBox = new HBox(5);
+        connectionButtonHBox.getChildren().addAll(hostButton, backButton);
+
+        HBox ipHBox = new HBox(5);
+        ipHBox.getChildren().addAll(
                 ipAddress,
                 copieableLabel
         );
+
+        VBox rootVBox = new VBox(5);
+        rootVBox.getChildren().addAll(
+                networkTitle,
+                backButton,
+                hostHBox,
+                portHBox,
+                connectionButtonHBox,
+                localTextArea,
+                ipHBox
+        );
+
+        rootVBox.setId("rootVBox");
 
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 400);

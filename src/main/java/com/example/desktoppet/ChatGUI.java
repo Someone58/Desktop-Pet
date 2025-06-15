@@ -5,10 +5,15 @@ import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.text.Font;
+
+import java.util.Objects;
 
 /**
  * Handles UI construction and components for the chat window
@@ -18,7 +23,7 @@ public class ChatGUI implements ChatInterface {
     private final PetController petController;
     private final TextArea chatArea = new TextArea();
     private final TextField messageField = new TextField();
-    private final Button sendButton = new Button("Send");
+    private final Button sendButton = new Button("");
     
     private double position = 0;
     private double newPosition = 0;
@@ -42,6 +47,10 @@ public class ChatGUI implements ChatInterface {
         chatArea.setPrefRowCount(10);
         chatArea.setPrefColumnCount(30);
         chatArea.setPrefWidth(300);
+
+        Image sendButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/send.png")));
+        ImageView sendButtonImgView = new ImageView(sendButtonImg);
+        sendButton.setGraphic(sendButtonImgView);
         
         // Set up scroll listeners
         setupScrollListeners();
@@ -90,7 +99,13 @@ public class ChatGUI implements ChatInterface {
         Stage stage = petController.getStage();
         Scene windowScene = petController.getWindowScene();
 
-        Button backButton = new Button("Back");
+        Label chatTitle = new Label("Chat");
+        chatTitle.setId("chatTitle");
+
+        Button backButton = new Button("");
+        Image backButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/arrow.png")));
+        ImageView backButtonImgView = new ImageView(backButtonImg);
+        backButton.setGraphic(backButtonImgView);
 
         // Set up message input area
         HBox messageBox = new HBox(5);
@@ -98,11 +113,15 @@ public class ChatGUI implements ChatInterface {
         messageBox.getChildren().addAll(messageField, sendButton);
 
         VBox rootVBox = new VBox(5);
+        rootVBox.setId("chatRoot");
         rootVBox.getChildren().addAll(
+                chatTitle,
                 backButton,
                 chatArea,
                 messageBox
         );
+
+        rootVBox.setId("rootVBox");
 
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 400);
