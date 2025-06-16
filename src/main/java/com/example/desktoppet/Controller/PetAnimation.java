@@ -1,7 +1,7 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
 
+import com.example.desktoppet.Model.PetData;
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -17,7 +17,7 @@ import javafx.stage.StageStyle;
 import java.util.Random;
 
 public class PetAnimation {
-    PetController petController;
+    PetData petController;
     Notification notification;
     private final Random random = new Random();
     private double xSpeed = 1.5;
@@ -40,7 +40,7 @@ public class PetAnimation {
     double screenWidth = screenBounds.getWidth();
 
 
-    public PetAnimation(PetController petController) {
+    public PetAnimation(PetData petController) {
         this.petController = petController;
 
         imageAnimation = new ImageAnimation(petController, petName, 4);

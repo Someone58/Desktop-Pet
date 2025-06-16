@@ -1,4 +1,4 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

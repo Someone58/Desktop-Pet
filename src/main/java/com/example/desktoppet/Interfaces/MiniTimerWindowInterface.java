@@ -1,4 +1,7 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Interfaces;
+
+import com.example.desktoppet.Controller.Timer;
+import com.example.desktoppet.Model.PetData;
 
 /**
  * Interface for Mini Timer Window UI operations.
@@ -10,7 +13,7 @@ public interface MiniTimerWindowInterface {
      * @param timer the timer logic instance
      * @param petController the pet controller instance
      */
-    void createMiniTimerWindow(Timer timer, PetController petController);
+    void createMiniTimerWindow(Timer timer, PetData petController);
     
     /**
      * Update the UI based on button state

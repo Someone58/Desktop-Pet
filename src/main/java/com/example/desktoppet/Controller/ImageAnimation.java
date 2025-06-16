@@ -1,5 +1,6 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
 
+import com.example.desktoppet.Model.PetData;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
@@ -9,7 +10,7 @@ import javafx.util.Duration;
 import java.util.Arrays;
 
 public class ImageAnimation {
-    private PetController petController;
+    private PetData petController;
     private Timeline timeline;
     private final Image[] frames;
     private ImageView imageView;
@@ -17,7 +18,7 @@ public class ImageAnimation {
     private double fps;
     private String file;
 
-    public ImageAnimation(PetController petController, String file, double fps) {
+    public ImageAnimation(PetData petController, String file, double fps) {
         this.petController = petController;
         imageView = petController.getPetImage();
 

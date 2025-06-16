@@ -1,11 +1,15 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
+
+import com.example.desktoppet.Model.PetData;
+import com.example.desktoppet.Interfaces.SettingsInterface;
+import com.example.desktoppet.UI.SettingsGUI;
 
 /**
  * Handles settings logic and data for the pet application.
  * UI is handled by the SettingsGUI class.
  */
 public class Settings {
-    private final PetController petController;
+    private final PetData petController;
     private final SettingsInterface settingsUI;
     
     // Default values
@@ -14,7 +18,7 @@ public class Settings {
     private double size = 100.0;
     private double height = 0.0;
     
-    public Settings(PetController petController) {
+    public Settings(PetData petController) {
         this.petController = petController;
         this.settingsUI = new SettingsGUI(this, petController);
     }
@@ -92,7 +96,7 @@ public class Settings {
      */
     private PetAnimation getPetAnimation() {
         try {
-            return petController.getStage().getUserData() instanceof PetSelect petSelect ? 
+            return petController.getStage().getUserData() instanceof PetSelect petSelect ?
                 petSelect.getPetAnimation() : null;
         } catch (Exception e) {
             return null;

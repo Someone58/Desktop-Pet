@@ -1,5 +1,11 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Model;
 
+import com.example.desktoppet.Controller.NetworkManager;
+import com.example.desktoppet.Controller.Notification;
+import com.example.desktoppet.Controller.Settings;
+import com.example.desktoppet.Controller.PetSelect;
+import com.example.desktoppet.SharedTextAreaManager;
+import com.example.desktoppet.StyleManager;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,7 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class PetController {
+public class PetData {
     //Window
     Notification notification = new Notification(this);
 

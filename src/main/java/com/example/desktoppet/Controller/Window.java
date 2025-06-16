@@ -1,5 +1,8 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
 
+import com.example.desktoppet.Model.PetData;
+import com.example.desktoppet.UI.WindowGUI;
+import com.example.desktoppet.Interfaces.WindowUI;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -8,7 +11,7 @@ import javafx.stage.Stage;
  * Uses WindowGUI for UI rendering and focuses on application logic.
  */
 public class Window extends Application {
-    private PetController petController = new PetController();
+    private PetData petController = new PetData();
     private WindowUI windowUI;
     
     public Window() {

@@ -1,4 +1,8 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
+
+import com.example.desktoppet.Interfaces.NetworkConnectorInterface;
+import com.example.desktoppet.Model.PetData;
+import com.example.desktoppet.UI.NetworkConnectorGUI;
 
 import java.io.IOException;
 
@@ -6,7 +10,7 @@ import java.io.IOException;
  * Handles network connection logic and functionality, delegating UI operations to NetworkConnectorInterface
  */
 public class NetworkConnector {
-    private final PetController petController;
+    private final PetData petController;
     private final NetworkManager networkManager;
     private final NetworkConnectorInterface networkUI;
 
@@ -14,7 +18,7 @@ public class NetworkConnector {
      * Constructor that uses the default NetworkConnectorGUI implementation
      * @param petController the pet controller instance
      */
-    public NetworkConnector(PetController petController) {
+    public NetworkConnector(PetData petController) {
         this.petController = petController;
         this.networkManager = petController.getNetworkManager();
 
@@ -27,7 +31,7 @@ public class NetworkConnector {
      * @param petController the pet controller instance
      * @param networkUI custom UI implementation
      */
-    public NetworkConnector(PetController petController, NetworkConnectorInterface networkUI) {
+    public NetworkConnector(PetData petController, NetworkConnectorInterface networkUI) {
         this.petController = petController;
         this.networkManager = petController.getNetworkManager();
         this.networkUI = networkUI;
@@ -93,7 +97,7 @@ public class NetworkConnector {
      * Get the pet controller
      * @return the pet controller
      */
-    public PetController getPetController() {
+    public PetData getPetController() {
         return petController;
     }
 }

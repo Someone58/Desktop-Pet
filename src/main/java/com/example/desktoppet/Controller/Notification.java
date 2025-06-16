@@ -1,16 +1,17 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
 
+import com.example.desktoppet.Model.PetData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Notification {
-    PetController petController;
+    PetData petController;
     Image chatIcon = new Image(getClass().getResource("/NotificationIcons/MessageNotification.png").toExternalForm());
     Image timerIcon = new Image(getClass().getResource("/NotificationIcons/TimerNotification.png").toExternalForm());
     ImageView notificationIcon = new ImageView();
     double size = 20;
 
-    public Notification(PetController petController) {
+    public Notification(PetData petController) {
         this.petController = petController;
 //        notificationIcon.setImage(chatIcon);
         notificationIcon.setFitHeight(20);

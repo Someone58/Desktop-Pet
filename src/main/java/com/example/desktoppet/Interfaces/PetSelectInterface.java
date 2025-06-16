@@ -1,4 +1,4 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Interfaces;
 
 /**
  * Interface for PetSelect UI operations.

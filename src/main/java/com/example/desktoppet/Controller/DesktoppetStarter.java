@@ -1,4 +1,4 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
 import javafx.application.Application;
 
 /**

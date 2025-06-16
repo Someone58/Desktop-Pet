@@ -1,4 +1,4 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Interfaces;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;

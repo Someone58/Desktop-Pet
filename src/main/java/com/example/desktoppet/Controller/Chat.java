@@ -1,10 +1,14 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
+
+import com.example.desktoppet.Interfaces.ChatInterface;
+import com.example.desktoppet.Model.PetData;
+import com.example.desktoppet.UI.ChatGUI;
 
 /**
  * Handles chat logic and functionality, delegating UI operations to ChatInterface
  */
 public class Chat {
-    private final PetController petController;
+    private final PetData petController;
     private final NetworkManager networkManager;
     private final ChatInterface chatUI;
     
@@ -12,7 +16,7 @@ public class Chat {
      * Constructor that uses the default ChatGUI implementation
      * @param petController the pet controller instance
      */
-    public Chat(PetController petController) {
+    public Chat(PetData petController) {
         this.petController = petController;
         this.networkManager = petController.getNetworkManager();
         
@@ -25,7 +29,7 @@ public class Chat {
      * @param petController the pet controller instance
      * @param chatUI custom UI implementation
      */
-    public Chat(PetController petController, ChatInterface chatUI) {
+    public Chat(PetData petController, ChatInterface chatUI) {
         this.petController = petController;
         this.networkManager = petController.getNetworkManager();
         this.chatUI = chatUI;
@@ -63,7 +67,7 @@ public class Chat {
      * Get the pet controller
      * @return the pet controller
      */
-    public PetController getPetController() {
+    public PetData getPetController() {
         return petController;
     }
 }

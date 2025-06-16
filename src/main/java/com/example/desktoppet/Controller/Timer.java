@@ -1,12 +1,14 @@
 // Only changed parts are commented
 
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
 
+import com.example.desktoppet.Model.PetData;
+import com.example.desktoppet.Interfaces.TimerInterface;
+import com.example.desktoppet.UI.TimerGUI;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -19,7 +21,7 @@ import java.util.function.UnaryOperator;
  * Handles timer logic and data, delegating UI operations to TimerInterface.
  */
 public class Timer {
-    private final PetController petController;
+    private final PetData petController;
     private final TimerInterface timerUI;
     private Timeline timeline;
     
@@ -52,7 +54,7 @@ public class Timer {
      * Constructor that uses the default TimerGUI implementation
      * @param petController the pet controller instance
      */
-    public Timer(PetController petController) {
+    public Timer(PetData petController) {
         this.petController = petController;
         this.notification = petController.getNotification();
         this.timerUI = new TimerGUI(this, petController);
@@ -67,7 +69,7 @@ public class Timer {
      * @param petController the pet controller instance
      * @param timerUI custom UI implementation
      */
-    public Timer(PetController petController, TimerInterface timerUI) {
+    public Timer(PetData petController, TimerInterface timerUI) {
         this.petController = petController;
         this.notification = petController.getNotification();
         this.timerUI = timerUI;
@@ -87,7 +89,7 @@ public class Timer {
     /**
      * Toggles the timer between start, pause, and resume states
      */
-    void toggleTimer() {
+    public void toggleTimer() {
         if (timeline == null || timeline.getStatus() == Timeline.Status.STOPPED) {
             startTimer();
         } else if (timeline.getStatus() == Timeline.Status.RUNNING) {

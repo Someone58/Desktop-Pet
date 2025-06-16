@@ -1,4 +1,4 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Interfaces;
 
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;

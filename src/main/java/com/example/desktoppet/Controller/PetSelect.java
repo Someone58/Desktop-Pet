@@ -1,14 +1,17 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
 
+import com.example.desktoppet.Model.PetData;
+import com.example.desktoppet.Interfaces.PetSelectInterface;
+import com.example.desktoppet.UI.PetSelectGUI;
 import javafx.scene.image.Image;
 
 /**
  * Handles pet selection logic and functionality, delegating UI operations to PetSelectInterface
  */
 public class PetSelect {
-    private final PetController petController;
+    private final PetData petController;
     private final Notification notification;
-    final Settings settings;
+    public final Settings settings;
     private double height = 100;
     private double size = 100;
 
@@ -27,7 +30,7 @@ public class PetSelect {
      * Constructor that uses the default PetSelectGUI implementation
      * @param petController the pet controller instance
      */
-    public PetSelect(PetController petController) {
+    public PetSelect(PetData petController) {
         this.petController = petController;
 
         notification = petController.getNotification();
@@ -57,7 +60,7 @@ public class PetSelect {
      * @param petController the pet controller instance
      * @param petSelectUI custom UI implementation
      */
-    public PetSelect(PetController petController, PetSelectInterface petSelectUI) {
+    public PetSelect(PetData petController, PetSelectInterface petSelectUI) {
         this.petController = petController;
 
         notification = petController.getNotification();
@@ -124,7 +127,7 @@ public class PetSelect {
      * Get the pet controller
      * @return the pet controller
      */
-    public PetController getPetController() {
+    public PetData getPetController() {
         return petController;
     }
 

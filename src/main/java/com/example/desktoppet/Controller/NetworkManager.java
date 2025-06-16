@@ -1,5 +1,7 @@
-package com.example.desktoppet;
+package com.example.desktoppet.Controller;
 
+import com.example.desktoppet.Model.PetData;
+import com.example.desktoppet.SharedTextAreaManager;
 import javafx.application.Platform;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,10 +10,9 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import javafx.scene.control.TextArea;
 
 public class NetworkManager {
-    private PetController petController;
+    private PetData petController;
     private Notification notification;
     private Socket socket;
     private PrintWriter out;
@@ -28,7 +29,7 @@ public class NetworkManager {
         return connected;
     }
 
-    public NetworkManager(PetController petController) {
+    public NetworkManager(PetData petController) {
         this.petController = petController;
 
         notification = petController.getNotification();
