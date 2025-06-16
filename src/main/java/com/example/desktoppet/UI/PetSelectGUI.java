@@ -1,5 +1,8 @@
-package com.example.desktoppet;
+package com.example.desktoppet.UI;
 
+import com.example.desktoppet.Model.PetData;
+import com.example.desktoppet.Controller.PetSelect;
+import com.example.desktoppet.Interfaces.PetSelectInterface;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -17,14 +21,14 @@ import java.util.Objects;
  */
 public class PetSelectGUI implements PetSelectInterface {
     private final PetSelect petSelectLogic;
-    private final PetController petController;
+    private final PetData petController;
 
     private Button sharkSelect = new Button("");
     private Button hedgehogSelect = new Button("");
     private Button dogSelect = new Button("");
     private Stage stage;
 
-    public PetSelectGUI(PetSelect petSelectLogic, PetController petController) {
+    public PetSelectGUI(PetSelect petSelectLogic, PetData petController) {
         this.petSelectLogic = petSelectLogic;
         this.petController = petController;
         initializeUI();
@@ -44,7 +48,11 @@ public class PetSelectGUI implements PetSelectInterface {
         Button backButton = new Button("");
         Image backButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/arrow.png")));
         ImageView backButtonImgView = new ImageView(backButtonImg);
+        backButtonImgView.setFitWidth(15);
+        backButtonImgView.setFitHeight(15);
+        backButtonImgView.setPreserveRatio(true);
         backButton.setGraphic(backButtonImgView);
+        backButton.setId("backButton");
 
         Image sharkButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/shark.png")));
         ImageView sharkButtonImgView = new ImageView(sharkButtonImg);
@@ -71,22 +79,37 @@ public class PetSelectGUI implements PetSelectInterface {
         dogSelect.setId("dog");
 
 
-        HBox petsHBox = new HBox(
+        HBox petsHBox = new HBox(19);
+        petsHBox.getChildren().addAll(
                 sharkSelect,
                 hedgehogSelect,
-                dogSelect);
+                dogSelect
+        );
+
+        petsHBox.setId("petsHBox");
+
+        VBox chatButtons = new VBox(30);
+        chatButtons.getChildren().addAll(
+                backButton,
+                petsHBox
+        );
+
+        chatButtons.setId("chatButtons");
 
         VBox rootVBox = new VBox(5);
         rootVBox.getChildren().addAll(
                 petSelectionTitle,
-                backButton,
-                petsHBox
+                chatButtons
         );
 
         rootVBox.setId("rootVBox");
 
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 200);
+
+        root.setId("scene");
+
+        scene.setFill(Color.web("#B8CCCB"));
 
         String css = petController.getCss();
         if (css != null) {

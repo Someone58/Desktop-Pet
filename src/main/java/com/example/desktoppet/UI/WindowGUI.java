@@ -1,5 +1,12 @@
-package com.example.desktoppet;
+package com.example.desktoppet.UI;
 
+import com.example.desktoppet.*;
+import com.example.desktoppet.Controller.Chat;
+import com.example.desktoppet.Controller.NetworkConnector;
+import com.example.desktoppet.Controller.PetSelect;
+import com.example.desktoppet.Controller.Timer;
+import com.example.desktoppet.Interfaces.WindowUI;
+import com.example.desktoppet.Model.PetData;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,7 +24,7 @@ import java.util.Objects;
  * Handles UI construction and components for the main window
  */
 public class WindowGUI implements WindowUI {
-    private PetController petController;
+    private PetData petController;
     private Stage stage;
     private Scene scene;
     
@@ -36,7 +43,7 @@ public class WindowGUI implements WindowUI {
     private PetSelect petSelect;
     private boolean windowOnTop = true;
     
-    public WindowGUI(PetController petController) {
+    public WindowGUI(PetData petController) {
         this.petController = petController;
         this.stage = petController.getStage();
         
@@ -137,6 +144,7 @@ public class WindowGUI implements WindowUI {
 
 
         Label petName = new Label("Mister Shark");
+        petName.setId("petName");
 
         Label currentStatus = new Label("");
         Image statusImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/disconnected.png")));
@@ -145,7 +153,7 @@ public class WindowGUI implements WindowUI {
         statusImgView.setFitHeight(15);
         statusImgView.setPreserveRatio(true);
         currentStatus.setGraphic(statusImgView);
-        currentStatus.setId("chatButton");
+        currentStatus.setId("currentStatus");
 
         HBox connectionHBox = new HBox(5);
         connectionHBox.getChildren().addAll(
@@ -173,6 +181,8 @@ public class WindowGUI implements WindowUI {
                 timerButton,
                 settingsButton
         );
+
+        appsHBox.setId("appsHBox");
 
 
         // Build UI layout

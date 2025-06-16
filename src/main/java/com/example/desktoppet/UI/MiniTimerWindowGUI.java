@@ -1,5 +1,10 @@
-package com.example.desktoppet;
+package com.example.desktoppet.UI;
 
+import com.example.desktoppet.*;
+import com.example.desktoppet.Controller.Notification;
+import com.example.desktoppet.Controller.Timer;
+import com.example.desktoppet.Interfaces.MiniTimerWindowInterface;
+import com.example.desktoppet.Model.PetData;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,7 +25,7 @@ import java.util.Objects;
 public class MiniTimerWindowGUI implements MiniTimerWindowInterface {
     private static Stage miniStage = null; // Only one instance allowed
     private Notification notification;
-    private PetController petController;
+    private PetData petController;
     private Timer timer;
     
     // UI Components
@@ -33,7 +38,7 @@ public class MiniTimerWindowGUI implements MiniTimerWindowInterface {
     private HBox miniButtonBox;
     
     @Override
-    public void createMiniTimerWindow(Timer timer, PetController petController) {
+    public void createMiniTimerWindow(Timer timer, PetData petController) {
         this.timer = timer;
         this.petController = petController;
         this.notification = petController.getNotification();

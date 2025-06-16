@@ -1,5 +1,11 @@
-package com.example.desktoppet;
+package com.example.desktoppet.UI;
 
+import com.example.desktoppet.*;
+import com.example.desktoppet.Controller.MiniTimerWindow;
+import com.example.desktoppet.Controller.Settings;
+import com.example.desktoppet.Interfaces.MiniTimerWindowInterface;
+import com.example.desktoppet.Interfaces.SettingsInterface;
+import com.example.desktoppet.Model.PetData;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,19 +21,19 @@ import java.util.Objects;
 
 public class SettingsGUI implements SettingsInterface {
     private final Settings settingsLogic;
-    private final PetController petController;
+    private final PetData petController;
     
     // UI Components
-    private final Label speedLabel = new Label("Speed (Changes the maximal speed): ");
+    private final Label speedLabel = new Label("Speed   ");
     private final Label speedTextLabel = new Label("(Changes the maximal speed)");
     private final Slider speedSlider = new Slider(0, 5, 1);
     private final Label activityLabel = new Label("Activity");
     private final Label activityTextLabel = new Label("(Changes the chance for the pet to move)");
     private final Slider activitySlider = new Slider(0.1, 1, 0.5);
-    private final Label sizeLabel = new Label("Size");
+    private final Label sizeLabel = new Label("Size    ");
     private final Label sizeTextLabel = new Label("(Changes the size of the pet)");
     private final Slider sizeSlider = new Slider(30, 300, 100);
-    private final Label heightLabel = new Label("Height");
+    private final Label heightLabel = new Label("Height  ");
     private final Label heightTextLabel = new Label("(Changes the height of the pet)");
     private final Slider heightSlider = new Slider(0, 100, 0);
 
@@ -36,7 +42,7 @@ public class SettingsGUI implements SettingsInterface {
     private boolean isDarkMode = false;
     private boolean windowOnTop = true;
     
-    public SettingsGUI(Settings settingsLogic, PetController petController) {
+    public SettingsGUI(Settings settingsLogic, PetData petController) {
         this.settingsLogic = settingsLogic;
         this.petController = petController;
         
@@ -84,7 +90,11 @@ public class SettingsGUI implements SettingsInterface {
         Button backButton = new Button("");
         Image backButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/arrow.png")));
         ImageView backButtonImgView = new ImageView(backButtonImg);
+        backButtonImgView.setFitWidth(15);
+        backButtonImgView.setFitHeight(15);
+        backButtonImgView.setPreserveRatio(true);
         backButton.setGraphic(backButtonImgView);
+        backButton.setId("backButton");
 
         speedTextLabel.setId("speedTextLabel");
         activityTextLabel.setId("activityTextLabel");

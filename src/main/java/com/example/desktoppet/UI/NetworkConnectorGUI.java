@@ -1,5 +1,11 @@
-package com.example.desktoppet;
+package com.example.desktoppet.UI;
 
+import com.example.desktoppet.*;
+import com.example.desktoppet.Controller.CopieableLabel;
+import com.example.desktoppet.Controller.NetworkConnector;
+import com.example.desktoppet.Controller.NetworkManager;
+import com.example.desktoppet.Interfaces.NetworkConnectorInterface;
+import com.example.desktoppet.Model.PetData;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,7 +28,7 @@ import java.util.Objects;
  */
 public class NetworkConnectorGUI implements NetworkConnectorInterface {
     private final NetworkConnector networkConnector;
-    private final PetController petController;
+    private final PetData petData;
 
     private CopieableLabel copieableLabel = new CopieableLabel("IP address: ");
     private TextField portField = new TextField("5555");
@@ -38,9 +44,9 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
 
     private Label ipAddress = new Label("IP address: ");
 
-    public NetworkConnectorGUI(NetworkConnector networkConnector, PetController petController) {
+    public NetworkConnectorGUI(NetworkConnector networkConnector, PetData petController) {
         this.networkConnector = networkConnector;
-        this.petController = petController;
+        this.petData = petController;
 
         // Initialize components
         this.networkManager = petController.getNetworkManager();
@@ -53,8 +59,8 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
     public void changeScene() {
         updateIPAddress();
 
-        Stage stage = petController.getStage();
-        Scene windowScene = petController.getWindowScene();
+        Stage stage = petData.getStage();
+        Scene windowScene = petData.getWindowScene();
 
         Label networkTitle = new Label("Network");
         networkTitle.setId("networkTitle");
@@ -62,7 +68,11 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
         Button backButton = new Button("");
         Image backButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/arrow.png")));
         ImageView backButtonImgView = new ImageView(backButtonImg);
+        backButtonImgView.setFitWidth(15);
+        backButtonImgView.setFitHeight(15);
+        backButtonImgView.setPreserveRatio(true);
         backButton.setGraphic(backButtonImgView);
+        backButton.setId("backButton");
 
         localTextArea.setEditable(false);
         localTextArea.setWrapText(true);
@@ -100,7 +110,7 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 400);
 
-        String css = petController.getCss();
+        String css = petData.getCss();
         if (css != null) {
             scene.getStylesheets().add(css);
         }

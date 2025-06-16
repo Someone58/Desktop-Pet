@@ -1,5 +1,9 @@
-package com.example.desktoppet;
+package com.example.desktoppet.UI;
 
+import com.example.desktoppet.Controller.MiniTimerWindow;
+import com.example.desktoppet.Model.PetData;
+import com.example.desktoppet.Controller.Timer;
+import com.example.desktoppet.Interfaces.TimerInterface;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
@@ -22,7 +26,7 @@ import java.util.Objects;
  */
 public class TimerGUI implements TimerInterface {
     private final Timer timerLogic;
-    private final PetController petController;
+    private final PetData petController;
     
     // UI Components
     private final Label statusLabel = new Label("Work Time");
@@ -43,7 +47,7 @@ public class TimerGUI implements TimerInterface {
     private final StringProperty startPauseTextProperty = new SimpleStringProperty("");
     private final StringProperty nextPhaseTextProperty = new SimpleStringProperty();
     
-    public TimerGUI(Timer timerLogic, PetController petController) {
+    public TimerGUI(Timer timerLogic, PetData petController) {
         this.timerLogic = timerLogic;
         this.petController = petController;
         
@@ -119,7 +123,11 @@ public class TimerGUI implements TimerInterface {
         Button backButton = new Button("");
         Image backButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/arrow.png")));
         ImageView backButtonImgView = new ImageView(backButtonImg);
+        backButtonImgView.setFitWidth(15);
+        backButtonImgView.setFitHeight(15);
+        backButtonImgView.setPreserveRatio(true);
         backButton.setGraphic(backButtonImgView);
+        backButton.setId("backButton");
 
 
         Scene scene = new Scene(rootVBox, 300, 400);

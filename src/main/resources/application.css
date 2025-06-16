@@ -97,7 +97,9 @@
 #rootVBox {
     -fx-background-color: interfaceBackground;
     -fx-border-color:  interfaceBackground interfaceShadow interfaceShadow  interfaceBackground;
-    -fx-border-width: 4px 4px 4px 4px;
+    -fx-border-width: 4px 5px 5px 4px;
+    -fx-translate-x: -2;
+    -fx-translate-y: -1;
 }
 
 #homeTitle, #petSelectionTitle, #networkTitle, #chatTitle, #timerTitle, #miniTimerTitle, #settingsTitle {
@@ -110,5 +112,54 @@
     -fx-font-family: "Silkscreen";
     -fx-font-size: 16px;
     -fx-min-width: 293px;
-    -fx-translate-x: 2px;
+    -fx-translate-x: 4px;
 }
+
+#petName {
+    -fx-background-color: interfaceBackground;
+    -fx-border-width: 0px;
+    -fx-text-fill: buttonText;
+    -fx-font-size: 18px;
+}
+
+#currentStatus {
+    -fx-background-color: interfaceBackground;
+    -fx-border-width: 0px;
+}
+
+#appsHBox {
+    -fx-min-height: 56px;
+    -fx-min-width: 265px;
+    -fx-background-color: interfaceBackground;
+    -fx-translate-y: 10px;
+    -fx-translate-x: -2px;
+    -fx-border-color:  interfaceBackground interfaceBackground interfaceShadow  interfaceBackground;
+    -fx-border-width: 0px 0px 4px 0px;
+}
+
+#speedTextLabel, #activityTextLabel, #sizeTextLabel, #heightTextLabel{
+    -fx-background-color: interfaceBackground;
+    -fx-border-width: 0px;
+    -fx-text-fill: buttonText;
+    -fx-font-size: 12px;
+    -fx-max-width: 100px;
+}
+#chatButtons {
+    /* <top> <right> <bottom> <left> */
+    -fx-padding: 0 0 27 0;
+    -fx-border-color:  titleBackground interfaceShadow interfaceShadow  titleBackground;
+    -fx-border-width: 0px 4px 1px 0px;
+    -fx-translate-x: 5;
+    -fx-translate-y: 1;
+}
+
+#petsHBox {
+    -fx-translate-x: 11;
+}
+
+#backButton {
+    -fx-translate-x: 10;
+    -fx-translate-y: 2;
+}
+
+

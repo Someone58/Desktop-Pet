@@ -1,5 +1,8 @@
-package com.example.desktoppet;
+package com.example.desktoppet.UI;
 
+import com.example.desktoppet.Controller.Chat;
+import com.example.desktoppet.Interfaces.ChatInterface;
+import com.example.desktoppet.Model.PetData;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -11,7 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.text.Font;
 
 import java.util.Objects;
 
@@ -20,7 +22,7 @@ import java.util.Objects;
  */
 public class ChatGUI implements ChatInterface {
     private final Chat chatLogic;
-    private final PetController petController;
+    private final PetData petController;
     private final TextArea chatArea = new TextArea();
     private final TextField messageField = new TextField();
     private final Button sendButton = new Button("");
@@ -31,7 +33,7 @@ public class ChatGUI implements ChatInterface {
     private boolean scrolledUp = false;
     private double lastPosition = 0;
     
-    public ChatGUI(Chat chatLogic, PetController petController) {
+    public ChatGUI(Chat chatLogic, PetData petController) {
         this.chatLogic = chatLogic;
         this.petController = petController;
         
@@ -50,6 +52,9 @@ public class ChatGUI implements ChatInterface {
 
         Image sendButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/send.png")));
         ImageView sendButtonImgView = new ImageView(sendButtonImg);
+        sendButtonImgView.setFitWidth(25);
+        sendButtonImgView.setFitHeight(25);
+        sendButtonImgView.setPreserveRatio(true);
         sendButton.setGraphic(sendButtonImgView);
         
         // Set up scroll listeners
@@ -105,7 +110,11 @@ public class ChatGUI implements ChatInterface {
         Button backButton = new Button("");
         Image backButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/arrow.png")));
         ImageView backButtonImgView = new ImageView(backButtonImg);
+        backButtonImgView.setFitWidth(15);
+        backButtonImgView.setFitHeight(15);
+        backButtonImgView.setPreserveRatio(true);
         backButton.setGraphic(backButtonImgView);
+        backButton.setId("backButton");
 
         // Set up message input area
         HBox messageBox = new HBox(5);
