@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -76,8 +77,8 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
 
         localTextArea.setEditable(false);
         localTextArea.setWrapText(true);
-        localTextArea.setPrefRowCount(10);
-        localTextArea.setPrefColumnCount(30);
+        localTextArea.setPrefRowCount(5);
+        localTextArea.setPrefColumnCount(20);
 
         HBox hostHBox = new HBox(5);
         hostHBox.getChildren().addAll(new Label("Host:"), hostField);
@@ -109,6 +110,8 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
 
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 400);
+
+        scene.setFill(Color.web("#B8CCCB"));
 
         String css = petData.getCss();
         if (css != null) {

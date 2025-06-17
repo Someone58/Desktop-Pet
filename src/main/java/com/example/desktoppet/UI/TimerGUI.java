@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -131,6 +132,8 @@ public class TimerGUI implements TimerInterface {
 
 
         Scene scene = new Scene(rootVBox, 300, 400);
+
+        scene.setFill(Color.web("#B8CCCB"));
 
         String css = petController.getCss();
         if (css != null) {

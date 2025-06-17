@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -199,6 +200,8 @@ public class WindowGUI implements WindowUI {
         Group root = new Group(rootVBox);
         scene = new Scene(root, 300, 200);
         petController.setWindowScene(scene);
+
+        scene.setFill(Color.web("#B8CCCB"));
         
         // Apply CSS styling
         String css = petController.getCss();

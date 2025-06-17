@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -146,6 +147,8 @@ public class SettingsGUI implements SettingsInterface {
 
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 400);
+
+        scene.setFill(Color.web("#B8CCCB"));
 
         // Register the scene with StyleManager to handle stylesheets
         StyleManager.getInstance().registerScene(scene);

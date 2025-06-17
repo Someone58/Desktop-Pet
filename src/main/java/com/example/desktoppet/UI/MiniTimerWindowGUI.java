@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -56,6 +57,8 @@ public class MiniTimerWindowGUI implements MiniTimerWindowInterface {
         rootVBox.setAlignment(Pos.CENTER);
 
         Scene miniScene = new Scene(rootVBox, 320, 220);
+
+        miniScene.setFill(Color.web("#B8CCCB"));
 
         // Apply the current stylesheet using proper resource loading
         String css = petController.getCss();
