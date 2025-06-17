@@ -70,7 +70,7 @@ public class Settings {
             petController.setPetSize(newValue);
             PetAnimation petAnimation = getPetAnimation();
             if (petAnimation != null) {
-                petAnimation.setSizeHeight(size, height);
+                petAnimation.setSizeHeight(size, 100 - settingsUI.getHeightValue());
             }
         }
     }
