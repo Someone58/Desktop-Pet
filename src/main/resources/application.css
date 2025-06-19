@@ -94,13 +94,19 @@
     -fx-font-size: 5px;
 }
 
+#currentPetHBox {
+    -fx-translate-x: 4;
+}
+
 #rootVBox {
     -fx-background-color: interfaceBackground;
     -fx-border-color:  interfaceBackground interfaceShadow interfaceShadow  interfaceBackground;
     -fx-border-width: 4px 5px 5px 4px;
     -fx-translate-x: -2;
-    -fx-translate-y: -1;
+    -fx-translate-y: 2;
 }
+
+
 
 #homeTitle, #petSelectionTitle, #networkTitle, #chatTitle, #timerTitle, #miniTimerTitle, #settingsTitle {
     -fx-text-fill: buttonText;
@@ -131,7 +137,7 @@
     -fx-min-height: 56px;
     -fx-min-width: 265px;
     -fx-background-color: interfaceBackground;
-    -fx-translate-y: 10px;
+    -fx-translate-y: 0px;
     -fx-translate-x: -2px;
     -fx-border-color:  interfaceBackground interfaceBackground interfaceShadow  interfaceBackground;
     -fx-border-width: 0px 0px 4px 0px;
@@ -144,9 +150,9 @@
     -fx-font-size: 12px;
     -fx-max-width: 100px;
 }
-#chatButtons {
+#petButtons {
     /* <top> <right> <bottom> <left> */
-    -fx-padding: 0 0 27 0;
+    -fx-padding: 0 0 24 0;
     -fx-border-color:  titleBackground interfaceShadow interfaceShadow  titleBackground;
     -fx-border-width: 0px 4px 1px 0px;
     -fx-translate-x: 5;
@@ -160,6 +166,16 @@
 #backButton {
     -fx-translate-x: 10;
     -fx-translate-y: 2;
+}
+
+
+#appsHBox {
+    /* <top> <right> <bottom> <left> */
+    -fx-translate-x: 4;
+    -fx-translate-y: 5;
+    -fx-border-color:  interfaceBackground interfaceShadow interfaceShadow  interfaceBackground;
+    -fx-border-width: 0px 4px 5px 0px;
+    -fx-padding: 0 0 16 0;
 }
 
 

@@ -54,8 +54,8 @@ public class WindowGUI implements WindowUI {
         petButton = new Button("");
         Image petButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pet.png")));
         ImageView petButtonImgView = new ImageView(petButtonImg);
-        petButtonImgView.setFitWidth(30);
-        petButtonImgView.setFitHeight(30);
+        petButtonImgView.setFitWidth(25);
+        petButtonImgView.setFitHeight(25);
         petButtonImgView.setPreserveRatio(true);
         petButton.setGraphic(petButtonImgView);
         petButton.setId("petButton");
@@ -63,8 +63,8 @@ public class WindowGUI implements WindowUI {
         networkButton = new Button("");
         Image networkButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/network.png")));
         ImageView networkButtonImgView = new ImageView(networkButtonImg);
-        networkButtonImgView.setFitWidth(30);
-        networkButtonImgView.setFitHeight(30);
+        networkButtonImgView.setFitWidth(25);
+        networkButtonImgView.setFitHeight(25);
         networkButtonImgView.setPreserveRatio(true);
         networkButton.setGraphic(networkButtonImgView);
         networkButton.setId("networkButton");
@@ -72,8 +72,8 @@ public class WindowGUI implements WindowUI {
         chatButton = new Button("");
         Image chatButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/chat.png")));
         ImageView chatButtonImgView = new ImageView(chatButtonImg);
-        chatButtonImgView.setFitWidth(30);
-        chatButtonImgView.setFitHeight(30);
+        chatButtonImgView.setFitWidth(25);
+        chatButtonImgView.setFitHeight(25);
         chatButtonImgView.setPreserveRatio(true);
         chatButton.setGraphic(chatButtonImgView);
         chatButton.setId("chatButton");
@@ -81,8 +81,8 @@ public class WindowGUI implements WindowUI {
         timerButton = new Button("");
         Image timerButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/timer.png")));
         ImageView timerButtonImgView = new ImageView(timerButtonImg);
-        timerButtonImgView.setFitWidth(30);
-        timerButtonImgView.setFitHeight(30);
+        timerButtonImgView.setFitWidth(25);
+        timerButtonImgView.setFitHeight(25);
         timerButtonImgView.setPreserveRatio(true);
         timerButton.setGraphic(timerButtonImgView);
         timerButton.setId("timerButton");
@@ -90,8 +90,8 @@ public class WindowGUI implements WindowUI {
         settingsButton = new Button("");
         Image settingsButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/settings.png")));
         ImageView settingsButtonImgView = new ImageView(settingsButtonImg);
-        settingsButtonImgView.setFitWidth(30);
-        settingsButtonImgView.setFitHeight(30);
+        settingsButtonImgView.setFitWidth(25);
+        settingsButtonImgView.setFitHeight(25);
         settingsButtonImgView.setPreserveRatio(true);
         settingsButton.setGraphic(settingsButtonImgView);
         settingsButton.setId("settingsButton");
@@ -137,8 +137,8 @@ public class WindowGUI implements WindowUI {
         Label currentPet = new Label("");
         Image sharkImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/shark.png")));
         ImageView sharkImgView = new ImageView(sharkImg);
-        sharkImgView.setFitWidth(80);
-        sharkImgView.setFitHeight(80);
+        sharkImgView.setFitWidth(60);
+        sharkImgView.setFitHeight(60);
         sharkImgView.setPreserveRatio(true); // Damit das Bild nicht verzerrt wird
         currentPet.setGraphic(sharkImgView);
         currentPet.setId("currentPet");
@@ -168,13 +168,17 @@ public class WindowGUI implements WindowUI {
                 currentStatus
         );
 
+        describitionVBox.setId("describitionVBox");
+
         HBox currentPetHBox = new HBox(5);
         currentPetHBox.getChildren().addAll(
                 currentPet,
                 describitionVBox
         );
 
-        HBox appsHBox = new HBox(5);
+        currentPetHBox.setId("currentPetHBox");
+
+        HBox appsHBox = new HBox(10);
         appsHBox.getChildren().addAll(
                 petButton,
                 networkButton,
@@ -187,7 +191,7 @@ public class WindowGUI implements WindowUI {
 
 
         // Build UI layout
-        VBox rootVBox = new VBox(5);
+        VBox rootVBox = new VBox(10);
         rootVBox.getChildren().addAll(
                 homeTitle,
                 currentPetHBox,
@@ -198,7 +202,7 @@ public class WindowGUI implements WindowUI {
         
         // Set up scene
         Group root = new Group(rootVBox);
-        scene = new Scene(root, 300, 200);
+        scene = new Scene(root, 300, 193);
         petController.setWindowScene(scene);
 
         scene.setFill(Color.web("#B8CCCB"));

@@ -88,18 +88,18 @@ public class PetSelectGUI implements PetSelectInterface {
 
         petsHBox.setId("petsHBox");
 
-        VBox chatButtons = new VBox(30);
-        chatButtons.getChildren().addAll(
+        VBox petButtons = new VBox(30);
+        petButtons.getChildren().addAll(
                 backButton,
                 petsHBox
         );
 
-        chatButtons.setId("chatButtons");
+        petButtons.setId("petButtons");
 
         VBox rootVBox = new VBox(5);
         rootVBox.getChildren().addAll(
                 petSelectionTitle,
-                chatButtons
+                petButtons
         );
 
         rootVBox.setId("rootVBox");
