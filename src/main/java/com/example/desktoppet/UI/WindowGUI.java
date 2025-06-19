@@ -180,10 +180,10 @@ public class WindowGUI implements WindowUI {
 
         HBox appsHBox = new HBox(10);
         appsHBox.getChildren().addAll(
-                petButton,
                 networkButton,
                 chatButton,
                 timerButton,
+                petButton,
                 settingsButton
         );
 
