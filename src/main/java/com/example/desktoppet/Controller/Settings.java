@@ -81,7 +81,7 @@ public class Settings {
      */
     public void onHeightChanged(double newValue) {
         double reversedValue = 100 - newValue;
-        this.height = reversedValue;
+        this.height = newValue;
         if (petController != null) {
             PetAnimation petAnimation = getPetAnimation();
             if (petAnimation != null) {
