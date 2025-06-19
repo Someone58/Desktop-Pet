@@ -178,4 +178,15 @@
     -fx-padding: 0 0 16 0;
 }
 
+#sendButtonImgView {
+    -fx-padding: 2;
+}
+
+#messagingBox {
+    -fx-translate-x: 20;
+}
+
+ #messageBox {
+     -fx-padding: 0 0 16 0;
+ }
 

@@ -49,7 +49,13 @@ public class ChatGUI implements ChatInterface {
         chatArea.setWrapText(true);
         chatArea.setPrefRowCount(10);
         chatArea.setPrefColumnCount(30);
-        chatArea.setPrefWidth(300);
+        chatArea.setMaxWidth(245);
+        chatArea.setMinHeight(230);
+
+        chatArea.setId("chatArea");
+
+        messageField.setMinWidth(180);
+        messageField.setMinHeight(10);
 
         Image sendButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/send.png")));
         ImageView sendButtonImgView = new ImageView(sendButtonImg);
@@ -57,6 +63,7 @@ public class ChatGUI implements ChatInterface {
         sendButtonImgView.setFitHeight(25);
         sendButtonImgView.setPreserveRatio(true);
         sendButton.setGraphic(sendButtonImgView);
+        sendButtonImgView.setId("sendButtonImgView");
         
         // Set up scroll listeners
         setupScrollListeners();
@@ -118,17 +125,24 @@ public class ChatGUI implements ChatInterface {
         backButton.setId("backButton");
 
         // Set up message input area
-        HBox messageBox = new HBox(5);
+        HBox messageBox = new HBox(17);
         messageField.setPrefWidth(150);
         messageBox.getChildren().addAll(messageField, sendButton);
+        messageBox.setId("messageBox");
 
-        VBox rootVBox = new VBox(5);
+        VBox chatHeader = new VBox(5);
+        chatHeader.getChildren().addAll(chatTitle, backButton);
+
+        VBox messagingBox = new VBox(18);
+        messagingBox.getChildren().addAll(chatArea, messageBox);
+
+        messagingBox.setId("messagingBox");
+
+        VBox rootVBox = new VBox(20);
         rootVBox.setId("chatRoot");
         rootVBox.getChildren().addAll(
-                chatTitle,
-                backButton,
-                chatArea,
-                messageBox
+                chatHeader,
+                messagingBox
         );
 
         rootVBox.setId("rootVBox");
