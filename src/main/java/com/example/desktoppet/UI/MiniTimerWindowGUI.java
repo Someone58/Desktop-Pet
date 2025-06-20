@@ -50,7 +50,7 @@ public class MiniTimerWindowGUI implements MiniTimerWindowInterface {
         miniStage.setAlwaysOnTop(true);
         miniStage.setResizable(false);
 
-        Label miniTimerTitle = new Label("Timer");
+        Label miniTimerTitle = new Label(" Mini Timer");
         miniTimerTitle.setId("miniTimerTitle");
 
         VBox rootVBox = new VBox(10);

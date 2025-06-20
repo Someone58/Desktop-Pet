@@ -75,7 +75,7 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
         Stage stage = petData.getStage();
         Scene windowScene = petData.getWindowScene();
 
-        Label networkTitle = new Label("Network");
+        Label networkTitle = new Label(" Network");
         networkTitle.setId("networkTitle");
 
         Button backButton = new Button("");

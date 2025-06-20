@@ -85,7 +85,7 @@ public class SettingsGUI implements SettingsInterface {
         Stage stage = petController.getStage();
         Scene windowScene = petController.getWindowScene();
 
-        Label settingsTitle = new Label("Settings");
+        Label settingsTitle = new Label(" Settings");
         settingsTitle.setId("settingsTitle");
 
         Button backButton = new Button("");

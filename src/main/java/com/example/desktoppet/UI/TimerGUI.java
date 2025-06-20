@@ -118,7 +118,7 @@ public class TimerGUI implements TimerInterface {
         VBox rootVBox = new VBox(10);
         rootVBox.setAlignment(Pos.CENTER);
 
-        Label timerTitle = new Label("Timer");
+        Label timerTitle = new Label(" Timer");
         timerTitle.setId("timerTitle");
 
         Button backButton = new Button("");

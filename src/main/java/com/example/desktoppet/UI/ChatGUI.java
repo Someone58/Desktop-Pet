@@ -112,7 +112,7 @@ public class ChatGUI implements ChatInterface {
         Stage stage = petController.getStage();
         Scene windowScene = petController.getWindowScene();
 
-        Label chatTitle = new Label("Chat");
+        Label chatTitle = new Label(" Chat");
         chatTitle.setId("chatTitle");
 
         Button backButton = new Button("");

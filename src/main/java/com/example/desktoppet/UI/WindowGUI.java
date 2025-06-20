@@ -131,7 +131,7 @@ public class WindowGUI implements WindowUI {
     @Override
     public void openWindow() {
 
-        Label homeTitle = new Label("Home");
+        Label homeTitle = new Label(" Home");
         homeTitle.setId("homeTitle");
 
         Label currentPet = new Label("");

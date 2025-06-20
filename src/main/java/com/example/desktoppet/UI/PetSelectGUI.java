@@ -42,7 +42,7 @@ public class PetSelectGUI implements PetSelectInterface {
 
     @Override
     public void changeScene() {
-        Label petSelectionTitle = new Label("Pets");
+        Label petSelectionTitle = new Label(" Pets");
         petSelectionTitle.setId("petSelectionTitle");
 
         Button backButton = new Button("");
