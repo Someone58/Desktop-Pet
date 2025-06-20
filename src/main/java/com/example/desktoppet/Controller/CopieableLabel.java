@@ -13,34 +13,18 @@ import java.util.Objects;
 
 public class CopieableLabel extends Label {
     public CopieableLabel() {
-        addCopyButton();
+        super();
     }
 
     public CopieableLabel(String text) {
         super(text);
-        addCopyButton();
     }
 
-    private void addCopyButton() {
-        Button copyButton = new Button("");
-        Image copyButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/copy.png")));
-        ImageView copyButtonImgView = new ImageView(copyButtonImg);
-        copyButton.setGraphic(copyButtonImgView);
-
-        copyButton.visibleProperty().bind(textProperty().isEmpty().not());
-        copyButton.managedProperty().bind(textProperty().isEmpty().not());
-        copyButton.setFocusTraversable(false);
-        copyButton.setPadding(new Insets(0.0, 4.0, 0.0, 4.0));
-        copyButton.setOnAction(actionEvent -> copyToClipboard(getText()));
-        setGraphic(copyButton);
-        setContentDisplay(ContentDisplay.RIGHT);
-    }
-
-    // Utility method as a private static method
-    private static void copyToClipboard(String text) {
+    public static void copyToClipboard(String text) {
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
         content.putString(text);
         clipboard.setContent(content);
     }
+
 }

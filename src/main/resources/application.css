@@ -34,6 +34,7 @@
     -fx-border-width: 4px 4px 4px 4px;
     -fx-border-style: solid;
     -fx-font-family: "Silkscreen";
+    -fx-font-size: 14px;
 }
 
 #timerLabel {
@@ -80,6 +81,7 @@
     -fx-border-width: 4px 4px 4px 4px;
     -fx-border-style: solid;
     -fx-font-family: "Silkscreen";
+    -fx-padding: 2px;
 }
 
 #chatRoot {
@@ -189,4 +191,30 @@
  #messageBox {
      -fx-padding: 0 0 16 0;
  }
+
+#copyButton {
+    -fx-translate-x: 20;
+    -fx-translate-y: -2;
+    -fx-padding: 2px;
+}
+
+#copieableLabel {
+    -fx-border-width: 4px 4px 4px 0px;
+    -fx-padding: 0px 7px 0px 7px;
+}
+
+#hostButton, #joinButton {
+    -fx-padding:  1 21 1 21;
+    -fx-font-size: 14px;
+}
+
+#allNetworkComponentsVBox {
+    -fx-translate-x: 20;
+    -fx-translate-y: 15;
+    -fx-padding: 0px 0px 35px 0px
+}
+
+#ipAddress {
+    -fx-border-width: 4px 0px 4px 4px;
+}
 

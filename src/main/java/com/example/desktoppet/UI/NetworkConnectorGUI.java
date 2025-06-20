@@ -32,10 +32,13 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
     private final PetData petData;
 
     private CopieableLabel copieableLabel = new CopieableLabel("IP address: ");
+    private Label titlePortField = new Label("Port: ");
+    private Label titleHostField = new Label("Host: ");
     private TextField portField = new TextField("5555");
     private TextField hostField = new TextField("localhost");
-    private Button hostButton = new Button("Host Game");
-    private Button joinButton = new Button("Join Game");
+    private Button hostButton = new Button("Host");
+    private Button joinButton = new Button("Join");
+    private Button copyButton = new Button();
 
     private TextArea connectionStatus;
     private NetworkManager networkManager;
@@ -43,7 +46,7 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
     private SharedTextAreaManager textAreaManager;
     private TextArea localTextArea = new TextArea();
 
-    private Label ipAddress = new Label("IP address: ");
+    private Label ipAddress = new Label("IP-addr: ");
 
     public NetworkConnectorGUI(NetworkConnector networkConnector, PetData petController) {
         this.networkConnector = networkConnector;
@@ -60,6 +63,15 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
     public void changeScene() {
         updateIPAddress();
 
+
+        Image copyButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/copy.png")));
+        ImageView copyButtonImgView = new ImageView(copyButtonImg);
+        copyButtonImgView.setFitHeight(20);
+        copyButtonImgView.setFitWidth(20);
+        copyButtonImgView.setPreserveRatio(true);
+        copyButton.setGraphic(copyButtonImgView);
+        copyButton.setOnAction(e -> CopieableLabel.copyToClipboard(copieableLabel.getText()));
+
         Stage stage = petData.getStage();
         Scene windowScene = petData.getWindowScene();
 
@@ -75,35 +87,62 @@ public class NetworkConnectorGUI implements NetworkConnectorInterface {
         backButton.setGraphic(backButtonImgView);
         backButton.setId("backButton");
 
+
         localTextArea.setEditable(false);
         localTextArea.setWrapText(true);
         localTextArea.setPrefRowCount(5);
         localTextArea.setPrefColumnCount(20);
+        localTextArea.setMinHeight(100);
+        localTextArea.setMaxWidth(250);
 
-        HBox hostHBox = new HBox(5);
-        hostHBox.getChildren().addAll(new Label("Host:"), hostField);
+        portField.setMinWidth(93);
+        hostField.setMinWidth(183);
 
-        HBox portHBox = new HBox(5);
-        portHBox.getChildren().addAll(new Label("Port:"), portField);
+        copieableLabel.setId("copieableLabel");
+        copyButton.setId("copyButton");
 
-        HBox connectionButtonHBox = new HBox(5);
-        connectionButtonHBox.getChildren().addAll(hostButton, backButton);
+        hostButton.setId("hostButton");
+        joinButton.setId("joinButton");
 
-        HBox ipHBox = new HBox(5);
+        ipAddress.setId("ipAddress");
+
+        HBox hostHBox = new HBox(7);
+        hostHBox.getChildren().addAll(titleHostField, hostField);
+        
+
+        HBox portHBox = new HBox(7);
+        portHBox.getChildren().addAll(titlePortField, portField);
+
+        VBox textFieldVBox = new VBox(9);
+        textFieldVBox.getChildren().addAll(hostHBox, portHBox);
+
+        HBox connectionButtonHBox = new HBox(23);
+        connectionButtonHBox.getChildren().addAll(hostButton, joinButton);
+
+        VBox connectionViewVBox = new VBox(8);
+        connectionViewVBox.getChildren().addAll(connectionButtonHBox, localTextArea);
+
+        VBox networkComponentsVBox = new VBox(20);
+        networkComponentsVBox.getChildren().addAll(textFieldVBox, connectionViewVBox);
+
+
+        HBox ipHBox = new HBox(0);
         ipHBox.getChildren().addAll(
                 ipAddress,
-                copieableLabel
+                copieableLabel,
+                copyButton
         );
+
+        VBox allNetworkComponentsVBox = new VBox(20);
+        allNetworkComponentsVBox.getChildren().addAll(networkComponentsVBox, ipHBox);
+
+        allNetworkComponentsVBox.setId("allNetworkComponentsVBox");
 
         VBox rootVBox = new VBox(5);
         rootVBox.getChildren().addAll(
                 networkTitle,
                 backButton,
-                hostHBox,
-                portHBox,
-                connectionButtonHBox,
-                localTextArea,
-                ipHBox
+                allNetworkComponentsVBox
         );
 
         rootVBox.setId("rootVBox");
