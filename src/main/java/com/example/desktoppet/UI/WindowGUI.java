@@ -18,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.application.Platform;
 
 import java.util.Objects;
 
@@ -28,7 +29,7 @@ public class WindowGUI implements WindowUI {
     private PetData petController;
     private Stage stage;
     private Scene scene;
-    
+
     // UI Components
     private TextArea connectionStatus;
     private Button chatButton;
@@ -36,20 +37,27 @@ public class WindowGUI implements WindowUI {
     private Button timerButton;
     private Button petButton;
     private Button settingsButton;
-    
+
     // Component handlers
     private Chat chat;
     private NetworkConnector networkConnector;
     private Timer timer;
     private PetSelect petSelect;
     private boolean windowOnTop = true;
-    
+
+    private Label currentStatus = new Label("");
+    private Image disconnectedImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/disconnected.png")));
+    private ImageView disconnectedImgView = new ImageView(disconnectedImg);
+    private Image connectedImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/connected.png")));
+    private ImageView connectedImgView = new ImageView(connectedImg);
+
     public WindowGUI(PetData petController) {
         this.petController = petController;
         this.stage = petController.getStage();
-        
+
         // Initialize UI components
         connectionStatus = new TextArea();
+        connectionStatus.setId("connectionStatus");
 
         petButton = new Button("");
         Image petButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pet.png")));
@@ -95,35 +103,59 @@ public class WindowGUI implements WindowUI {
         settingsButtonImgView.setPreserveRatio(true);
         settingsButton.setGraphic(settingsButtonImgView);
         settingsButton.setId("settingsButton");
-        
+
         // Initialize handlers with their respective UI implementations
         chat = new Chat(petController); // This now uses ChatGUI internally
         networkConnector = new NetworkConnector(petController);
         timer = new Timer(petController);
         petSelect = new PetSelect(petController);
     }
-    
+
     @Override
     public void initializeUI() {
         stage.setAlwaysOnTop(true);
-        
-        // Configure connection status area
+
         SharedTextAreaManager statusManager = petController.getStatusManager();
+
+        // Bilder für Status konfigurieren
+        connectedImgView.setFitWidth(15);
+        connectedImgView.setFitHeight(15);
+        connectedImgView.setPreserveRatio(true);
+
+        disconnectedImgView.setFitWidth(15);
+        disconnectedImgView.setFitHeight(15);
+        disconnectedImgView.setPreserveRatio(true);
+
         connectionStatus.setEditable(false);
         connectionStatus.setPrefRowCount(1);
         connectionStatus.setPrefHeight(25);
+        connectionStatus.setMaxWidth(180);
+        connectionStatus.setMaxHeight(15);
         connectionStatus.getStyleClass().add("disconnected-status");
         statusManager.registerTextArea(connectionStatus);
         connectionStatus.setText("Disconnected");
-        
-        // Setup connection status styling
-        connectionStatus.textProperty().addListener((observable, oldValue, newValue) -> {
-            connectionStatus.getStyleClass().removeAll("connected-status", "disconnected-status");
-            if (newValue.equals("Connected")) {
-                connectionStatus.getStyleClass().add("connected-status");
-            } else if (newValue.equals("Disconnected")) {
-                connectionStatus.getStyleClass().add("disconnected-status");
-            }
+
+        // Status-Label konfigurieren
+        currentStatus = new Label("Disconnected");
+        currentStatus.setId("currentStatus");
+        currentStatus.setGraphic(disconnectedImgView);
+        currentStatus.getStyleClass().add("disconnected-status");
+
+        // NetworkManager Status-Änderungen überwachen;
+        statusManager.sharedContentProperty().addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> {
+                if ("Connected".equals(newValue)) {
+                    connectionStatus.setText("Connected");
+                    currentStatus.setGraphic(connectedImgView);
+                    currentStatus.getStyleClass().remove("disconnected-status");
+                    currentStatus.getStyleClass().add("connected-status");
+                } else if ("Disconnected".equals(newValue)) {
+                    connectionStatus.setText("Disconnected");
+                    currentStatus.setGraphic(disconnectedImgView);
+                    currentStatus.getStyleClass().remove("connected-status");
+                    currentStatus.getStyleClass().add("disconnected-status");
+                }
+            });
         });
     }
 
@@ -147,25 +179,19 @@ public class WindowGUI implements WindowUI {
         Label petName = new Label("Mister Shark");
         petName.setId("petName");
 
-        Label currentStatus = new Label("");
-        Image statusImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/disconnected.png")));
-        ImageView statusImgView = new ImageView(statusImg);
-        statusImgView.setFitWidth(15);
-        statusImgView.setFitHeight(15);
-        statusImgView.setPreserveRatio(true);
-        currentStatus.setGraphic(statusImgView);
-        currentStatus.setId("currentStatus");
 
-        HBox connectionHBox = new HBox(5);
+        HBox connectionHBox = new HBox(0);
         connectionHBox.getChildren().addAll(
                 currentStatus,
                 connectionStatus
         );
 
+        connectionHBox.setId("connectionHBox");
+
         VBox describitionVBox = new VBox(5);
         describitionVBox.getChildren().addAll(
                 petName,
-                currentStatus
+                connectionHBox
         );
 
         describitionVBox.setId("describitionVBox");
@@ -198,31 +224,31 @@ public class WindowGUI implements WindowUI {
                 appsHBox
         );
 
-        rootVBox.setId("rootVBox");
-        
+        rootVBox.setId("windowRootVBox");
+
         // Set up scene
         Group root = new Group(rootVBox);
         scene = new Scene(root, 300, 193);
         petController.setWindowScene(scene);
 
         scene.setFill(Color.web("#B8CCCB"));
-        
+
         // Apply CSS styling
         String css = petController.getCss();
         if (css != null) {
             scene.getStylesheets().add(css);
         }
-        
+
         // Configure stage
         stage.setTitle("Apps");
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false);
-        
+
         // Set up button event handlers
         setupEventHandlers();
     }
-    
+
     private void setupEventHandlers() {
         chatButton.setOnAction(e -> chat.changeScene());
         networkButton.setOnAction(e -> networkConnector.changeScene());
@@ -230,7 +256,7 @@ public class WindowGUI implements WindowUI {
         petButton.setOnAction(e -> petSelect.changeScene());
         settingsButton.setOnAction(e -> petSelect.settings.changeScene());
     }
-    
+
     @Override
     public void setAlwaysOnTop(boolean onTop) {
         stage.setAlwaysOnTop(onTop);
@@ -239,17 +265,17 @@ public class WindowGUI implements WindowUI {
 
 
 
-    
+
     @Override
     public Stage getStage() {
         return stage;
     }
-    
+
     @Override
     public Scene getScene() {
         return scene;
     }
-    
+
     // Getters for components
     public PetSelect getPetSelect() {
         return petSelect;

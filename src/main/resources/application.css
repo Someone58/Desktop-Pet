@@ -190,8 +190,6 @@
     -fx-translate-y: 2;
 }
 
-
-
 #homeTitle, #petSelectionTitle, #networkTitle, #chatTitle, #settingsTitle {
     -fx-text-fill: buttonText;
     -fx-background-color: titleBackground;
@@ -351,6 +349,32 @@
 
 #navigationButtons {
     -fx-translate-y: -2;
+}
+
+#connectionStatus {
+    -fx-translate-x: -70;
+    -fx-translate-y: -2;
+    -fx-background-color: interfaceBackground;
+    -fx-border-width: 0px;
+    -fx-font-size: 12px;
+    -fx-padding: 0px;
+}
+
+#connectionStatus  .content{
+    -fx-background-color: interfaceBackground;
+}
+
+
+#windowRootVBox {
+    -fx-background-color: interfaceBackground;
+    -fx-border-color:  interfaceBackground interfaceShadow interfaceShadow  interfaceBackground;
+    -fx-border-width: 4px 5px 5px 4px;
+    -fx-translate-x: -2;
+    -fx-translate-y: 2;
+}
+
+#connectionHBox {
+    -fx-max-width: 220px;
 }
 
 
