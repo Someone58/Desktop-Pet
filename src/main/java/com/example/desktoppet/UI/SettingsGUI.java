@@ -6,6 +6,7 @@ import com.example.desktoppet.Controller.Settings;
 import com.example.desktoppet.Interfaces.MiniTimerWindowInterface;
 import com.example.desktoppet.Interfaces.SettingsInterface;
 import com.example.desktoppet.Model.PetData;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -101,6 +102,11 @@ public class SettingsGUI implements SettingsInterface {
         backButton.setGraphic(backButtonImgView);
         backButton.setId("backButton");
 
+        speedLabel.setId("speedLabel");
+        activityLabel.setId("activityLabel");
+        sizeLabel.setId("sizeLabel");
+        heightLabel.setId("heightLabel");
+
         speedTextLabel.setId("speedTextLabel");
         activityTextLabel.setId("activityTextLabel");
         sizeTextLabel.setId("sizeTextLabel");
@@ -122,44 +128,77 @@ public class SettingsGUI implements SettingsInterface {
         navigationButtons.getChildren().addAll(
                 backButton,
                 pinWindow);
+        navigationButtons.setId("navigationButtons");
 
-        HBox speedHBox = new HBox(5);
-        speedHBox.getChildren().addAll(
+
+        HBox speedTitleHBox = new HBox(5);
+        speedTitleHBox.getChildren().addAll(
                 speedLabel,
                 speedTextLabel
         );
 
-        HBox activityHBox = new HBox(5);
-        activityHBox.getChildren().addAll(
+        VBox speedVBox = new VBox(0);
+        speedVBox.getChildren().addAll(
+                speedTitleHBox,
+                speedSlider
+        );
+
+
+
+        HBox activityTitleHBox = new HBox(5);
+        activityTitleHBox.getChildren().addAll(
                 activityLabel,
                 activityTextLabel
         );
 
-        HBox sizeHBox = new HBox(5);
-        sizeHBox.getChildren().addAll(
+        VBox activityVBox = new VBox(0);
+        activityVBox.getChildren().addAll(
+                activityTitleHBox,
+                activitySlider
+        );
+
+
+
+        HBox sizeTitleHBox = new HBox(5);
+        sizeTitleHBox.getChildren().addAll(
                 sizeLabel,
                 sizeTextLabel
         );
 
-        HBox heightHBox = new HBox(5);
-        heightHBox.getChildren().addAll(
+        VBox sizeVBox = new VBox(0);
+        sizeVBox.getChildren().addAll(
+                sizeTitleHBox,
+                sizeSlider
+        );
+
+
+
+        HBox heightTitleHBox = new HBox(5);
+        heightTitleHBox.getChildren().addAll(
                 heightLabel,
                 heightTextLabel
         );
 
+        VBox heightVBox = new VBox(0);
+        heightVBox.getChildren().addAll(
+                heightTitleHBox,
+                heightSlider
+        );
 
-        VBox rootVBox = new VBox(5);
+        VBox allSlidersVBox = new VBox(0);
+        allSlidersVBox.getChildren().addAll(
+                speedVBox,
+                activityVBox,
+                sizeVBox,
+                heightVBox);
+
+        allSlidersVBox.setId("allSlidersVBox");
+
+        VBox rootVBox = new VBox(11);
         rootVBox.getChildren().addAll(
                 settingsTitle,
                 navigationButtons,
-                speedHBox,
-                speedSlider,
-                activityHBox,
-                activitySlider,
-                sizeHBox,
-                sizeSlider,
-                heightHBox,
-                heightSlider
+                allSlidersVBox
         );
 
         rootVBox.setId("rootVBox");
