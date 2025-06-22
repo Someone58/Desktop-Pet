@@ -40,6 +40,9 @@ public class TimerGUI implements TimerInterface {
     private final TextField workField = new TextField();
     private final TextField breakField = new TextField();
     private final TextField sessionsField = new TextField();
+    private final Label workLabel = new Label("Work:     ");
+    private final Label breakLabel = new Label("Break:    ");
+    private final Label sessionsLabel = new Label("Sessions:");
     private HBox buttonBox;
     
     // String properties for binding
@@ -66,24 +69,30 @@ public class TimerGUI implements TimerInterface {
     }
     
     private void setupComponents() {
-        // Style components
-        timerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold;");
-        statusLabel.setStyle("-fx-font-size: 20px;");
         startPauseButton.setStyle("-fx-font-size: 16px;");
         resetButton.setStyle("-fx-font-size: 16px;");
         nextPhaseButton.setStyle("-fx-font-size: 16px;");
 
         Image startPauseButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/play.png")));
         ImageView startPauseButtonImgView = new ImageView(startPauseButtonImg);
+        startPauseButtonImgView.setFitWidth(17);
+        startPauseButtonImgView.setFitHeight(17);
+        startPauseButtonImgView.setPreserveRatio(true);
         startPauseButton.setGraphic(startPauseButtonImgView);
 
         Image resetButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/replay.png")));
         ImageView resetButtonImgView = new ImageView(resetButtonImg);
+        resetButtonImgView.setFitWidth(17);
+        resetButtonImgView.setFitHeight(17);
+        resetButtonImgView.setPreserveRatio(true);
         resetButton.setGraphic(resetButtonImgView);
 
         timerLabel.setId("timerLabel");
         statusLabel.setId("statusLabel");
         sessionLabel.setId("sessionLabel");
+        startPauseButton.setId("startPauseButton");
+        resetButton.setId("resetButton");
+        nextPhaseButton.setId("nextPhaseButton");
         
         // Set up text fields
         workField.setPromptText("25 (min)");
@@ -96,9 +105,11 @@ public class TimerGUI implements TimerInterface {
         sessionsField.setTextFormatter(new TextFormatter<>(timerLogic.new PositiveIntegerStringConverter(), null, timerLogic.positiveIntegerFilter));
         
         // Initialize buttonBox
-        buttonBox = new HBox(10);
+        buttonBox = new HBox(15);
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.getChildren().addAll(startPauseButton, resetButton);
+
+        miniTimerButton.setId("miniTimerButton");
     }
     
     private void setupEventHandlers() {
@@ -115,8 +126,8 @@ public class TimerGUI implements TimerInterface {
         petController.setTimeropened(true);
         petController.getNotification().setNoIcon();
 
-        VBox rootVBox = new VBox(10);
-        rootVBox.setAlignment(Pos.CENTER);
+        VBox rootTimerVBox = new VBox(10);
+        rootTimerVBox.setAlignment(Pos.CENTER);
 
         Label timerTitle = new Label(" Timer");
         timerTitle.setId("timerTitle");
@@ -131,7 +142,7 @@ public class TimerGUI implements TimerInterface {
         backButton.setId("backButton");
 
 
-        Scene scene = new Scene(rootVBox, 300, 400);
+        Scene scene = new Scene(rootTimerVBox, 300, 400);
 
         scene.setFill(Color.web("#B8CCCB"));
 
@@ -165,7 +176,7 @@ public class TimerGUI implements TimerInterface {
             );
         });
 
-        HBox navigationHBox = new HBox(10);
+        HBox navigationHBox = new HBox(25);
         navigationHBox.getChildren().addAll(backButton, miniTimerButton);
 
         VBox inputBox = new VBox(10);
@@ -176,14 +187,25 @@ public class TimerGUI implements TimerInterface {
         if (timerLogic.getBreakInput() != null) breakField.setText(timerLogic.getBreakInput());
         if (timerLogic.getSessionsInput() != null) sessionsField.setText(timerLogic.getSessionsInput());
 
-        HBox workHBox = new HBox(5, new Label("Work:"), workField);
-        HBox breakHBox = new HBox(5, new Label("Break:"), breakField);
-        HBox sessionsHBox = new HBox(5, new Label("Sessions:"), sessionsField);
+        HBox workHBox = new HBox(13);
+        workHBox.getChildren().addAll(workLabel, workField);
+        workHBox.setAlignment(Pos.CENTER);
+
+        HBox breakHBox = new HBox(13);
+        breakHBox.getChildren().addAll(breakLabel, breakField);
+        breakHBox.setAlignment(Pos.CENTER);
+
+        HBox sessionsHBox = new HBox(13);
+        sessionsHBox.getChildren().addAll(sessionsLabel, sessionsField);
+        sessionsHBox.setAlignment(Pos.CENTER);
 
         inputBox.getChildren().addAll(
                 workHBox,
                 breakHBox,
                 sessionsHBox);
+
+
+        inputBox.setId("inputBox");
 
         buttonBox.getChildren().clear();
         if (timerLogic.isWaitingForNextPhase()) {
@@ -194,18 +216,26 @@ public class TimerGUI implements TimerInterface {
                     resetButton);
         }
 
-        rootVBox.getChildren().clear();
-        rootVBox.getChildren().addAll(
+        buttonBox.setId("buttonBox");
+
+        VBox workTimeVBox = new VBox(2);
+        workTimeVBox.setAlignment(Pos.CENTER);
+        workTimeVBox.getChildren().addAll(statusLabel, sessionLabel);
+
+        VBox timeVBox = new VBox();
+        timeVBox.setSpacing(4);
+        timeVBox.setAlignment(Pos.CENTER);
+        timeVBox.getChildren().addAll(workTimeVBox, timerLabel, buttonBox);
+
+        rootTimerVBox.getChildren().clear();
+        rootTimerVBox.getChildren().addAll(
                 timerTitle,
                 navigationHBox,
-                statusLabel,
-                sessionLabel,
-                timerLabel,
-                buttonBox,
+                timeVBox,
                 inputBox
         );
 
-        rootVBox.setId("rootVBox");
+        rootTimerVBox.setId("rootTimerVBox");
 
         updateTimerDisplay();
         updateSessionLabel();
@@ -272,11 +302,11 @@ public class TimerGUI implements TimerInterface {
         boolean isNegative = timerText != null && timerText.startsWith("-");
         
         if (isStats) {
-            timerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: green;");
+            timerLabel.setStyle("-fx-font-size: 47px; -fx-font-weight: bold; -fx-text-fill: green;");
         } else if (isNegative) {
-            timerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: red;");
+            timerLabel.setStyle("-fx-font-size: 47px; -fx-font-weight: bold; -fx-text-fill: red;");
         } else {
-            timerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: black;");
+            timerLabel.setStyle("-fx-font-size: 47px; -fx-font-weight: bold; -fx-text-fill: #152F38;");
         }
     }
     
@@ -295,7 +325,7 @@ public class TimerGUI implements TimerInterface {
         
         statusTextProperty.set("All sessions completed!");
         timerTextProperty.set("Study: " + studyTimeStr + "\nBreak: " + breakTimeStr);
-        timerLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: green;");
+        timerLabel.setStyle("-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: green;");
     }
     
     @Override
