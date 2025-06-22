@@ -40,9 +40,9 @@ public class TimerGUI implements TimerInterface {
     private final TextField workField = new TextField();
     private final TextField breakField = new TextField();
     private final TextField sessionsField = new TextField();
-    private final Label workLabel = new Label("Work:     ");
-    private final Label breakLabel = new Label("Break:    ");
-    private final Label sessionsLabel = new Label("Sessions:");
+    private final Label workLabel = new Label("Work:      ");
+    private final Label breakLabel = new Label("Break:     ");
+    private final Label sessionsLabel = new Label("Sessions: ");
     private HBox buttonBox;
     
     // String properties for binding
@@ -50,27 +50,27 @@ public class TimerGUI implements TimerInterface {
     private final StringProperty statusTextProperty = new SimpleStringProperty("Work Time");
     private final StringProperty startPauseTextProperty = new SimpleStringProperty("");
     private final StringProperty nextPhaseTextProperty = new SimpleStringProperty();
-    
+
+    private ImageView playImageView;
+    private ImageView pauseImageView;
+
     public TimerGUI(Timer timerLogic, PetData petController) {
         this.timerLogic = timerLogic;
         this.petController = petController;
-        
+
         // Initialize components
         setupComponents();
-        
-        // Bind text properties
+
+        // Bind nur die anderen Properties
         timerLabel.textProperty().bindBidirectional(timerTextProperty);
         statusLabel.textProperty().bindBidirectional(statusTextProperty);
-        startPauseButton.textProperty().bindBidirectional(startPauseTextProperty);
         nextPhaseButton.textProperty().bindBidirectional(nextPhaseTextProperty);
-        
+
         // Set up event handlers
         setupEventHandlers();
     }
-    
+
     private void setupComponents() {
-        startPauseButton.setStyle("-fx-font-size: 16px;");
-        resetButton.setStyle("-fx-font-size: 16px;");
         nextPhaseButton.setStyle("-fx-font-size: 16px;");
 
         Image startPauseButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/play.png")));
@@ -86,6 +86,23 @@ public class TimerGUI implements TimerInterface {
         resetButtonImgView.setFitHeight(17);
         resetButtonImgView.setPreserveRatio(true);
         resetButton.setGraphic(resetButtonImgView);
+
+        // Play-Button Image
+        Image playButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/play.png")));
+        playImageView = new ImageView(playButtonImg);
+        playImageView.setFitWidth(17);
+        playImageView.setFitHeight(17);
+        playImageView.setPreserveRatio(true);
+
+        // Pause-Button Image
+        Image pauseButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pause.png"))); // Sie müssen eine pause.png hinzufügen
+        pauseImageView = new ImageView(pauseButtonImg);
+        pauseImageView.setFitWidth(17);
+        pauseImageView.setFitHeight(17);
+        pauseImageView.setPreserveRatio(true);
+
+        startPauseButton.setGraphic(playImageView);
+
 
         timerLabel.setId("timerLabel");
         statusLabel.setId("statusLabel");
@@ -111,7 +128,12 @@ public class TimerGUI implements TimerInterface {
 
         miniTimerButton.setId("miniTimerButton");
     }
-    
+
+    public void updateStartPauseButtonImage(boolean isPlaying) {
+        startPauseButton.setGraphic(isPlaying ? pauseImageView : playImageView);
+    }
+
+
     private void setupEventHandlers() {
         startPauseButton.setOnAction(e -> timerLogic.toggleTimer());
         resetButton.setOnAction(e -> timerLogic.resetTimer());

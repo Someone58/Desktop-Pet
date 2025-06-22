@@ -94,12 +94,26 @@ public class Timer {
             startTimer();
         } else if (timeline.getStatus() == Timeline.Status.RUNNING) {
             timeline.pause();
-            timerUI.startPauseTextProperty().set("Resume");
+            updateStartPauseButton(false); // Pause-Zustand
         } else {
             timeline.play();
-            timerUI.startPauseTextProperty().set("Pause");
+            updateStartPauseButton(true); // Play-Zustand
         }
         if (onUpdate != null) onUpdate.run();
+    }
+
+    /**
+     * Check if the timer is currently running
+     * @return true if the timer is running, false otherwise
+     */
+    public boolean isRunning() {
+        return timeline != null && timeline.getStatus() == Timeline.Status.RUNNING;
+    }
+
+
+    private void updateStartPauseButton(boolean isPlaying) {
+        TimerGUI gui = (TimerGUI) timerUI;
+        gui.updateStartPauseButtonImage(isPlaying);
     }
     
     /**
@@ -126,6 +140,7 @@ public class Timer {
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateTimer()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+
         
         timerUI.startPauseTextProperty().set("Pause");
         timerUI.statusTextProperty().set("Work Time");

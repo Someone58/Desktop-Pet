@@ -60,7 +60,7 @@
     -fx-background-color: interfaceBackground;
     -fx-border-width: 0px;
     -fx-text-fill: buttonText;
-    -fx-font-size: 11px;
+    -fx-font-size: 12px;
 }
 
 #miniTimerButton {
@@ -68,7 +68,7 @@
     -fx-translate-y: 1;
 }
 
-#startPauseButton {
+#startPauseButton, #startPauseButton {
     -fx-padding: 2px 6px 2px 6px;
 }
 
@@ -88,6 +88,10 @@
     -fx-translate-y: -4;
 }
 
+#miniButtonBox {
+    -fx-translate-y: -10;
+}
+
 #rootTimerVBox {
     -fx-background-color: interfaceBackground;
     -fx-border-color:  interfaceBackground interfaceShadow interfaceShadow  interfaceBackground;
@@ -95,6 +99,15 @@
     -fx-translate-x: 0;
     -fx-translate-y: 1;
 }
+
+#miniRootVBox {
+    -fx-background-color: interfaceBackground;
+    -fx-border-color:  interfaceBackground interfaceShadow interfaceShadow  interfaceBackground;
+    -fx-border-width: 4px 5px 5px 4px;
+    -fx-translate-x: 0;
+    -fx-translate-y: 0;
+}
+
 
 #timerTitle {
     -fx-text-fill: buttonText;
@@ -107,6 +120,20 @@
     -fx-font-size: 16px;
     -fx-min-width: 293px;
     -fx-translate-x: 3px;
+}
+
+#miniTimerTitle {
+    -fx-text-fill: buttonText;
+    -fx-background-color: titleBackground;
+    /* Border-Farben: oben rechts unten links */
+    -fx-border-color:  titleBackground interfaceShadow interfaceShadow  titleBackground;
+    -fx-border-width: 4px 4px 4px 0px;
+    -fx-border-style: solid;
+    -fx-font-family: "Silkscreen";
+    -fx-font-size: 16px;
+    -fx-min-width: 293px;
+    -fx-translate-x: 3px;
+    -fx-translate-y: 2px;
 }
 
 
@@ -165,7 +192,7 @@
 
 
 
-#homeTitle, #petSelectionTitle, #networkTitle, #chatTitle, #miniTimerTitle, #settingsTitle {
+#homeTitle, #petSelectionTitle, #networkTitle, #chatTitle, #settingsTitle {
     -fx-text-fill: buttonText;
     -fx-background-color: titleBackground;
     /* Border-Farben: oben rechts unten links */

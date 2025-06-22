@@ -9,6 +9,8 @@ import com.example.desktoppet.UI.MiniTimerWindowGUI;
  */
 public class MiniTimerWindow {
     private static MiniTimerWindowInterface miniTimerUI = null; // Only one instance allowed
+    private Timer timer;
+    private PetData petController;
 
     /**
      * Creates a new mini timer window or brings the existing one to front
@@ -16,17 +18,20 @@ public class MiniTimerWindow {
      * @param petController the pet controller instance
      */
     public MiniTimerWindow(Timer timer, PetData petController) {
+        this.timer = timer;
+        this.petController = petController;
+
         // If a mini timer window already exists and is showing, bring it to front
         if (miniTimerUI != null && miniTimerUI.isShowing()) {
             miniTimerUI.toFront();
             return;
         }
-        
+
         // Create a new mini timer window UI
         miniTimerUI = new MiniTimerWindowGUI();
         miniTimerUI.createMiniTimerWindow(timer, petController);
     }
-    
+
     /**
      * Get the mini timer window UI implementation
      * @return the mini timer window UI interface

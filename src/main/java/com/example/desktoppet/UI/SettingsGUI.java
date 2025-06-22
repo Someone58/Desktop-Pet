@@ -102,6 +102,23 @@ public class SettingsGUI implements SettingsInterface {
         sizeTextLabel.setId("sizeTextLabel");
         heightTextLabel.setId("heightTextLabel");
 
+        speedSlider.setShowTickMarks(true);
+        speedSlider.setShowTickLabels(true);
+
+        activitySlider.setShowTickMarks(true);
+        activitySlider.setShowTickLabels(true);
+
+        sizeSlider.setShowTickMarks(true);
+        sizeSlider.setShowTickLabels(true);
+
+        heightSlider.setShowTickMarks(true);
+        heightSlider.setShowTickLabels(true);
+
+        HBox navigationButtons = new HBox(5);
+        navigationButtons.getChildren().addAll(
+                backButton,
+                pinWindow);
+
         HBox speedHBox = new HBox(5);
         speedHBox.getChildren().addAll(
                 speedLabel,
@@ -130,7 +147,7 @@ public class SettingsGUI implements SettingsInterface {
         VBox rootVBox = new VBox(5);
         rootVBox.getChildren().addAll(
                 settingsTitle,
-                backButton,
+                navigationButtons,
                 speedHBox,
                 speedSlider,
                 activityHBox,
@@ -138,9 +155,7 @@ public class SettingsGUI implements SettingsInterface {
                 sizeHBox,
                 sizeSlider,
                 heightHBox,
-                heightSlider,
-                darkmode,
-                pinWindow
+                heightSlider
         );
 
         rootVBox.setId("rootVBox");
