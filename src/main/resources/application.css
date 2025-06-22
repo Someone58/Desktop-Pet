@@ -335,4 +335,7 @@
     -fx-stroke: labelBackground;
 }
 
+#pinWindow {
+    -fx-translate-y: 2;
+}
 

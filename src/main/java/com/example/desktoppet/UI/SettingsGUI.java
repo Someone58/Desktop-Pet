@@ -39,9 +39,13 @@ public class SettingsGUI implements SettingsInterface {
     private final Slider heightSlider = new Slider(0, 100, 0);
 
     private final Button darkmode = new Button("Dark Mode");
-    private final Button pinWindow = new Button("Pin Window");
+    private final Button pinWindow = new Button("");
     private boolean isDarkMode = false;
     private boolean windowOnTop = true;
+    private final Image pinButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pin.png")));
+    private final ImageView pinButtonImgView = new ImageView(pinButtonImg);
+    private final Image unpinButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/unpin.png")));
+    private final ImageView unpinButtonImgView = new ImageView(unpinButtonImg);
     
     public SettingsGUI(Settings settingsLogic, PetData petController) {
         this.settingsLogic = settingsLogic;
@@ -114,7 +118,7 @@ public class SettingsGUI implements SettingsInterface {
         heightSlider.setShowTickMarks(true);
         heightSlider.setShowTickLabels(true);
 
-        HBox navigationButtons = new HBox(5);
+        HBox navigationButtons = new HBox(25);
         navigationButtons.getChildren().addAll(
                 backButton,
                 pinWindow);
@@ -172,6 +176,18 @@ public class SettingsGUI implements SettingsInterface {
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false);
+
+
+        pinButtonImgView.setFitWidth(15);
+        pinButtonImgView.setFitHeight(15);
+        pinButtonImgView.setPreserveRatio(true);
+        pinWindow.setGraphic(pinButtonImgView);
+        pinWindow.setId("pinWindow");
+
+
+        unpinButtonImgView.setFitWidth(15);
+        unpinButtonImgView.setFitHeight(15);
+        unpinButtonImgView.setPreserveRatio(true);
 
         backButton.setOnAction(e -> {
             stage.setScene(windowScene);
@@ -240,8 +256,14 @@ public class SettingsGUI implements SettingsInterface {
      * Updates the text of the pin window button based on current state
      */
     private void updatePinWindowText() {
-        pinWindow.setText(windowOnTop ? "Unpin Window" : "Pin Window");
+        pinWindow.setText("");
+        if (windowOnTop) {
+            pinWindow.setGraphic(unpinButtonImgView);
+        } else {
+            pinWindow.setGraphic(pinButtonImgView);
+        }
     }
+
 
     /**
      * Updates the stylesheet of all existing scenes
