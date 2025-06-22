@@ -27,10 +27,13 @@ public class PetSelectGUI implements PetSelectInterface {
     private Button hedgehogSelect = new Button("");
     private Button dogSelect = new Button("");
     private Stage stage;
+    private String currentPet;
+
 
     public PetSelectGUI(PetSelect petSelectLogic, PetData petController) {
         this.petSelectLogic = petSelectLogic;
         this.petController = petController;
+        this.currentPet = "Shark";
         initializeUI();
     }
 
@@ -38,6 +41,20 @@ public class PetSelectGUI implements PetSelectInterface {
     public void initializeUI() {
         // Get references to the stage
         this.stage = petController.getStage();
+    }
+
+    private void updatePetButtonStyles() {
+        // Setze zuerst alle Pet-Buttons auf die nicht-ausgewählte Farbe
+        sharkSelect.setStyle("-fx-background-color: #566E73;");
+        hedgehogSelect.setStyle("-fx-background-color: #566E73;");
+        dogSelect.setStyle("-fx-background-color: #566E73;");
+
+        // Setze die ausgewählte Farbe für das aktuelle Pet
+        switch (currentPet) {
+            case "Shark" -> sharkSelect.setStyle("-fx-background-color: #152F38;");
+            case "Hedgehog" -> hedgehogSelect.setStyle("-fx-background-color: #152F38;");
+            case "Dog" -> dogSelect.setStyle("-fx-background-color: #152F38;");
+        }
     }
 
     @Override
@@ -137,10 +154,14 @@ public class PetSelectGUI implements PetSelectInterface {
         dogSelect.setOnAction(e -> {
             applyPetSelection(petSelectLogic.getDogName());
         });
+
+        updatePetButtonStyles(); // Aktualisiert die Styles beim Öffnen der Scene
     }
 
     @Override
     public void applyPetSelection(String petName) {
+        this.currentPet = petName;
+        updatePetButtonStyles();
         petSelectLogic.setupPet(petName);
     }
 }

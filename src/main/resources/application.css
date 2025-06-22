@@ -12,6 +12,8 @@
     inputBackground: "#E5E5E5";
     inputHighlight: "#AFABA5";
     inputShadow: "#6E6962";
+    selectedPet: "#152F38";
+    notSelectedPet: "#566E73";
 }
 
 .scene {
@@ -377,5 +379,13 @@
     -fx-max-width: 220px;
 }
 
+.selected-pet {
+    -fx-background-color: selectedPet;
+}
+
+.button.selected-pet {
+    -fx-background-color: selectedPet;
+    -fx-border-color: buttonHighlight buttonShadow buttonShadow buttonHighlight;
+}
 
 
