@@ -7,7 +7,7 @@ import javafx.stage.Stage;
  * Interface for Window UI operations.
  * This allows for different UI implementations while maintaining consistent functionality.
  */
-public interface WindowUI {
+public interface WindowInterface {
     /**
      * Initialize the UI components
      */

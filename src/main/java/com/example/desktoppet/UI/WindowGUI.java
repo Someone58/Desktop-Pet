@@ -5,7 +5,7 @@ import com.example.desktoppet.Controller.Chat;
 import com.example.desktoppet.Controller.NetworkConnector;
 import com.example.desktoppet.Controller.PetSelect;
 import com.example.desktoppet.Controller.Timer;
-import com.example.desktoppet.Interfaces.WindowUI;
+import com.example.desktoppet.Interfaces.WindowInterface;
 import com.example.desktoppet.Model.PetData;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -25,7 +25,7 @@ import java.util.Objects;
 /**
  * Handles UI construction and components for the main window
  */
-public class WindowGUI implements WindowUI {
+public class WindowGUI implements WindowInterface {
     private PetData petController;
     private Stage stage;
     private Scene scene;
@@ -196,8 +196,10 @@ public class WindowGUI implements WindowUI {
         currentPetLabel.setGraphic(selectedPetImage);
 
         // Aktualisiere den Namen
-        Label petNameLabel = (Label) ((VBox) currentPetLabel.getParent().getParent()).getChildren().get(0);
+        VBox descriptionVBox = (VBox) ((HBox) currentPetLabel.getParent()).getChildren().get(1);
+        Label petNameLabel = (Label) descriptionVBox.getChildren().get(0);
         petNameLabel.setText(displayName);
+
     }
 
 
