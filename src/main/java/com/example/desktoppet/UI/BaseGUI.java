@@ -108,35 +108,6 @@ public abstract class BaseGUI {
     }
 
     /**
-     * Create a vertical layout container
-     * @param spacing spacing between elements
-     * @param id container ID (optional)
-     * @return configured VBox instance
-     */
-    protected VBox createVBox(double spacing, String id) {
-        VBox vbox = new VBox(spacing);
-        if (id != null && !id.isEmpty()) {
-            vbox.setId(id);
-        }
-        return vbox;
-    }
-
-    /**
-     * Create a styled text area
-     * @param editable whether the text area is editable
-     * @param id the text area ID
-     * @return configured TextArea instance
-     */
-    protected TextArea createTextArea(boolean editable, String id) {
-        TextArea textArea = new TextArea();
-        textArea.setEditable(editable);
-        if (id != null && !id.isEmpty()) {
-            textArea.setId(id);
-        }
-        return textArea;
-    }
-
-    /**
      * Apply CSS styling to a scene
      * @param scene the scene to style
      */
