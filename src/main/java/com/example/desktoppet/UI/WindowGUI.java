@@ -25,9 +25,7 @@ import java.util.Objects;
 /**
  * Handles UI construction and components for the main window
  */
-public class WindowGUI implements WindowInterface {
-    private PetData petController;
-    private Stage stage;
+public class WindowGUI extends BaseGUI implements WindowInterface {
     private Scene scene;
 
     // UI Components
@@ -61,57 +59,26 @@ public class WindowGUI implements WindowInterface {
 
 
     public WindowGUI(PetData petController) {
-        this.petController = petController;
-        this.stage = petController.getStage();
+        super(petController);
 
         // Initialize UI components
         connectionStatus = new TextArea();
         connectionStatus.setId("connectionStatus");
 
         petButton = new Button("");
-        Image petButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pet.png")));
-        ImageView petButtonImgView = new ImageView(petButtonImg);
-        petButtonImgView.setFitWidth(25);
-        petButtonImgView.setFitHeight(25);
-        petButtonImgView.setPreserveRatio(true);
-        petButton.setGraphic(petButtonImgView);
-        petButton.setId("petButton");
+        configureButton(petButton, "/pet.png", 25, 25, "petButton");
 
         networkButton = new Button("");
-        Image networkButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/network.png")));
-        ImageView networkButtonImgView = new ImageView(networkButtonImg);
-        networkButtonImgView.setFitWidth(25);
-        networkButtonImgView.setFitHeight(25);
-        networkButtonImgView.setPreserveRatio(true);
-        networkButton.setGraphic(networkButtonImgView);
-        networkButton.setId("networkButton");
+        configureButton(networkButton, "/network.png", 25, 25, "networkButton");
 
         chatButton = new Button("");
-        Image chatButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/chat.png")));
-        ImageView chatButtonImgView = new ImageView(chatButtonImg);
-        chatButtonImgView.setFitWidth(25);
-        chatButtonImgView.setFitHeight(25);
-        chatButtonImgView.setPreserveRatio(true);
-        chatButton.setGraphic(chatButtonImgView);
-        chatButton.setId("chatButton");
+        configureButton(chatButton, "/chat.png", 25, 25, "chatButton");
 
         timerButton = new Button("");
-        Image timerButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/timer.png")));
-        ImageView timerButtonImgView = new ImageView(timerButtonImg);
-        timerButtonImgView.setFitWidth(25);
-        timerButtonImgView.setFitHeight(25);
-        timerButtonImgView.setPreserveRatio(true);
-        timerButton.setGraphic(timerButtonImgView);
-        timerButton.setId("timerButton");
+        configureButton(timerButton, "/timer.png", 25, 25, "timerButton");
 
         settingsButton = new Button("");
-        Image settingsButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/settings.png")));
-        ImageView settingsButtonImgView = new ImageView(settingsButtonImg);
-        settingsButtonImgView.setFitWidth(25);
-        settingsButtonImgView.setFitHeight(25);
-        settingsButtonImgView.setPreserveRatio(true);
-        settingsButton.setGraphic(settingsButtonImgView);
-        settingsButton.setId("settingsButton");
+        configureButton(settingsButton, "/settings.png", 25, 25, "settingsButton");
 
         // Initialize handlers with their respective UI implementations
         chat = new Chat(petController); // This now uses ChatGUI internally
@@ -271,11 +238,8 @@ public class WindowGUI implements WindowInterface {
 
         scene.setFill(Color.web("#B8CCCB"));
 
-        // Apply CSS styling
-        String css = petController.getCss();
-        if (css != null) {
-            scene.getStylesheets().add(css);
-        }
+        // Apply CSS styling using inherited method
+        applyCSS(scene);
 
         // Configure stage
         stage.setTitle("Apps");

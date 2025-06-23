@@ -20,9 +20,8 @@ import java.util.Objects;
 /**
  * Handles UI construction and components for the pet selection window
  */
-public class PetSelectGUI implements PetSelectInterface {
+public class PetSelectGUI extends BaseGUI implements PetSelectInterface {
     private final PetSelect petSelectLogic;
-    private final PetData petController;
 
     private Button sharkSelect = new Button("");
     private Button hedgehogSelect = new Button("");
@@ -33,16 +32,15 @@ public class PetSelectGUI implements PetSelectInterface {
 
 
     public PetSelectGUI(PetSelect petSelectLogic, PetData petController) {
+        super(petController);
         this.petSelectLogic = petSelectLogic;
-        this.petController = petController;
         this.currentPet = "Shark";
         initializeUI();
     }
 
     @Override
     public void initializeUI() {
-        // Get references to the stage
-        this.stage = petController.getStage();
+        // Stage is already initialized in the parent class
     }
 
     private void updatePetButtonStyles() {
@@ -76,13 +74,7 @@ public class PetSelectGUI implements PetSelectInterface {
         petSelectionTitle.setId("petSelectionTitle");
 
         Button backButton = new Button("");
-        Image backButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/arrow.png")));
-        ImageView backButtonImgView = new ImageView(backButtonImg);
-        backButtonImgView.setFitWidth(15);
-        backButtonImgView.setFitHeight(15);
-        backButtonImgView.setPreserveRatio(true);
-        backButton.setGraphic(backButtonImgView);
-        backButton.setId("backButton");
+        configureButton(backButton, "/arrow.png", 15, 15, "backButton");
 
         Image sharkButtonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/shark.png")));
         ImageView sharkButtonImgView = new ImageView(sharkButtonImg);
@@ -141,10 +133,8 @@ public class PetSelectGUI implements PetSelectInterface {
 
         scene.setFill(Color.web("#B8CCCB"));
 
-        String css = petController.getCss();
-        if (css != null) {
-            scene.getStylesheets().add(css);
-        }
+        // Use inherited method to apply CSS
+        applyCSS(scene);
 
         stage.setTitle("Select Pet");
         stage.setScene(scene);
