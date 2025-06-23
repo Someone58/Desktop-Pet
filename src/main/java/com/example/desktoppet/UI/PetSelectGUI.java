@@ -3,6 +3,7 @@ package com.example.desktoppet.UI;
 import com.example.desktoppet.Model.PetData;
 import com.example.desktoppet.Controller.PetSelect;
 import com.example.desktoppet.Interfaces.PetSelectInterface;
+import com.example. desktoppet.UI.WindowGUI;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,6 +29,7 @@ public class PetSelectGUI implements PetSelectInterface {
     private Button dogSelect = new Button("");
     private Stage stage;
     private String currentPet;
+    private WindowGUI windowGUI;
 
 
     public PetSelectGUI(PetSelect petSelectLogic, PetData petController) {
@@ -54,6 +56,17 @@ public class PetSelectGUI implements PetSelectInterface {
             case "Shark" -> sharkSelect.setStyle("-fx-background-color: #152F38;");
             case "Hedgehog" -> hedgehogSelect.setStyle("-fx-background-color: #152F38;");
             case "Dog" -> dogSelect.setStyle("-fx-background-color: #152F38;");
+        }
+    }
+
+    public void setWindowGUI(WindowGUI windowGUI) {
+        this.windowGUI = windowGUI;
+    }
+
+    public void setupPet(String petName) {
+        petSelectLogic.setupPet(petName);  // Verwendung von petSelectLogic statt pet
+        if (windowGUI != null) {
+            windowGUI.updatePetGraphic(petName);
         }
     }
 
@@ -163,5 +176,9 @@ public class PetSelectGUI implements PetSelectInterface {
         this.currentPet = petName;
         updatePetButtonStyles();
         petSelectLogic.setupPet(petName);
+
+        if (windowGUI != null) {
+            windowGUI.updatePetGraphic(petName);
+        }
     }
 }

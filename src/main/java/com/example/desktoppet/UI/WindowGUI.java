@@ -50,6 +50,15 @@ public class WindowGUI implements WindowUI {
     private ImageView disconnectedImgView = new ImageView(disconnectedImg);
     private Image connectedImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/connected.png")));
     private ImageView connectedImgView = new ImageView(connectedImg);
+    private Label currentPetLabel;
+    private String currentPetName;
+    private Image sharkImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/shark.png")));
+    private ImageView sharkImgView = new ImageView(sharkImg);
+    private Image hedgehogImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/hedgehog.png")));
+    private ImageView hedgehogImgView = new ImageView(hedgehogImg);
+    private Image dogImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dog.png")));
+    private ImageView dogImgView = new ImageView(dogImg);
+
 
     public WindowGUI(PetData petController) {
         this.petController = petController;
@@ -109,6 +118,7 @@ public class WindowGUI implements WindowUI {
         networkConnector = new NetworkConnector(petController);
         timer = new Timer(petController);
         petSelect = new PetSelect(petController);
+        ((PetSelectGUI)petSelect.getPetSelectUI()).setWindowGUI(this);
     }
 
     @Override
@@ -159,6 +169,37 @@ public class WindowGUI implements WindowUI {
         });
     }
 
+    public void updatePetGraphic(String newPetName) {
+        currentPetName = newPetName;
+
+        // Aktualisiere das Bild
+        ImageView selectedPetImage;
+        String displayName;
+        switch (newPetName) {
+            case "Dog" -> {
+                selectedPetImage = dogImgView;
+                displayName = "Mister Dog";
+            }
+            case "Hedgehog" -> {
+                selectedPetImage = hedgehogImgView;
+                displayName = "Mister Hedgehog";
+            }
+            default -> {
+                selectedPetImage = sharkImgView;
+                displayName = "Mister Shark";
+            }
+        }
+
+        selectedPetImage.setFitWidth(60);
+        selectedPetImage.setFitHeight(60);
+        selectedPetImage.setPreserveRatio(true);
+        currentPetLabel.setGraphic(selectedPetImage);
+
+        // Aktualisiere den Namen
+        Label petNameLabel = (Label) ((VBox) currentPetLabel.getParent().getParent()).getChildren().get(0);
+        petNameLabel.setText(displayName);
+    }
+
 
     @Override
     public void openWindow() {
@@ -166,19 +207,14 @@ public class WindowGUI implements WindowUI {
         Label homeTitle = new Label(" Home");
         homeTitle.setId("homeTitle");
 
-        Label currentPet = new Label("");
-        Image sharkImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/shark.png")));
-        ImageView sharkImgView = new ImageView(sharkImg);
-        sharkImgView.setFitWidth(60);
-        sharkImgView.setFitHeight(60);
-        sharkImgView.setPreserveRatio(true); // Damit das Bild nicht verzerrt wird
-        currentPet.setGraphic(sharkImgView);
-        currentPet.setId("currentPet");
 
-
-        Label petName = new Label("Mister Shark");
+        Label petName = new Label("Mister Pet");
         petName.setId("petName");
 
+        currentPetLabel = new Label();
+        currentPetLabel.setId("currentPet");
+        currentPetLabel.setGraphic(sharkImgView);
+        currentPetName = "Shark"; // Startzustand
 
         HBox connectionHBox = new HBox(0);
         connectionHBox.getChildren().addAll(
@@ -198,7 +234,7 @@ public class WindowGUI implements WindowUI {
 
         HBox currentPetHBox = new HBox(5);
         currentPetHBox.getChildren().addAll(
-                currentPet,
+                currentPetLabel,
                 describitionVBox
         );
 
@@ -247,6 +283,7 @@ public class WindowGUI implements WindowUI {
 
         // Set up button event handlers
         setupEventHandlers();
+        updatePetGraphic(currentPetName);
     }
 
     private void setupEventHandlers() {
@@ -281,3 +318,5 @@ public class WindowGUI implements WindowUI {
         return petSelect;
     }
 }
+
+
