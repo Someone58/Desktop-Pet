@@ -3,8 +3,13 @@ package com.example.desktoppet.UI;
 import com.example.desktoppet.Model.PetData;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -23,6 +28,10 @@ public abstract class BaseGUI {
     public BaseGUI(PetData petController) {
         this.petController = petController;
         this.stage = petController.getStage();
+        if (this.stage == null) {
+            this.stage = new Stage();
+            petController.setStage(this.stage);
+        }
     }
 
     /**
@@ -33,12 +42,25 @@ public abstract class BaseGUI {
      * @return configured ImageView instance
      */
     protected ImageView createButtonImageView(String resourcePath, double width, double height) {
-        Image buttonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream(resourcePath)));
-        ImageView buttonImgView = new ImageView(buttonImg);
-        buttonImgView.setFitWidth(width);
-        buttonImgView.setFitHeight(height);
-        buttonImgView.setPreserveRatio(true);
-        return buttonImgView;
+        if (resourcePath == null || resourcePath.isEmpty()) {
+            throw new IllegalArgumentException("Resource path cannot be null or empty");
+        }
+
+        try {
+            Image buttonImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream(resourcePath)));
+            ImageView buttonImgView = new ImageView(buttonImg);
+            buttonImgView.setFitWidth(width);
+            buttonImgView.setFitHeight(height);
+            buttonImgView.setPreserveRatio(true);
+            return buttonImgView;
+        } catch (Exception e) {
+            System.err.println("Error loading image from " + resourcePath + ": " + e.getMessage());
+            // Fallback to empty image view
+            ImageView fallbackView = new ImageView();
+            fallbackView.setFitWidth(width);
+            fallbackView.setFitHeight(height);
+            return fallbackView;
+        }
     }
 
     /**
@@ -58,6 +80,63 @@ public abstract class BaseGUI {
     }
 
     /**
+     * Create a styled title label
+     * @param text the label text
+     * @param id the label ID
+     * @return configured Label instance
+     */
+    protected Label createTitleLabel(String text, String id) {
+        Label titleLabel = new Label(text);
+        if (id != null && !id.isEmpty()) {
+            titleLabel.setId(id);
+        }
+        return titleLabel;
+    }
+
+    /**
+     * Create a horizontal layout container
+     * @param spacing spacing between elements
+     * @param id container ID (optional)
+     * @return configured HBox instance
+     */
+    protected HBox createHBox(double spacing, String id) {
+        HBox hbox = new HBox(spacing);
+        if (id != null && !id.isEmpty()) {
+            hbox.setId(id);
+        }
+        return hbox;
+    }
+
+    /**
+     * Create a vertical layout container
+     * @param spacing spacing between elements
+     * @param id container ID (optional)
+     * @return configured VBox instance
+     */
+    protected VBox createVBox(double spacing, String id) {
+        VBox vbox = new VBox(spacing);
+        if (id != null && !id.isEmpty()) {
+            vbox.setId(id);
+        }
+        return vbox;
+    }
+
+    /**
+     * Create a styled text area
+     * @param editable whether the text area is editable
+     * @param id the text area ID
+     * @return configured TextArea instance
+     */
+    protected TextArea createTextArea(boolean editable, String id) {
+        TextArea textArea = new TextArea();
+        textArea.setEditable(editable);
+        if (id != null && !id.isEmpty()) {
+            textArea.setId(id);
+        }
+        return textArea;
+    }
+
+    /**
      * Apply CSS styling to a scene
      * @param scene the scene to style
      */
@@ -66,6 +145,20 @@ public abstract class BaseGUI {
         if (css != null) {
             scene.getStylesheets().add(css);
         }
+    }
+
+    /**
+     * Create a basic scene with the standard background color
+     * @param root the root node for the scene
+     * @param width the scene width
+     * @param height the scene height
+     * @return configured Scene instance with CSS applied
+     */
+    protected Scene createBasicScene(javafx.scene.Parent root, double width, double height) {
+        Scene scene = new Scene(root, width, height);
+        scene.setFill(Color.web("#B8CCCB"));
+        applyCSS(scene);
+        return scene;
     }
 
     /**

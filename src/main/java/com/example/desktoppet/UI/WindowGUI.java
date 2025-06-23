@@ -173,9 +173,7 @@ public class WindowGUI extends BaseGUI implements WindowInterface {
     @Override
     public void openWindow() {
 
-        Label homeTitle = new Label(" Home");
-        homeTitle.setId("homeTitle");
-
+        Label homeTitle = createTitleLabel(" Home", "homeTitle");
 
         Label petName = new Label("Mister Pet");
         petName.setId("petName");
@@ -185,13 +183,11 @@ public class WindowGUI extends BaseGUI implements WindowInterface {
         currentPetLabel.setGraphic(sharkImgView);
         currentPetName = "Shark"; // Startzustand
 
-        HBox connectionHBox = new HBox(0);
+        HBox connectionHBox = createHBox(0, "connectionHBox");
         connectionHBox.getChildren().addAll(
                 currentStatus,
                 connectionStatus
         );
-
-        connectionHBox.setId("connectionHBox");
 
         VBox describitionVBox = new VBox(5);
         describitionVBox.getChildren().addAll(
@@ -218,28 +214,23 @@ public class WindowGUI extends BaseGUI implements WindowInterface {
                 settingsButton
         );
 
-        appsHBox.setId("appsHBox");
-
-
         // Build UI layout
         VBox rootVBox = new VBox(10);
+        rootVBox.setId("windowRootVBox");
         rootVBox.getChildren().addAll(
                 homeTitle,
                 currentPetHBox,
                 appsHBox
         );
-
-        rootVBox.setId("windowRootVBox");
+        rootVBox.setTranslateX(-2); // Fix für die Position
+        rootVBox.setTranslateY(2); // Fix für die Position
 
         // Set up scene
         Group root = new Group(rootVBox);
         scene = new Scene(root, 300, 193);
-        petController.setWindowScene(scene);
-
-        scene.setFill(Color.web("#B8CCCB"));
-
-        // Apply CSS styling using inherited method
+        scene.setFill(javafx.scene.paint.Color.web("#B8CCCB"));
         applyCSS(scene);
+        petController.setWindowScene(scene);
 
         // Configure stage
         stage.setTitle("Apps");
@@ -252,11 +243,43 @@ public class WindowGUI extends BaseGUI implements WindowInterface {
         updatePetGraphic(currentPetName);
     }
 
+    /**
+     * Erstellt ein Label für den Titel
+     */
+    public Label createTitleLabel(String text, String id) {
+        Label label = new Label(text);
+        label.setId(id);
+        return label;
+    }
+
+    /**
+     * Erstellt eine HBox mit Abstand und ID
+     */
+    public HBox createHBox(double spacing, String id) {
+        HBox hbox = new HBox(spacing);
+        hbox.setId(id);
+        return hbox;
+    }
+
     private void setupEventHandlers() {
         chatButton.setOnAction(e -> chat.changeScene());
         networkButton.setOnAction(e -> networkConnector.changeScene());
         timerButton.setOnAction(e -> timer.changeScene());
-        petButton.setOnAction(e -> petSelect.changeScene());
+
+        // Fixe den Pet Selection Button
+        petButton.setOnAction(e -> {
+            try {
+                if (petSelect != null && petSelect.getPetSelectUI() != null) {
+                    petSelect.changeScene();
+                } else {
+                    System.err.println("Error: petSelect or petSelectUI is null");
+                }
+            } catch (Exception ex) {
+                System.err.println("Error in pet selection: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        });
+
         settingsButton.setOnAction(e -> petSelect.settings.changeScene());
     }
 

@@ -90,6 +90,7 @@ public class PetData {
     }
 
     public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     public Scene getWindowScene() {

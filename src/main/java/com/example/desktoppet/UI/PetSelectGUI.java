@@ -35,12 +35,19 @@ public class PetSelectGUI extends BaseGUI implements PetSelectInterface {
         super(petController);
         this.petSelectLogic = petSelectLogic;
         this.currentPet = "Shark";
+        // Initialisiere die UI-Komponenten
+        this.sharkSelect = new Button("");
+        this.hedgehogSelect = new Button("");
+        this.dogSelect = new Button("");
         initializeUI();
     }
 
     @Override
     public void initializeUI() {
-        // Stage is already initialized in the parent class
+        // Stelle sicher, dass wir eine gültige Stage haben
+        this.stage = petController.getStage();
+        // Füge einen Debug-Log hinzu
+        System.out.println("PetSelectGUI initialized with stage: " + stage);
     }
 
     private void updatePetButtonStyles() {
@@ -70,6 +77,11 @@ public class PetSelectGUI extends BaseGUI implements PetSelectInterface {
 
     @Override
     public void changeScene() {
+        // Stelle sicher, dass wir eine gültige Stage haben
+        if (stage == null) {
+            stage = petController.getStage();
+        }
+
         Label petSelectionTitle = new Label(" Pets");
         petSelectionTitle.setId("petSelectionTitle");
 
@@ -107,35 +119,41 @@ public class PetSelectGUI extends BaseGUI implements PetSelectInterface {
                 hedgehogSelect,
                 dogSelect
         );
-
         petsHBox.setId("petsHBox");
+        petsHBox.setTranslateX(11); // Fix für die Position
 
         VBox petButtons = new VBox(30);
         petButtons.getChildren().addAll(
                 backButton,
                 petsHBox
         );
-
         petButtons.setId("petButtons");
+        petButtons.setTranslateX(5); // Fix für die Position
+        petButtons.setTranslateY(1); // Fix für die Position
 
         VBox rootVBox = new VBox(5);
         rootVBox.getChildren().addAll(
                 petSelectionTitle,
                 petButtons
         );
-
         rootVBox.setId("rootVBox");
+        rootVBox.setTranslateX(-2); // Fix für die Position
+        rootVBox.setTranslateY(2); // Fix für die Position
 
         Group root = new Group(rootVBox);
-        Scene scene = new Scene(root, 300, 200);
-
         root.setId("scene");
 
+        Scene scene = new Scene(root, 300, 200);
         scene.setFill(Color.web("#B8CCCB"));
 
-        // Use inherited method to apply CSS
-        applyCSS(scene);
+        // Apply CSS
+        String css = petController.getCss();
+        if (css != null) {
+            scene.getStylesheets().add(css);
+        }
 
+        // Setze die Scene und zeige die Stage
+        System.out.println("Setting scene for stage: " + stage);
         stage.setTitle("Select Pet");
         stage.setScene(scene);
         stage.show();

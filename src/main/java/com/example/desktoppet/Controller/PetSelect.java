@@ -88,7 +88,16 @@ public class PetSelect {
      * Changes to the pet selection scene using the UI implementation
      */
     public void changeScene() {
-        petSelectUI.changeScene();
+        if (petSelectUI == null) {
+            System.err.println("Error: petSelectUI is null in PetSelect.changeScene()");
+            return;
+        }
+        try {
+            petSelectUI.changeScene();
+        } catch (Exception e) {
+            System.err.println("Error changing scene in PetSelect: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
