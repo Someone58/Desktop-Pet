@@ -214,6 +214,8 @@ public class WindowGUI extends BaseGUI implements WindowInterface {
                 settingsButton
         );
 
+        appsHBox.setId("appsHBox");
+
         // Build UI layout
         VBox rootVBox = new VBox(10);
         rootVBox.setId("windowRootVBox");
