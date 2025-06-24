@@ -13,6 +13,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 import java.util.Random;
 
@@ -103,72 +106,63 @@ public class PetAnimation {
     }
 
 private void setupAnimation() {
-        animation = new AnimationTimer() {
-            private long lastChange = 0;
+        // Use a one-element array to hold last change time.
+        final long[] lastChange = {System.nanoTime()};
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(16), event -> {
+            // Move horizontally
+            double newX = pet.getLayoutX() + xSpeed;
+            boolean facingRight = xSpeed > 0;
 
-            @Override
-            public void handle(long now) {
-                // Move horizontally
-                double newX = pet.getLayoutX() + xSpeed;
-                boolean facingRight = xSpeed > 0;
+            notification.setSize(petController.getPetSize() / 6.0);
+            double notificationWidth = notification.getSize();
 
-                notification.setSize(petController.getPetSize() / 6.0);
-                double notificationWidth = notification.getSize();
-
-                double middlePos = pet.getLayoutX() + petController.getPetSize() / 2 - notificationWidth / 2;
-                if (xSpeed < 0 || xSpeed == 0 && facingRight) {
-                    notification.setPos(
-                            middlePos - petController.getPetSize() / 2.3,
-                            pet.getLayoutY() + petController.getPetSize() / 5
-                    );
-                    petImage.setScaleX(1.0);
-                } else if (xSpeed > 0 || xSpeed == 0 && !facingRight) {
-                    notification.setPos(
-                            middlePos + petController.getPetSize() / 2.3,
-                            pet.getLayoutY() + petController.getPetSize() / 5
-                    );
-                    petImage.setScaleX(-1.0);
-                }
-
-                // Boundary check
-                if (newX > screenWidth - pet.getWidth() || newX < 0) {
-                    xSpeed *= -1;
-                    imageAnimation.setFps(Math.abs(xSpeed * 2.5));
-                    if (newX > screenWidth - pet.getWidth()) {
-                        petImage.setScaleX(1.0);
-                    } else {
-                        petImage.setScaleX(-1.0);
-                    }
-
-                    newX = Math.max(0, Math.min(newX, screenWidth - pet.getWidth()));
-                }
-
-                pet.setLayoutX(newX);
-
-                // Random direction changes
-                if (now - lastChange > 1_000_000_000) { // Every 1 second
-                    if (random.nextDouble() < 0.3) { // 30% chance to change
-                        if (random.nextDouble() < activity) {
-                            imageAnimation.playAnimation();
-                            xSpeed = (random.nextBoolean() ? 0.5 : -0.5) * (1 + random.nextDouble() * 2);
-                            xSpeed *= speedMultiplier;
-                            imageAnimation.setFps(Math.abs(xSpeed * 2.5));
-                            if (xSpeed < 0) {
-                                petImage.setScaleX(1.0);
-                            } else if (xSpeed > 0) {
-                                petImage.setScaleX(-1.0);
-                            }
-                        } else {
-                            xSpeed = 0;
-                            imageAnimation.setFps(4);
-                            imageAnimation.playIdle();
-                        }
-                    }
-                    lastChange = now;
-                }
+            double middlePos = pet.getLayoutX() + petController.getPetSize() / 2 - notificationWidth / 2;
+            if (xSpeed < 0 || (xSpeed == 0 && facingRight)) {
+                notification.setPos(
+                    middlePos - petController.getPetSize() / 2.3,
+                    pet.getLayoutY() + petController.getPetSize() / 5
+                );
+                petImage.setScaleX(1.0);
+            } else if (xSpeed > 0 || (xSpeed == 0 && !facingRight)) {
+                notification.setPos(
+                    middlePos + petController.getPetSize() / 2.3,
+                    pet.getLayoutY() + petController.getPetSize() / 5
+                );
+                petImage.setScaleX(-1.0);
             }
-        };
-        animation.start();
+
+            // Boundary check
+            if (newX > screenWidth - pet.getWidth() || newX < 0) {
+                xSpeed *= -1;
+                imageAnimation.setFps(Math.abs(xSpeed * 2.5));
+                petImage.setScaleX(newX > screenWidth - pet.getWidth() ? 1.0 : -1.0);
+                newX = Math.max(0, Math.min(newX, screenWidth - pet.getWidth()));
+            }
+
+            pet.setLayoutX(newX);
+
+            // Random direction changes every ~1 second
+            long now = System.nanoTime();
+            if (now - lastChange[0] > 1_000_000_000) {
+                if (random.nextDouble() < 0.3) {
+                    if (random.nextDouble() < activity) {
+                        imageAnimation.playAnimation();
+                        xSpeed = (random.nextBoolean() ? 0.5 : -0.5) * (1 + random.nextDouble() * 2);
+                        xSpeed *= speedMultiplier;
+                        imageAnimation.setFps(Math.abs(xSpeed * 2.5));
+                        petImage.setScaleX(xSpeed < 0 ? 1.0 : -1.0);
+                    } else {
+                        xSpeed = 0;
+                        imageAnimation.setFps(4);
+                        imageAnimation.playIdle();
+                    }
+                }
+                lastChange[0] = now;
+            }
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+        // Optionally, save the timeline instance if you’ll need to pause/stop it later.
     }
 
     public void setxSpeed(double speedMultiplier) {

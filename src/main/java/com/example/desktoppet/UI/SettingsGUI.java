@@ -80,9 +80,6 @@ public class SettingsGUI implements SettingsInterface {
         // Setup button actions
         darkmode.setOnAction(e -> toggleDarkMode());
         pinWindow.setOnAction(e -> toggleAlwaysOnTop());
-
-        // Initialize pin window button text
-        updatePinWindowText();
     }
     
     @Override
@@ -123,6 +120,17 @@ public class SettingsGUI implements SettingsInterface {
 
         heightSlider.setShowTickMarks(true);
         heightSlider.setShowTickLabels(true);
+
+        pinButtonImgView.setFitWidth(15);
+        pinButtonImgView.setFitHeight(15);
+        pinButtonImgView.setPreserveRatio(true);
+        pinWindow.setId("pinWindow");
+
+        unpinButtonImgView.setFitWidth(15);
+        unpinButtonImgView.setFitHeight(15);
+        unpinButtonImgView.setPreserveRatio(true);
+
+        updatePinWindowText();
 
         HBox navigationButtons = new HBox(25);
         navigationButtons.getChildren().addAll(
@@ -217,16 +225,16 @@ public class SettingsGUI implements SettingsInterface {
         stage.setResizable(false);
 
 
-        pinButtonImgView.setFitWidth(15);
-        pinButtonImgView.setFitHeight(15);
-        pinButtonImgView.setPreserveRatio(true);
-        pinWindow.setGraphic(pinButtonImgView);
-        pinWindow.setId("pinWindow");
-
-
-        unpinButtonImgView.setFitWidth(15);
-        unpinButtonImgView.setFitHeight(15);
-        unpinButtonImgView.setPreserveRatio(true);
+//        pinButtonImgView.setFitWidth(15);
+//        pinButtonImgView.setFitHeight(15);
+//        pinButtonImgView.setPreserveRatio(true);
+//        pinWindow.setGraphic(pinButtonImgView);
+//        pinWindow.setId("pinWindow");
+//
+//
+//        unpinButtonImgView.setFitWidth(15);
+//        unpinButtonImgView.setFitHeight(15);
+//        unpinButtonImgView.setPreserveRatio(true);
 
         backButton.setOnAction(e -> {
             stage.setScene(windowScene);
@@ -295,7 +303,7 @@ public class SettingsGUI implements SettingsInterface {
      * Updates the text of the pin window button based on current state
      */
     private void updatePinWindowText() {
-        pinWindow.setText("");
+//        pinWindow.setText("");
         if (windowOnTop) {
             pinWindow.setGraphic(unpinButtonImgView);
         } else {

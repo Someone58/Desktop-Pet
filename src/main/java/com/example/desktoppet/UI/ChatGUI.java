@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.Objects;
 
 /**
@@ -34,6 +35,9 @@ public class ChatGUI implements ChatInterface {
     private boolean scrolledUp = false;
     private double lastPosition = 0;
     
+    // Fixed line height in pixels (adjust as needed)
+    private final double LINE_HEIGHT = 18;
+
     public ChatGUI(Chat chatLogic, PetData petController) {
         this.chatLogic = chatLogic;
         this.petController = petController;
@@ -44,7 +48,7 @@ public class ChatGUI implements ChatInterface {
     }
     
     private void setupComponents() {
-        // Set up chat area
+        // Set up chat area with fixed font size to ensure integer sizes
         chatArea.setEditable(false);
         chatArea.setWrapText(true);
         chatArea.setPrefRowCount(10);
@@ -52,6 +56,8 @@ public class ChatGUI implements ChatInterface {
         chatArea.setMaxWidth(245);
         chatArea.setMinHeight(230);
 
+        // Set fixed font size (an integer value in pixels)
+        chatArea.setStyle("-fx-font-size: 14px;");
         chatArea.setId("chatArea");
 
         messageField.setMinWidth(180);
@@ -71,17 +77,21 @@ public class ChatGUI implements ChatInterface {
     
     private void setupScrollListeners() {
         chatArea.scrollTopProperty().addListener((obs, oldVal, newVal) -> {
-            if ((double) newVal % 1 == 0 && (double) newVal != 0 && (double) newVal > scrollBottom) {
-                scrollBottom = (double) newVal;
-//                System.out.println("At bottom:  " + scrollBottom);
+            // Round the raw scroll value to the nearest multiple of LINE_HEIGHT
+            double rawScroll = (double) newVal;
+            double adjustedScroll = Math.round(rawScroll / LINE_HEIGHT) * LINE_HEIGHT;
+            System.out.println("Adjusted Scroll: " + adjustedScroll);
+
+            if (adjustedScroll != 0 && adjustedScroll > scrollBottom) {
+                scrollBottom = adjustedScroll;
+                System.out.println("At bottom: " + scrollBottom);
             }
 
-            newPosition = (double) newVal;
+            newPosition = adjustedScroll;
 
             if (position > newPosition) {
                 scrolledUp = true;
-            }
-            else if (Math.abs(newPosition - scrollBottom) <= 50) {
+            } else if (Math.abs(newPosition - scrollBottom) <= 50) {
                 scrolledUp = false;
             }
             position = newPosition;
@@ -96,8 +106,7 @@ public class ChatGUI implements ChatInterface {
                 Platform.runLater(() -> {
                     chatArea.positionCaret(newText.length());
                 });
-            }
-            else {
+            } else {
                 chatArea.setScrollTop(lastPosition);
                 scrollToTop();
             }
@@ -135,7 +144,6 @@ public class ChatGUI implements ChatInterface {
 
         VBox messagingBox = new VBox(18);
         messagingBox.getChildren().addAll(chatArea, messageBox);
-
         messagingBox.setId("messagingBox");
 
         VBox rootVBox = new VBox(20);
@@ -149,7 +157,6 @@ public class ChatGUI implements ChatInterface {
 
         Group root = new Group(rootVBox);
         Scene scene = new Scene(root, 300, 400);
-
         scene.setFill(Color.web("#B8CCCB"));
 
         String css = petController.getCss();
@@ -172,9 +179,7 @@ public class ChatGUI implements ChatInterface {
             stage.setTitle("Apps");
         });
 
-        stage.setOnCloseRequest(event -> {
-            petController.setChatopened(false);
-        });
+        stage.setOnCloseRequest(event -> petController.setChatopened(false));
     }
 
     @Override
@@ -189,15 +194,17 @@ public class ChatGUI implements ChatInterface {
     public void registerTextArea() {
         petController.getChatManager().registerTextArea(chatArea);
     }
-    
+
     private void scrollToTop() {
-        PauseTransition delay = new PauseTransition(Duration.seconds(0.005));
+        // Increase delay from 0.005 to 0.05 seconds (50ms) to reduce the frequency of the scroll update
+        PauseTransition delay = new PauseTransition(Duration.seconds(0.05));
         delay.setOnFinished(ev -> {
             Platform.runLater(() -> chatArea.setScrollTop(lastPosition));
         });
         delay.play();
     }
-    
+
+
     @Override
     public void setScrolledUp(boolean scrolledUp) {
         this.scrolledUp = scrolledUp;
